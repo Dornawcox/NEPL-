@@ -1,68 +1,40 @@
 # NEPL — New England Polo League
 
-A standalone web application for managing the New England Polo League: team registration, venue management, schedule generation with specific dates, game results with individual stats, and live standings.
+Club team polo league management — teams, venues, schedule, results, standings, and stats.
+
+## What's New in v5
+
+- **Edit Teams and Venues** — Click the pencil icon on any team or venue card to edit all fields
+- **Team and Venue Logos** — Emoji-based logos displayed on cards, standings, and stats. Choose from 30+ icons during registration or editing
+- **Stats Tab with Sub-tabs** — Defaults to **Team Stats** (per-team cards with win rate, goals/game, conceded/game, form streak) with a **Player Stats** sub-tab for individual scoring and MVP leaderboards
+- **Full November Schedule** — Games run through the last Saturday of November (indoor arena for the final month)
 
 ## Features
 
-- **8 Pre-loaded Venues** across MA, CT, RI, NH, and VT — with Indoor Arena, Outdoor, and Outdoor Arena facility types
-- **10 Pre-loaded Teams** (low and medium goal) with full rosters and alternates
-- **Full Season Schedule** — April through November 2027 with specific dates, game times, alternate dates, and round-robin weekends at single venues
-- **Outdoor Rules** — No outdoor games before May 15 or after October 15
-- **Game Results** — Final scores, chukker-by-chukker detail, MVP selection, and individual goal scorers per game
-- **Pre-populated Results** — All games through June 30 have scores, MVPs, and goal scorers
-- **Live Standings** — League table with W/D/L, goal difference, points, division tags, and recent form
-- **Player Statistics** — Top scorers, MVP leaders, and goals-per-game leaderboards
-- **Edit Game Details** — Change game times, dates, alternate dates, and venues
-- **Contact Venues** — Email links to venue organizers directly from game cards
-- **Persistent Data** — All data saved to localStorage
+- 8 venues across MA, CT, RI, NH, VT with Indoor Arena / Outdoor / Outdoor Arena facility types
+- 10 teams (low + medium goal) with full rosters and alternates
+- April–November schedule with specific dates, times, alternate dates, round-robin weekends
+- No outdoor games before May 15 or after October 15
+- Game results with chukker-by-chukker scores, MVP selection, individual goal scorers
+- Pre-populated results through June 30
+- Live standings with division tags and recent form
+- All data in localStorage with Reset and Restore Demo buttons
 
-## Hosting on GitHub Pages
-
-1. Create a new GitHub repository (e.g., `nepl-league`)
-
-2. Upload the files:
-   ```bash
-   git init
-   git add .
-   git commit -m "NEPL League site"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/nepl-league.git
-   git push -u origin main
-   ```
-
-3. Enable GitHub Pages:
-   - Repository → **Settings** → **Pages**
-   - Source: **Deploy from a branch**
-   - Branch: **main**, folder: **/ (root)**
-   - Save
-
-4. Site goes live at `https://YOUR_USERNAME.github.io/nepl-league/`
-
-## Local Development
-
-No build step required. Open `index.html` in any browser:
+## Deploy to GitHub Pages
 
 ```bash
-open index.html
+git init
+git add .
+git commit -m "NEPL v5"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/nepl-league.git
+git push -u origin main
 ```
 
-Or serve locally:
+Settings → Pages → Deploy from branch → main → / (root) → Save
 
-```bash
-python -m http.server 8000
-# visit http://localhost:8000
-```
+Live at: `https://YOUR_USERNAME.github.io/nepl-league/`
 
-## Data Management
+## Local
 
-- **Reset All Data** — Clears everything and starts fresh
-- **Restore Demo Data** — Reloads the 8 venues, 10 teams, full schedule, and pre-populated results
-- All data lives in `localStorage` — does not sync between browsers/devices
-
-## Tech
-
-Single HTML file. No frameworks, no build tools. Google Fonts loaded externally. Designed for static hosting on GitHub Pages, Netlify, Vercel, or any web server.
-
-## License
-
-MIT
+Just open `index.html` in a browser. No build step needed.

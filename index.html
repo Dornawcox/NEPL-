@@ -99,6 +99,18 @@ footer .sub{font-size:12px;color:var(--text-dim)}
 .week-month{font-size:13px;color:var(--text-muted)}
 .contact-link{color:var(--teal);font-size:11px;cursor:pointer;text-decoration:underline}
 .contact-link:hover{color:var(--accent)}
+
+.logo-circle{width:44px;height:44px;border-radius:50%;background:var(--surface-alt);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
+.logo-circle.sm{width:32px;height:32px;font-size:16px;border-width:1px}
+.logo-picker{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--surface-alt);border-radius:8px;margin-top:6px}
+.logo-picker span{cursor:pointer;font-size:22px;padding:4px;border-radius:6px;transition:background 0.1s}
+.logo-picker span:hover{background:var(--border)}
+.logo-picker span.sel{background:rgba(196,162,92,0.25);outline:2px solid var(--accent)}
+.sub-tabs{display:flex;gap:2px;background:var(--surface-alt);border-radius:8px;padding:3px;margin-bottom:24px}
+.sub-tab{padding:8px 16px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--text-muted);font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.sub-tab.active{background:rgba(196,162,92,0.15);color:var(--accent)}
+.sub-tab:hover:not(.active){color:var(--text)}
+
 @media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}nav{flex-wrap:wrap}nav button span.nav-label{display:none}h1{font-size:28px}.header-inner{flex-direction:column;gap:12px}.game-card{grid-template-columns:1fr;text-align:center;gap:8px}}
 </style>
 </head>
@@ -135,38 +147,38 @@ function esc(s){const d=document.createElement('div');d.textContent=s||'';return
 // PRE-POPULATED DATA
 // ══════════════════════════════════════════════
 const VENUES_SEED = [
-  {id:'v-myopia',name:'Myopia Polo Club',location:'Hamilton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'info@myopiapolo.com',notes:'Historic NE venue. Full arena + 2 outdoor fields.',organizer:'Bill Tompkins'},
-  {id:'v-stagehill',name:'Stage Hill Polo Club',location:'Bolton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'play@stagehillpolo.com',notes:'Arena + outdoor arena + grass field. Strong admin hub.',organizer:'Alyson Poor'},
-  {id:'v-giant',name:'Giant Valley Polo Club',location:'Glastonbury',st:'CT',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'giantvalley@polo.com',notes:'CT anchor. Year-round arena.',organizer:'Mark Gillespie'},
-  {id:'v-newport',name:'Newport / Westchester Polo Club',location:'Portsmouth',st:'RI',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'info@newportpolo.com',notes:'Historic Westchester club operating as Newport Polo. Arena + outdoor arena.',organizer:'Dan Keating'},
-  {id:'v-sugar',name:'Sugarbush Polo Club',location:'Shelburne',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'sugarbush@vtpolo.com',notes:'Summer outdoor only. Beautiful mountain setting.',organizer:'Pete Schultz'},
-  {id:'v-tuckaway',name:'Tuckaway Farm',location:'Lee',st:'NH',hasArena:false,hasOutdoor:true,hasOutdoorArena:true,contact:'tuckaway@polo.nh',notes:'Outdoor arena + grass field. NH anchor.',organizer:'Sarah Collins'},
-  {id:'v-kings',name:'Kingswood Polo Club',location:'Wolfeboro',st:'NH',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'play@kingswoodpolo.com',notes:'Arena + summer outdoor. Lakes Region.',organizer:'Jim Hannigan'},
-  {id:'v-quechee',name:'Quechee Polo Club',location:'Quechee',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'polo@quecheeclub.com',notes:'Upper Valley VT. Summer outdoor venue.',organizer:'Tom Richards'},
+  {id:'v-myopia',name:'Myopia Polo Club',location:'Hamilton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'info@myopiapolo.com',notes:'Historic NE venue. Full arena + 2 outdoor fields.',organizer:'Bill Tompkins',logo:'🏇'},
+  {id:'v-stagehill',name:'Stage Hill Polo Club',location:'Bolton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'play@stagehillpolo.com',notes:'Arena + outdoor arena + grass field. Strong admin hub.',organizer:'Alyson Poor',logo:'⚡'},
+  {id:'v-giant',name:'Giant Valley Polo Club',location:'Glastonbury',st:'CT',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'giantvalley@polo.com',notes:'CT anchor. Year-round arena.',organizer:'Mark Gillespie',logo:'🏔️'},
+  {id:'v-newport',name:'Newport / Westchester Polo Club',location:'Portsmouth',st:'RI',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'info@newportpolo.com',notes:'Historic Westchester club operating as Newport Polo. Arena + outdoor arena.',organizer:'Dan Keating',logo:'⚓'},
+  {id:'v-sugar',name:'Sugarbush Polo Club',location:'Shelburne',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'sugarbush@vtpolo.com',notes:'Summer outdoor only. Beautiful mountain setting.',organizer:'Pete Schultz',logo:'🍁'},
+  {id:'v-tuckaway',name:'Tuckaway Farm',location:'Lee',st:'NH',hasArena:false,hasOutdoor:true,hasOutdoorArena:true,contact:'tuckaway@polo.nh',notes:'Outdoor arena + grass field. NH anchor.',organizer:'Sarah Collins',logo:'🦊'},
+  {id:'v-kings',name:'Kingswood Polo Club',location:'Wolfeboro',st:'NH',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'play@kingswoodpolo.com',notes:'Arena + summer outdoor. Lakes Region.',organizer:'Jim Hannigan',logo:'🌲'},
+  {id:'v-quechee',name:'Quechee Polo Club',location:'Quechee',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'polo@quecheeclub.com',notes:'Upper Valley VT. Summer outdoor venue.',organizer:'Tom Richards',logo:'🏞️'},
 ];
 
 function mkPlayers(names){return names.map(n=>{const[name,h]=n.split('|');return{name,handicap:h||'0'}});}
 
 const TEAMS_SEED = [
-  {id:'t-myopia1',name:'Myopia Mustangs',club:'Myopia Polo Club',goalLevel:'low',homeVenue:'v-myopia',
+  {id:'t-myopia1',name:'Myopia Mustangs',logo:'🐎',club:'Myopia Polo Club',goalLevel:'low',homeVenue:'v-myopia',
     players:mkPlayers(['Bill Tompkins|1','Sarah Chen|0','Jake Morrison|1']),alternates:mkPlayers(['Emma Whitfield|0'])},
-  {id:'t-stagehill1',name:'Stage Hill Storm',club:'Stage Hill Polo Club',goalLevel:'low',homeVenue:'v-stagehill',
+  {id:'t-stagehill1',name:'Stage Hill Storm',logo:'🌩️',club:'Stage Hill Polo Club',goalLevel:'low',homeVenue:'v-stagehill',
     players:mkPlayers(['Alyson Poor|2','Steve Rudolph|1','Tom Rizzo|1']),alternates:mkPlayers(['Amanda Roberts|0'])},
-  {id:'t-giant1',name:'Giant Valley Riders',club:'Giant Valley Polo Club',goalLevel:'low',homeVenue:'v-giant',
+  {id:'t-giant1',name:'Giant Valley Riders',logo:'🦅',club:'Giant Valley Polo Club',goalLevel:'low',homeVenue:'v-giant',
     players:mkPlayers(['Mark Gillespie|1','Lucia Fernandez|1','Chris Walsh|0']),alternates:mkPlayers(['Nina Torres|1'])},
-  {id:'t-newport1',name:'Newport Navy',club:'Newport / Westchester Polo Club',goalLevel:'low',homeVenue:'v-newport',
+  {id:'t-newport1',name:'Newport Navy',logo:'⚓',club:'Newport / Westchester Polo Club',goalLevel:'low',homeVenue:'v-newport',
     players:mkPlayers(['Dan Keating|2','Meg Sullivan|0','Ravi Patel|1']),alternates:mkPlayers(['Olivia Harrington|0'])},
-  {id:'t-sugar1',name:'Sugarbush Chargers',club:'Sugarbush Polo Club',goalLevel:'medium',homeVenue:'v-sugar',
+  {id:'t-sugar1',name:'Sugarbush Chargers',logo:'⚡',club:'Sugarbush Polo Club',goalLevel:'medium',homeVenue:'v-sugar',
     players:mkPlayers(['Pete Schultz|2','Hannah Greene|2','Carlos Vega|1']),alternates:mkPlayers(['Liam Casey|1'])},
-  {id:'t-tuck1',name:'Tuckaway Foxes',club:'Tuckaway Farm',goalLevel:'low',homeVenue:'v-tuckaway',
+  {id:'t-tuck1',name:'Tuckaway Foxes',logo:'🦊',club:'Tuckaway Farm',goalLevel:'low',homeVenue:'v-tuckaway',
     players:mkPlayers(['Sarah Collins|1','Ben Archer|1','Kelly Donahue|0']),alternates:mkPlayers(['Matt Pierce|0'])},
-  {id:'t-kings1',name:'Kingswood Lakers',club:'Kingswood Polo Club',goalLevel:'medium',homeVenue:'v-kings',
+  {id:'t-kings1',name:'Kingswood Lakers',logo:'🌊',club:'Kingswood Polo Club',goalLevel:'medium',homeVenue:'v-kings',
     players:mkPlayers(['Jim Hannigan|3','Priya Sharma|1','Tyler Brooks|2']),alternates:mkPlayers(['Nora Flanagan|1'])},
-  {id:'t-quechee1',name:'Quechee Valley',club:'Quechee Polo Club',goalLevel:'low',homeVenue:'v-quechee',
+  {id:'t-quechee1',name:'Quechee Valley',logo:'🏔️',club:'Quechee Polo Club',goalLevel:'low',homeVenue:'v-quechee',
     players:mkPlayers(['Tom Richards|1','Ava Sinclair|0','Derek Holm|1']),alternates:mkPlayers(['Rachel Kim|0'])},
-  {id:'t-myopia2',name:'Myopia Mavericks',club:'Myopia Polo Club',goalLevel:'medium',homeVenue:'v-myopia',
+  {id:'t-myopia2',name:'Myopia Mavericks',logo:'🔥',club:'Myopia Polo Club',goalLevel:'medium',homeVenue:'v-myopia',
     players:mkPlayers(['Greg Monroe|2','Tess Callahan|2','Owen Blake|1']),alternates:mkPlayers(['Fiona Xu|1'])},
-  {id:'t-mixed1',name:'NE All-Stars',club:'Multi-club',goalLevel:'medium',homeVenue:'v-stagehill',
+  {id:'t-mixed1',name:'NE All-Stars',logo:'⭐',club:'Multi-club',goalLevel:'medium',homeVenue:'v-stagehill',
     players:mkPlayers(['Nina Torres|1','Liam Casey|1','Matt Pierce|2']),alternates:mkPlayers(['Rachel Kim|1','Nora Flanagan|0'])},
 ];
 
@@ -187,7 +199,7 @@ function buildPreSchedule(){
   // No outdoor before May 15, no outdoor after Oct 15
   const saturdays=[];
   const d=new Date(2027,3,3); // Apr 3 2027 (Sat)
-  while(d<=new Date(2027,10,28)){
+  while(d<=new Date(2027,10,29)){
     if(d.getDay()===6) saturdays.push(new Date(d));
     d.setDate(d.getDate()+1);
   }
@@ -334,18 +346,22 @@ function initState(){
   state={
     tab:'home',teams,venues,schedule,results,
     showTeamForm:false,showVenueForm:false,
-    gameModal:null,editGameModal:null,
-    filterMonth:'all',
+    gameModal:null,editGameModal:null,editTeamModal:null,editVenueModal:null,
+    filterMonth:'all',statsSubTab:'team',_editTeamLogo:null,_editVenueLogo:null,
     teamForm:freshTeamForm(),venueForm:freshVenueForm(),
   };
 }
 
-function freshTeamForm(){return{name:'',club:'',goalLevel:'low',homeVenue:'',p1:'',p1h:'',p2:'',p2h:'',p3:'',p3h:'',a1:'',a1h:'',a2:'',a2h:''};}
-function freshVenueForm(){return{name:'',location:'',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'',notes:'',organizer:''};}
+function freshTeamForm(){return{name:'',club:'',goalLevel:'low',homeVenue:'',logo:'🏇',p1:'',p1h:'',p2:'',p2h:'',p3:'',p3h:'',a1:'',a1h:'',a2:'',a2h:''};}
+function freshVenueForm(){return{name:'',location:'',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'',notes:'',organizer:'',logo:'📍'};}
 function save(){LS.set('teams',state.teams);LS.set('venues',state.venues);LS.set('schedule',state.schedule);LS.set('results',state.results);}
 function setState(patch){Object.assign(state,patch);save();render();}
 function tmMap(){const m={};state.teams.forEach(t=>m[t.id]=t);return m;}
 function vmMap(){const m={};state.venues.forEach(v=>m[v.id]=v);return m;}
+const LOGO_EMOJIS=['🏇','🐎','🐴','🏆','⚡','🔥','🌩️','🦅','🐺','🦊','🐻','🦁','🐍','🦈','⚓','🌊','🏔️','🌲','🍁','⭐','💎','🎯','🏛️','🗡️','🛡️','👑','🌟','🔱','🏰','🎪','📍','🏞️'];
+function logoCircle(emoji,cls){return '<div class="logo-circle'+(cls?' '+cls:'')+'">'+(emoji||'🏇')+'</div>';}
+function logoPicker(id,cur){return '<div class="logo-picker" id="'+id+'">'+LOGO_EMOJIS.map(function(e){return '<span class="'+(e===cur?'sel':'')+'" onclick="pickLogo(this,\''+id+'\')">'+e+'</span>';}).join('')+'</div>';}
+function pickLogo(el,pid){var emoji=el.textContent;el.parentNode.querySelectorAll('span').forEach(function(s){s.classList.toggle('sel',s===el);});if(pid==='tp-logo')state.teamForm.logo=emoji;else if(pid==='vp-logo')state.venueForm.logo=emoji;else if(pid==='et-logo')state._editTeamLogo=emoji;else if(pid==='ev-logo')state._editVenueLogo=emoji;}
 
 // ── Standings ──
 function calcStandings(){
@@ -422,6 +438,8 @@ function render(){
     </footer>
     ${state.gameModal?renderGameModal(tm,vm):''}
     ${state.editGameModal?renderEditGameModal(tm,vm):''}
+    ${state.editTeamModal?renderEditTeamModal(tm,vm):''}
+    ${state.editVenueModal?renderEditVenueModal(vm):''}
   `;
 }
 
@@ -478,6 +496,7 @@ function renderTeams(tm,vm){
     <div class="flex between mb-24"><div><h2>Teams</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.teams.length} registered teams. 3-person rosters with up to 2 alternates.</p></div>
       <button class="btn btn-primary" onclick="setState({showTeamForm:!state.showTeamForm})">${icon('plus')} Register Team</button></div>
     ${state.showTeamForm?`<div class="card card-accent mb-24 fade-in"><h3 class="mb-20">New Team Registration</h3>
+      <div class="mb-16"><label class="field-label">Team Logo</label>${logoPicker('tp-logo',f.logo)}</div>
       <div class="grid-2 mb-16">
         <div><label class="field-label">Team Name</label><input id="tf-name" value="${esc(f.name)}" oninput="state.teamForm.name=this.value" placeholder="e.g., Myopia Marauders"></div>
         <div><label class="field-label">Primary Club</label><input id="tf-club" value="${esc(f.club)}" oninput="state.teamForm.club=this.value" placeholder="e.g., Myopia Polo Club"></div>
@@ -489,15 +508,15 @@ function renderTeams(tm,vm){
       <div class="flex gap-8"><button class="btn btn-primary" onclick="submitTeam()">${icon('check')} Submit</button><button class="btn btn-secondary" onclick="setState({showTeamForm:false})">Cancel</button></div>
     </div>`:''}
     ${state.teams.length>0?`<div class="grid-2">${state.teams.map(t=>`
-      <div class="card"><div class="flex between mb-10"><div><div class="serif" style="font-size:18px;font-weight:700">${esc(t.name)}</div><div style="font-size:12px;color:var(--text-muted)" class="mt-4">${esc(t.club)}${t.homeVenue&&vm[t.homeVenue]?' &middot; Home: '+esc(vm[t.homeVenue].name):''}</div></div>
-        <div class="flex gap-8"><span class="tag ${t.goalLevel==='low'?'tag-low':'tag-med'}">${t.goalLevel==='low'?'Low Goal':'Medium Goal'}</span><button class="btn-icon" onclick="removeTeam('${t.id}')">${icon('x')}</button></div></div>
+      <div class="card"><div class="flex between mb-10"><div class="flex gap-12">${logoCircle(t.logo)}<div><div class="serif" style="font-size:18px;font-weight:700">${esc(t.name)}</div><div style="font-size:12px;color:var(--text-muted)" class="mt-4">${esc(t.club)}${t.homeVenue&&vm[t.homeVenue]?' &middot; Home: '+esc(vm[t.homeVenue].name):''}</div></div></div>
+        <div class="flex gap-6"><span class="tag ${t.goalLevel==='low'?'tag-low':'tag-med'}">${t.goalLevel==='low'?'Low Goal':'Medium Goal'}</span><button class="btn-icon" onclick="openEditTeam('${t.id}')" title="Edit">${icon('edit')}</button><button class="btn-icon" onclick="removeTeam('${t.id}')" title="Remove">${icon('x')}</button></div></div>
         <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em" class="mb-6">Roster</div>
         ${t.players.map(p=>`<div class="flex between" style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${esc(p.name)}</span><span style="color:var(--text-muted)">${p.handicap?p.handicap+' goal':''}</span></div>`).join('')}
         ${(t.alternates||[]).filter(a=>a.name).map(a=>`<div class="flex between" style="padding:5px 0;font-size:13px;color:var(--text-muted)"><span style="font-style:italic">${esc(a.name)} (alt)</span><span>${a.handicap?a.handicap+' goal':''}</span></div>`).join('')}
       </div>`).join('')}</div>`:`<div class="empty"><div class="empty-icon">🏇</div><div class="empty-title">No teams yet</div></div>`}
   `;
 }
-function submitTeam(){const f=state.teamForm;if(!f.name||!f.club||!f.p1||!f.p2||!f.p3){alert('Fill in team name, club, and 3 players.');return}state.teams.push({id:'team-'+Date.now(),name:f.name,club:f.club,goalLevel:f.goalLevel,homeVenue:f.homeVenue,players:[{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(p=>p.name),alternates:[{name:f.a1,handicap:f.a1h},{name:f.a2,handicap:f.a2h}].filter(a=>a.name)});state.teamForm=freshTeamForm();state.showTeamForm=false;save();render();}
+function submitTeam(){const f=state.teamForm;if(!f.name||!f.club||!f.p1||!f.p2||!f.p3){alert('Fill in team name, club, and 3 players.');return}state.teams.push({id:'team-'+Date.now(),name:f.name,club:f.club,goalLevel:f.goalLevel,homeVenue:f.homeVenue,logo:f.logo||'🏇',players:[{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(p=>p.name),alternates:[{name:f.a1,handicap:f.a1h},{name:f.a2,handicap:f.a2h}].filter(a=>a.name)});state.teamForm=freshTeamForm();state.showTeamForm=false;save();render();}
 function removeTeam(id){if(confirm('Remove this team?')){state.teams=state.teams.filter(t=>t.id!==id);save();render();}}
 
 // ═══ VENUES ═══
@@ -507,6 +526,7 @@ function renderVenues(vm){
     <div class="flex between mb-24"><div><h2>Venues</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.venues.length} registered venues across New England.</p></div>
       <button class="btn btn-primary" onclick="setState({showVenueForm:!state.showVenueForm})">${icon('plus')} Add Venue</button></div>
     ${state.showVenueForm?`<div class="card card-accent mb-24 fade-in"><h3 class="mb-20">Register Venue</h3>
+      <div class="mb-16"><label class="field-label">Venue Logo</label>${logoPicker('vp-logo',f.logo)}</div>
       <div class="grid-2 mb-16">
         <div><label class="field-label">Venue Name</label><input value="${esc(f.name)}" oninput="state.venueForm.name=this.value" placeholder="e.g., Myopia Polo Club"></div>
         <div><label class="field-label">Town</label><input value="${esc(f.location)}" oninput="state.venueForm.location=this.value" placeholder="e.g., Hamilton"></div>
@@ -523,7 +543,7 @@ function renderVenues(vm){
       <div class="flex gap-8"><button class="btn btn-primary" onclick="submitVenue()">${icon('check')} Add</button><button class="btn btn-secondary" onclick="setState({showVenueForm:false})">Cancel</button></div>
     </div>`:''}
     ${state.venues.length>0?`<div class="grid-3">${state.venues.map(v=>`
-      <div class="card"><div class="flex between"><div class="serif" style="font-size:16px;font-weight:700">${esc(v.name)}</div><button class="btn-icon" onclick="removeVenue('${v.id}')">${icon('x')}</button></div>
+      <div class="card"><div class="flex between"><div class="flex gap-12">${logoCircle(v.logo,'sm')}<div class="serif" style="font-size:16px;font-weight:700">${esc(v.name)}</div></div><div class="flex gap-6"><button class="btn-icon" onclick="openEditVenue('${v.id}')" title="Edit">${icon('edit')}</button><button class="btn-icon" onclick="removeVenue('${v.id}')" title="Remove">${icon('x')}</button></div></div>
         <div style="font-size:13px;color:var(--text-muted);margin:6px 0 8px">${esc(v.location)}, ${v.st}</div>
         <div class="flex gap-6 wrap mb-8">${v.hasArena?'<span class="tag tag-arena">Arena</span>':''}${v.hasOutdoor?'<span class="tag tag-outdoor">Outdoor</span>':''}${v.hasOutdoorArena?'<span class="tag tag-outdoor-arena">Outdoor Arena</span>':''}</div>
         ${v.organizer?`<div style="font-size:12px;color:var(--text-muted)">${icon('users',12)} ${esc(v.organizer)}</div>`:''}
@@ -532,7 +552,7 @@ function renderVenues(vm){
       </div>`).join('')}</div>`:``}
   `;
 }
-function submitVenue(){const f=state.venueForm;if(!f.name||!f.location){alert('Name and location required.');return}state.venues.push({id:'venue-'+Date.now(),name:f.name,location:f.location,st:f.st,hasArena:f.hasArena,hasOutdoor:f.hasOutdoor,hasOutdoorArena:f.hasOutdoorArena,contact:f.contact,notes:f.notes,organizer:f.organizer});state.venueForm=freshVenueForm();state.showVenueForm=false;save();render();}
+function submitVenue(){const f=state.venueForm;if(!f.name||!f.location){alert('Name and location required.');return}state.venues.push({id:'venue-'+Date.now(),name:f.name,location:f.location,st:f.st,hasArena:f.hasArena,hasOutdoor:f.hasOutdoor,hasOutdoorArena:f.hasOutdoorArena,contact:f.contact,notes:f.notes,organizer:f.organizer,logo:f.logo||'📍'});state.venueForm=freshVenueForm();state.showVenueForm=false;save();render();}
 function removeVenue(id){if(confirm('Remove venue?')){state.venues=state.venues.filter(v=>v.id!==id);save();render();}}
 
 // ═══ SCHEDULE ═══
@@ -541,7 +561,7 @@ function renderSchedule(tm,vm){
   const filtered=state.filterMonth==='all'?state.schedule:state.schedule.filter(w=>w.month===state.filterMonth);
   const total=state.schedule.reduce((s,w)=>s+w.games.length,0);
   return`
-    <div class="flex between mb-24"><div><h2>Season Schedule</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.schedule.length} weeks, ${total} matches &middot; April – November 2027</p></div>
+    <div class="flex between mb-24"><div><h2>Season Schedule</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.schedule.length} weeks, ${total} matches &middot; April – November 2027 (Outdoor: May 15 – Oct 15)</p></div>
       <button class="btn btn-primary" onclick="doGenerate()" ${state.teams.length<2||state.venues.length<1?'disabled':''}>${icon('refresh')} Regenerate</button></div>
     ${state.schedule.length>0?`
       <div class="filter-pills"><button class="pill ${state.filterMonth==='all'?'active':''}" onclick="setState({filterMonth:'all'})">All</button>${months.map(m=>`<button class="pill ${state.filterMonth===m?'active':''}" onclick="setState({filterMonth:'${m}'})">${m}</button>`).join('')}</div>
@@ -683,48 +703,137 @@ function renderStandings(tm){
   `;
 }
 
-// ═══ PLAYER STATS ═══
+// ═══ STATS (team + player) ═══
 function renderPlayerStats(tm){
+  const standings=calcStandings();
   const ps=calcPlayerStats();
-  const byGoals=ps.slice().sort((a,b)=>b.goals-a.goals);
-  const byMVP=ps.filter(p=>p.mvps>0).sort((a,b)=>b.mvps-a.mvps);
-  const byGPG=ps.filter(p=>p.games>=3).sort((a,b)=>(b.goals/b.games)-(a.goals/a.games));
   const tmm=tmMap();
-  function teamName(ids){return ids.map(id=>tmm[id]?tmm[id].name:'?').join(', ');}
+  function teamName(ids){return ids.map(function(id){return tmm[id]?tmm[id].name:'?';}).join(', ');}
 
-  return`
-    <div class="mb-24"><h2>Player Statistics</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">Individual scoring and MVP awards across all completed games.</p></div>
+  return `
+    <div class="flex between mb-16"><h2>Statistics</h2></div>
+    <div class="sub-tabs">
+      <button class="sub-tab ${state.statsSubTab==='team'?'active':''}" onclick="setState({statsSubTab:'team'})">Team Stats</button>
+      <button class="sub-tab ${state.statsSubTab==='player'?'active':''}" onclick="setState({statsSubTab:'player'})">Player Stats</button>
+    </div>
+    ${state.statsSubTab==='team'?renderTeamStats(standings,tmm):renderIndividualStats(ps,tmm)}
+  `;
+}
+
+function renderTeamStats(standings,tmm){
+  const vm=vmMap();
+  return `
+    <div class="grid-2 mb-24">${standings.map(function(s){
+      const t=tmm[s.id];const v=t&&t.homeVenue?vm[t.homeVenue]:null;
+      const winPct=s.played>0?((s.w/s.played)*100).toFixed(0):'0';
+      const ppg=s.played>0?(s.gf/s.played).toFixed(1):'0.0';
+      const capg=s.played>0?(s.ga/s.played).toFixed(1):'0.0';
+      return '<div class="card team-stat-card"><div class="flex gap-12 mb-12">'+logoCircle(t?t.logo:null,'sm')+'<div><div class="serif" style="font-size:16px;font-weight:700">'+esc(s.name)+'</div><div style="font-size:11px;color:var(--text-dim)">'+esc(s.club)+(v?' &middot; '+esc(v.name):'')+'</div></div><span class="tag '+(s.goalLevel==='low'?'tag-low':'tag-med')+'" style="margin-left:auto">'+( s.goalLevel==='low'?'Low':'Med')+'</span></div>'+
+        '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">'+
+        '<div class="center"><div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;color:var(--accent)">'+s.pts+'</div><div style="font-size:10px;color:var(--text-dim);text-transform:uppercase">Points</div></div>'+
+        '<div class="center"><div style="font-size:18px;font-weight:700;color:var(--green)">'+winPct+'%</div><div style="font-size:10px;color:var(--text-dim);text-transform:uppercase">Win Rate</div></div>'+
+        '<div class="center"><div style="font-size:18px;font-weight:700;color:var(--teal)">'+ppg+'</div><div style="font-size:10px;color:var(--text-dim);text-transform:uppercase">Goals/Game</div></div>'+
+        '<div class="center"><div style="font-size:18px;font-weight:700;color:var(--blue)">'+capg+'</div><div style="font-size:10px;color:var(--text-dim);text-transform:uppercase">Conc/Game</div></div></div>'+
+        '<div style="font-size:12px;color:var(--text-muted)">'+s.w+'W '+s.d+'D '+s.l+'L &middot; '+s.gf+' GF '+s.ga+' GA &middot; GD '+(s.gf-s.ga>0?'+':'')+(s.gf-s.ga)+'</div>'+
+        '<div style="margin-top:8px">'+s.form.slice(-8).map(function(f){return '<span class="tag '+(f==='W'?'tag-win':f==='L'?'tag-loss':'tag-draw')+'" style="font-size:10px;padding:2px 6px;margin:0 1px">'+f+'</span>';}).join('')+'</div></div>';
+    }).join('')}</div>
+  `;
+}
+
+function renderIndividualStats(ps,tmm){
+  function teamName(ids){return ids.map(function(id){return tmm[id]?tmm[id].name:'?';}).join(', ');}
+  const byGoals=ps.slice().sort(function(a,b){return b.goals-a.goals;});
+  const byMVP=ps.filter(function(p){return p.mvps>0;}).sort(function(a,b){return b.mvps-a.mvps;});
+  const byGPG=ps.filter(function(p){return p.games>=3;}).sort(function(a,b){return(b.goals/b.games)-(a.goals/a.games);});
+  return `
     <div class="grid-2 mb-24">
       <div class="card"><h3 class="mb-12">Top Scorers</h3>
         <div style="display:grid;grid-template-columns:30px 1fr auto;gap:4px 12px;font-size:13px;align-items:center">
-          ${byGoals.slice(0,15).map((p,i)=>`
-            <span style="color:${i<3?'var(--accent)':'var(--text-muted)'};font-weight:700;text-align:center;font-family:'Playfair Display',serif">${i+1}</span>
-            <div><div style="font-weight:600">${esc(p.name)}</div><div style="font-size:11px;color:var(--text-dim)">${teamName(p.teams)} &middot; ${p.games} games</div></div>
-            <span style="color:var(--green);font-weight:700;font-size:16px;font-family:'Playfair Display',serif">${p.goals}</span>
-          `).join('')}
+          ${byGoals.slice(0,15).map(function(p,i){return '<span style="color:'+(i<3?'var(--accent)':'var(--text-muted)')+';font-weight:700;text-align:center;font-family:\'Playfair Display\',serif">'+(i+1)+'</span><div><div style="font-weight:600">'+esc(p.name)+'</div><div style="font-size:11px;color:var(--text-dim)">'+teamName(p.teams)+' &middot; '+p.games+' games</div></div><span style="color:var(--green);font-weight:700;font-size:16px;font-family:\'Playfair Display\',serif">'+p.goals+'</span>';}).join('')}
         </div>
       </div>
       <div class="card"><h3 class="mb-12">${icon('star',18)} MVP Awards</h3>
         <div style="display:grid;grid-template-columns:30px 1fr auto;gap:4px 12px;font-size:13px;align-items:center">
-          ${byMVP.slice(0,15).map((p,i)=>`
-            <span style="color:${i<3?'var(--accent)':'var(--text-muted)'};font-weight:700;text-align:center;font-family:'Playfair Display',serif">${i+1}</span>
-            <div><div style="font-weight:600">${esc(p.name)}</div><div style="font-size:11px;color:var(--text-dim)">${teamName(p.teams)}</div></div>
-            <span style="color:var(--accent);font-weight:700">${p.mvps} ${icon('star',12)}</span>
-          `).join('')}
+          ${byMVP.slice(0,15).map(function(p,i){return '<span style="color:'+(i<3?'var(--accent)':'var(--text-muted)')+';font-weight:700;text-align:center;font-family:\'Playfair Display\',serif">'+(i+1)+'</span><div><div style="font-weight:600">'+esc(p.name)+'</div><div style="font-size:11px;color:var(--text-dim)">'+teamName(p.teams)+'</div></div><span style="color:var(--accent);font-weight:700">'+p.mvps+' '+icon('star',12)+'</span>';}).join('')}
         </div>
       </div>
     </div>
-    ${byGPG.length>0?`<div class="card"><h3 class="mb-12">Goals Per Game (min. 3 games)</h3>
-      <div style="display:grid;grid-template-columns:30px 1fr auto auto;gap:4px 16px;font-size:13px;align-items:center">
-        ${byGPG.slice(0,10).map((p,i)=>`
-          <span style="color:${i<3?'var(--accent)':'var(--text-muted)'};font-weight:700;text-align:center">${i+1}</span>
-          <div><div style="font-weight:600">${esc(p.name)}</div><div style="font-size:11px;color:var(--text-dim)">${teamName(p.teams)}</div></div>
-          <span style="color:var(--text-muted);font-size:12px">${p.goals}g / ${p.games}gp</span>
-          <span style="color:var(--blue);font-weight:700;font-size:16px;font-family:'Playfair Display',serif">${(p.goals/p.games).toFixed(2)}</span>
-        `).join('')}
-      </div>
-    </div>`:''}
+    ${byGPG.length>0?'<div class="card"><h3 class="mb-12">Goals Per Game (min. 3 games)</h3><div style="display:grid;grid-template-columns:30px 1fr auto auto;gap:4px 16px;font-size:13px;align-items:center">'+byGPG.slice(0,10).map(function(p,i){return '<span style="color:'+(i<3?'var(--accent)':'var(--text-muted)')+';font-weight:700;text-align:center">'+(i+1)+'</span><div><div style="font-weight:600">'+esc(p.name)+'</div><div style="font-size:11px;color:var(--text-dim)">'+teamName(p.teams)+'</div></div><span style="color:var(--text-muted);font-size:12px">'+p.goals+'g / '+p.games+'gp</span><span style="color:var(--blue);font-weight:700;font-size:16px;font-family:\'Playfair Display\',serif">'+(p.goals/p.games).toFixed(2)+'</span>';}).join('')+'</div></div>':''}
   `;
+}
+
+
+// ═══ EDIT TEAM MODAL ═══
+function openEditTeam(id){state.editTeamModal=id;var t=state.teams.find(function(t){return t.id===id;});if(t)state._editTeamLogo=t.logo||'🏇';render();}
+function closeEditTeam(){state.editTeamModal=null;render();}
+function renderEditTeamModal(tm,vm){
+  var t=state.teams.find(function(t){return t.id===state.editTeamModal;});if(!t)return'';
+  var sts=['MA','CT','RI','NH','VT','ME','NY'];
+  return '<div class="modal-overlay" onclick="if(event.target===this)closeEditTeam()"><div class="modal fade-in">'+
+    '<button class="modal-close" onclick="closeEditTeam()">'+icon('x',20)+'</button>'+
+    '<h3 class="mb-20">Edit Team: '+esc(t.name)+'</h3>'+
+    '<div class="mb-12"><label class="field-label">Logo</label>'+logoPicker('et-logo',state._editTeamLogo||t.logo)+'</div>'+
+    '<div class="grid-2 mb-16">'+
+    '<div><label class="field-label">Team Name</label><input id="et-name" value="'+esc(t.name)+'"></div>'+
+    '<div><label class="field-label">Club</label><input id="et-club" value="'+esc(t.club)+'"></div>'+
+    '<div><label class="field-label">Goal Level</label><select id="et-goal"><option value="low"'+(t.goalLevel==='low'?' selected':'')+'>Low Goal</option><option value="medium"'+(t.goalLevel==='medium'?' selected':'')+'>Medium Goal</option></select></div>'+
+    '<div><label class="field-label">Home Venue</label><select id="et-venue"><option value="">None</option>'+state.venues.map(function(v){return '<option value="'+v.id+'"'+(t.homeVenue===v.id?' selected':'')+'>'+esc(v.name)+'</option>';}).join('')+'</select></div></div>'+
+    '<label class="field-label">Players</label><div style="display:grid;gap:6px" class="mb-12">'+
+    t.players.map(function(p,i){return '<div class="grid-2"><input id="et-p'+i+'" value="'+esc(p.name)+'"><input id="et-ph'+i+'" value="'+esc(p.handicap)+'" placeholder="Handicap"></div>';}).join('')+'</div>'+
+    '<label class="field-label">Alternates</label><div style="display:grid;gap:6px" class="mb-20">'+
+    [0,1].map(function(i){var a=(t.alternates&&t.alternates[i])||{name:'',handicap:''};return '<div class="grid-2"><input id="et-a'+i+'" value="'+esc(a.name)+'" placeholder="Alternate '+(i+1)+'"><input id="et-ah'+i+'" value="'+esc(a.handicap)+'" placeholder="Handicap"></div>';}).join('')+'</div>'+
+    '<div class="flex gap-8"><button class="btn btn-primary" onclick="saveEditTeam(''+t.id+'')">'+icon('check')+' Save</button><button class="btn btn-secondary" onclick="closeEditTeam()">Cancel</button></div>'+
+  '</div></div>';
+}
+function saveEditTeam(tid){
+  var t=state.teams.find(function(t){return t.id===tid;});if(!t)return;
+  t.name=document.getElementById('et-name').value;
+  t.club=document.getElementById('et-club').value;
+  t.goalLevel=document.getElementById('et-goal').value;
+  t.homeVenue=document.getElementById('et-venue').value;
+  t.logo=state._editTeamLogo||t.logo;
+  t.players=t.players.map(function(p,i){return{name:document.getElementById('et-p'+i).value,handicap:document.getElementById('et-ph'+i).value};}).filter(function(p){return p.name;});
+  t.alternates=[0,1].map(function(i){return{name:document.getElementById('et-a'+i).value,handicap:document.getElementById('et-ah'+i).value};}).filter(function(a){return a.name;});
+  state.editTeamModal=null;save();render();
+}
+
+// ═══ EDIT VENUE MODAL ═══
+function openEditVenue(id){state.editVenueModal=id;var v=state.venues.find(function(v){return v.id===id;});if(v)state._editVenueLogo=v.logo||'📍';render();}
+function closeEditVenue(){state.editVenueModal=null;render();}
+function renderEditVenueModal(vm){
+  var v=state.venues.find(function(v){return v.id===state.editVenueModal;});if(!v)return'';
+  var sts=['MA','CT','RI','NH','VT','ME','NY'];
+  return '<div class="modal-overlay" onclick="if(event.target===this)closeEditVenue()"><div class="modal fade-in">'+
+    '<button class="modal-close" onclick="closeEditVenue()">'+icon('x',20)+'</button>'+
+    '<h3 class="mb-20">Edit Venue: '+esc(v.name)+'</h3>'+
+    '<div class="mb-12"><label class="field-label">Logo</label>'+logoPicker('ev-logo',state._editVenueLogo||v.logo)+'</div>'+
+    '<div class="grid-2 mb-16">'+
+    '<div><label class="field-label">Name</label><input id="ev-name" value="'+esc(v.name)+'"></div>'+
+    '<div><label class="field-label">Town</label><input id="ev-loc" value="'+esc(v.location)+'"></div>'+
+    '<div><label class="field-label">State</label><select id="ev-st">'+sts.map(function(s){return '<option value="'+s+'"'+(v.st===s?' selected':'')+'>'+s+'</option>';}).join('')+'</select></div>'+
+    '<div><label class="field-label">Organizer</label><input id="ev-org" value="'+esc(v.organizer||'')+'"></div>'+
+    '<div><label class="field-label">Email</label><input id="ev-email" value="'+esc(v.contact||'')+'"></div>'+
+    '<div><label class="field-label">Notes</label><input id="ev-notes" value="'+esc(v.notes||'')+'"></div></div>'+
+    '<div class="flex gap-16 mb-20">'+
+    '<label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" id="ev-arena"'+(v.hasArena?' checked':'')+' > Indoor Arena</label>'+
+    '<label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" id="ev-outdoor"'+(v.hasOutdoor?' checked':'')+' > Outdoor</label>'+
+    '<label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" id="ev-oa"'+(v.hasOutdoorArena?' checked':'')+' > Outdoor Arena</label></div>'+
+    '<div class="flex gap-8"><button class="btn btn-primary" onclick="saveEditVenue(''+v.id+'')">'+icon('check')+' Save</button><button class="btn btn-secondary" onclick="closeEditVenue()">Cancel</button></div>'+
+  '</div></div>';
+}
+function saveEditVenue(vid){
+  var v=state.venues.find(function(v){return v.id===vid;});if(!v)return;
+  v.name=document.getElementById('ev-name').value;
+  v.location=document.getElementById('ev-loc').value;
+  v.st=document.getElementById('ev-st').value;
+  v.organizer=document.getElementById('ev-org').value;
+  v.contact=document.getElementById('ev-email').value;
+  v.notes=document.getElementById('ev-notes').value;
+  v.hasArena=document.getElementById('ev-arena').checked;
+  v.hasOutdoor=document.getElementById('ev-outdoor').checked;
+  v.hasOutdoorArena=document.getElementById('ev-oa').checked;
+  v.logo=state._editVenueLogo||v.logo;
+  state.editVenueModal=null;save();render();
 }
 
 // ═══ INIT ═══
