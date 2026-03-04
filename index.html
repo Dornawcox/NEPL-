@@ -782,7 +782,7 @@ function renderEditTeamModal(tm,vm){
     t.players.map(function(p,i){return '<div class="grid-2"><input id="et-p'+i+'" value="'+esc(p.name)+'"><input id="et-ph'+i+'" value="'+esc(p.handicap)+'" placeholder="Handicap"></div>';}).join('')+'</div>'+
     '<label class="field-label">Alternates</label><div style="display:grid;gap:6px" class="mb-20">'+
     [0,1].map(function(i){var a=(t.alternates&&t.alternates[i])||{name:'',handicap:''};return '<div class="grid-2"><input id="et-a'+i+'" value="'+esc(a.name)+'" placeholder="Alternate '+(i+1)+'"><input id="et-ah'+i+'" value="'+esc(a.handicap)+'" placeholder="Handicap"></div>';}).join('')+'</div>'+
-    '<div class="flex gap-8"><button class="btn btn-primary" onclick="saveEditTeam(''+t.id+'')">'+icon('check')+' Save</button><button class="btn btn-secondary" onclick="closeEditTeam()">Cancel</button></div>'+
+    '<div class="flex gap-8"><button class="btn btn-primary" onclick="saveEditTeam(&apos;'+t.id+'&apos;)">'+icon('check')+' Save</button><button class="btn btn-secondary" onclick="closeEditTeam()">Cancel</button></div>'+
   '</div></div>';
 }
 function saveEditTeam(tid){
@@ -818,7 +818,7 @@ function renderEditVenueModal(vm){
     '<label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" id="ev-arena"'+(v.hasArena?' checked':'')+' > Indoor Arena</label>'+
     '<label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" id="ev-outdoor"'+(v.hasOutdoor?' checked':'')+' > Outdoor</label>'+
     '<label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" id="ev-oa"'+(v.hasOutdoorArena?' checked':'')+' > Outdoor Arena</label></div>'+
-    '<div class="flex gap-8"><button class="btn btn-primary" onclick="saveEditVenue(''+v.id+'')">'+icon('check')+' Save</button><button class="btn btn-secondary" onclick="closeEditVenue()">Cancel</button></div>'+
+    '<div class="flex gap-8"><button class="btn btn-primary" onclick="saveEditVenue(&apos;'+v.id+'&apos;)">'+icon('check')+' Save</button><button class="btn btn-secondary" onclick="closeEditVenue()">Cancel</button></div>'+
   '</div></div>';
 }
 function saveEditVenue(vid){
