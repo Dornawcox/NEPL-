@@ -1,63 +1,67 @@
 # NEPL — New England Polo League
 
-A standalone web application for managing the New England Polo League: team registration, venue management, automatic schedule generation, game results entry, and live standings.
+A standalone web application for managing the New England Polo League: team registration, venue management, schedule generation with specific dates, game results with individual stats, and live standings.
 
 ## Features
 
-- **Team Registration** — 3-person teams (low or medium goal) with up to 2 alternates. Players can come from different clubs.
-- **Venue Registration** — Clubs register with arena/outdoor availability, location, and contact info.
-- **Automatic Schedule Generation** — Full double round-robin (home & away) generated from registered teams. Games run simultaneously at multiple venues. Season spans April (indoor) through December (indoor), with outdoor play May–October.
-- **Game Results** — Click any game to enter final scores, chukker-by-chukker detail, and game notes.
-- **Live Standings** — League table with W/D/L, goal difference, points, and recent form. Plus top scorers and best defense leaderboards.
-- **Persistent Data** — All data saved to `localStorage` in your browser.
+- **8 Pre-loaded Venues** across MA, CT, RI, NH, and VT — with Indoor Arena, Outdoor, and Outdoor Arena facility types
+- **10 Pre-loaded Teams** (low and medium goal) with full rosters and alternates
+- **Full Season Schedule** — April through November 2027 with specific dates, game times, alternate dates, and round-robin weekends at single venues
+- **Outdoor Rules** — No outdoor games before May 15 or after October 15
+- **Game Results** — Final scores, chukker-by-chukker detail, MVP selection, and individual goal scorers per game
+- **Pre-populated Results** — All games through June 30 have scores, MVPs, and goal scorers
+- **Live Standings** — League table with W/D/L, goal difference, points, division tags, and recent form
+- **Player Statistics** — Top scorers, MVP leaders, and goals-per-game leaderboards
+- **Edit Game Details** — Change game times, dates, alternate dates, and venues
+- **Contact Venues** — Email links to venue organizers directly from game cards
+- **Persistent Data** — All data saved to localStorage
 
 ## Hosting on GitHub Pages
 
-1. **Create a new GitHub repository** (e.g., `nepl-league`)
+1. Create a new GitHub repository (e.g., `nepl-league`)
 
-2. **Upload the files:**
+2. Upload the files:
    ```bash
    git init
    git add .
-   git commit -m "Initial NEPL site"
+   git commit -m "NEPL League site"
    git branch -M main
    git remote add origin https://github.com/YOUR_USERNAME/nepl-league.git
    git push -u origin main
    ```
 
-3. **Enable GitHub Pages:**
-   - Go to your repo → **Settings** → **Pages**
-   - Under "Source", select **Deploy from a branch**
-   - Select **main** branch and **/ (root)** folder
-   - Click **Save**
+3. Enable GitHub Pages:
+   - Repository → **Settings** → **Pages**
+   - Source: **Deploy from a branch**
+   - Branch: **main**, folder: **/ (root)**
+   - Save
 
-4. Your site will be live at `https://YOUR_USERNAME.github.io/nepl-league/` within a few minutes.
+4. Site goes live at `https://YOUR_USERNAME.github.io/nepl-league/`
 
-## Quick Start (Local)
+## Local Development
 
-Just open `index.html` in any browser. No build step, no dependencies, no server required.
+No build step required. Open `index.html` in any browser:
 
 ```bash
 open index.html
-# or
-python -m http.server 8000
-# then visit http://localhost:8000
 ```
 
-## How It Works
+Or serve locally:
 
-1. **Add venues** — Register the clubs that will host games
-2. **Register teams** — Create teams with rosters, assign home venues
-3. **Generate schedule** — The algorithm builds a full home-and-away round-robin
-4. **Play and record** — Enter results as games are played; standings update automatically
+```bash
+python -m http.server 8000
+# visit http://localhost:8000
+```
 
-## Data
+## Data Management
 
-All data is stored in your browser's `localStorage`. Use the "Reset All Data" button in the footer to start fresh. Data does not sync between browsers or devices.
+- **Reset All Data** — Clears everything and starts fresh
+- **Restore Demo Data** — Reloads the 8 venues, 10 teams, full schedule, and pre-populated results
+- All data lives in `localStorage` — does not sync between browsers/devices
 
 ## Tech
 
-Single HTML file. No frameworks, no build tools, no external dependencies beyond Google Fonts. Designed to be dropped onto any static hosting platform.
+Single HTML file. No frameworks, no build tools. Google Fonts loaded externally. Designed for static hosting on GitHub Pages, Netlify, Vercel, or any web server.
 
 ## License
 

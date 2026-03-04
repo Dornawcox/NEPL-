@@ -4,1012 +4,731 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEPL — New England Polo League</title>
-<meta name="description" content="New England Polo League — Club team polo across New England. Register teams, schedule games, track standings.">
+<meta name="description" content="New England Polo League — Club team polo across New England.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0C1117;
-  --surface: #151C25;
-  --surface-alt: #1A2332;
-  --border: #253040;
-  --border-light: #2D3B4F;
-  --text: #E8ECF1;
-  --text-muted: #8896A8;
-  --text-dim: #5A6A7E;
-  --accent: #C4A25C;
-  --accent-light: #D4B76C;
-  --accent-dark: #A48840;
-  --green: #4CAF6E;
-  --red: #CF6056;
-  --blue: #5B8DC9;
-  --teal: #4CA89E;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.5;
-}
-.serif { font-family: 'Playfair Display', serif; }
-a { color: var(--accent); text-decoration: none; }
-
-/* Layout */
-.max-w { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
-.card-accent { border-color: rgba(196,162,92,0.3); }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.flex { display: flex; align-items: center; }
-.gap-8 { gap: 8px; }
-.gap-12 { gap: 12px; }
-.gap-16 { gap: 16px; }
-.between { justify-content: space-between; }
-.center { text-align: center; }
-.mt-4 { margin-top: 4px; }
-.mt-8 { margin-top: 8px; }
-.mt-12 { margin-top: 12px; }
-.mt-16 { margin-top: 16px; }
-.mt-24 { margin-top: 24px; }
-.mt-28 { margin-top: 28px; }
-.mb-6 { margin-bottom: 6px; }
-.mb-10 { margin-bottom: 10px; }
-.mb-12 { margin-bottom: 12px; }
-.mb-16 { margin-bottom: 16px; }
-.mb-20 { margin-bottom: 20px; }
-.mb-24 { margin-bottom: 24px; }
-.mb-32 { margin-bottom: 32px; }
-
-/* Typography */
-h1 { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 700; letter-spacing: -0.02em; }
-h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
-h3 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--accent); }
-.stat-num { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 700; }
-.stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
-
-/* Inputs */
-label.field-label {
-  display: block; font-size: 12px; font-weight: 600; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
-}
-input, select, textarea {
-  width: 100%; padding: 10px 14px; background: var(--surface-alt); border: 1px solid var(--border);
-  border-radius: 6px; color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none;
-}
-input:focus, select:focus { border-color: var(--accent); }
-input.score-input { width: 48px; text-align: center; padding: 8px 4px; font-size: 16px; font-weight: 700; }
-
-/* Buttons */
-.btn {
-  display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: none; border-radius: 6px;
-  font-weight: 600; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s;
-}
-.btn-primary { background: var(--accent); color: var(--bg); }
-.btn-primary:hover { background: var(--accent-light); }
-.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
-.btn-secondary:hover { background: rgba(196,162,92,0.1); }
-.btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(207,96,86,0.4); }
-.btn-sm { padding: 6px 14px; font-size: 12px; }
-.btn-xs { padding: 4px 10px; font-size: 11px; }
-.btn-icon { background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 4px; display: inline-flex; }
-.btn-icon:hover { color: var(--text); }
-
-/* Tags */
-.tag {
-  display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em;
-}
-.tag-low { background: rgba(76,168,158,0.1); color: var(--teal); }
-.tag-med { background: rgba(91,141,201,0.1); color: var(--blue); }
-.tag-arena { background: rgba(91,141,201,0.1); color: var(--blue); }
-.tag-outdoor { background: rgba(76,175,110,0.1); color: var(--green); }
-.tag-indoor { background: rgba(91,141,201,0.1); color: var(--blue); }
-.tag-win { background: rgba(76,175,110,0.12); color: var(--green); }
-.tag-loss { background: rgba(207,96,86,0.12); color: var(--red); }
-.tag-draw { background: rgba(137,150,168,0.12); color: var(--text-muted); }
-
-/* Header */
-header { border-bottom: 1px solid var(--border); background: var(--surface); }
-.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
-.logo-area { display: flex; align-items: center; gap: 14px; }
-.logo-icon { color: var(--accent); }
-.logo-icon svg { width: 28px; height: 28px; }
-.logo-text { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
-.logo-sub { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-top: -2px; }
-nav { display: flex; gap: 2px; background: var(--surface-alt); border-radius: 8px; padding: 3px; }
-nav button {
-  display: flex; align-items: center; gap: 6px; padding: 8px 14px; border: none; border-radius: 6px;
-  cursor: pointer; background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 600;
-  font-family: 'DM Sans', sans-serif; transition: all 0.15s;
-}
-nav button.active { background: rgba(196,162,92,0.15); color: var(--accent); }
-nav button:hover:not(.active) { color: var(--text); }
-nav button svg { width: 16px; height: 16px; }
-
-/* Table */
-.league-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.league-table th {
-  padding: 12px 10px; text-align: center; font-size: 11px; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); font-weight: 600;
-}
-.league-table th.left { text-align: left; }
-.league-table td { padding: 10px; text-align: center; border-bottom: 1px solid var(--border); }
-.league-table td.left { text-align: left; }
-.league-table tr:nth-child(even) { background: rgba(26,35,50,0.3); }
-.league-table .rank { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; }
-.league-table .pts-cell { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--accent); }
-
-/* Game card */
-.game-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 18px;
-  display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; cursor: pointer;
-  transition: border-color 0.15s;
-}
-.game-card:hover { border-color: var(--border-light); }
-.game-card.has-result { border-left: 3px solid var(--accent); }
-.game-team { font-weight: 600; font-size: 14px; }
-.game-club { font-size: 11px; color: var(--text-dim); }
-.game-venue { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
-.game-score { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--accent); }
-.game-vs { font-size: 12px; color: var(--text-dim); font-weight: 600; }
-
-/* Modal */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center;
-  justify-content: center; z-index: 1000; padding: 20px; backdrop-filter: blur(4px);
-}
-.modal {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  width: 100%; max-width: 520px; padding: 28px; position: relative;
-}
-.modal-close {
-  position: absolute; top: 14px; right: 14px; background: none; border: none; color: var(--text-dim);
-  cursor: pointer; padding: 4px;
-}
-.modal-close:hover { color: var(--text); }
-
-/* Results detail */
-.result-row {
-  display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-}
-.result-row:last-child { border-bottom: none; }
-
-/* Footer */
-footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; margin-top: 40px; }
-footer .sub { font-size: 12px; color: var(--text-dim); }
-
-/* Empty state */
-.empty { text-align: center; padding: 60px 20px; color: var(--text-dim); }
-.empty-icon { font-size: 40px; margin-bottom: 12px; }
-.empty-title { font-size: 16px; }
-.empty-sub { font-size: 13px; margin-top: 4px; }
-
-/* Month filter pills */
-.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
-.pill {
-  padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
-  background: transparent; color: var(--accent); border: 1px solid var(--accent); font-family: 'DM Sans', sans-serif;
-  transition: all 0.15s;
-}
-.pill.active { background: rgba(196,162,92,0.15); }
-
-/* Responsive */
-@media (max-width: 768px) {
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  nav { flex-wrap: wrap; }
-  nav button span { display: none; }
-  h1 { font-size: 28px; }
-  .header-inner { flex-direction: column; gap: 12px; }
-  .game-card { grid-template-columns: 1fr; text-align: center; gap: 8px; }
-}
-
-/* Week header */
-.week-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.week-label { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--accent); }
-.week-month { font-size: 13px; color: var(--text-muted); }
-
-/* How it works grid */
-.how-card { padding: 16px; background: var(--surface-alt); border-radius: 8px; }
-.how-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
-.how-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
-
-/* Recent results */
-.recent-result {
-  display: flex; justify-content: space-between; align-items: center; padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-.recent-result:last-child { border-bottom: none; }
-
-/* Chukker scores */
-.chukker-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.chukker-label { font-size: 12px; color: var(--text-muted); min-width: 70px; }
-.chukker-input { width: 48px; text-align: center; padding: 6px 4px; }
-
-/* Transitions */
-.fade-in { animation: fadeIn 0.2s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+:root{--bg:#0C1117;--surface:#151C25;--surface-alt:#1A2332;--border:#253040;--border-light:#2D3B4F;--text:#E8ECF1;--text-muted:#8896A8;--text-dim:#5A6A7E;--accent:#C4A25C;--accent-light:#D4B76C;--green:#4CAF6E;--red:#CF6056;--blue:#5B8DC9;--teal:#4CA89E;--orange:#D4903C}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+.serif{font-family:'Playfair Display',serif}
+a{color:var(--accent);text-decoration:none}
+.max-w{max-width:1120px;margin:0 auto;padding:0 24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px}
+.card-accent{border-color:rgba(196,162,92,0.3)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.flex{display:flex;align-items:center}.gap-6{gap:6px}.gap-8{gap:8px}.gap-12{gap:12px}.gap-16{gap:16px}
+.between{justify-content:space-between}.center{text-align:center}.wrap{flex-wrap:wrap}
+.mt-4{margin-top:4px}.mt-8{margin-top:8px}.mt-12{margin-top:12px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}.mt-28{margin-top:28px}
+.mb-6{margin-bottom:6px}.mb-8{margin-bottom:8px}.mb-10{margin-bottom:10px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}.mb-20{margin-bottom:20px}.mb-24{margin-bottom:24px}.mb-32{margin-bottom:32px}
+h1{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;letter-spacing:-0.02em}
+h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700}
+h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--accent)}
+h4{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text)}
+.stat-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:700}
+.stat-label{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px}
+label.field-label{display:block;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+input,select,textarea{width:100%;padding:10px 14px;background:var(--surface-alt);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none}
+input:focus,select:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:60px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn-primary{background:var(--accent);color:var(--bg)}.btn-primary:hover{background:var(--accent-light)}.btn-primary:disabled{opacity:0.4;cursor:not-allowed}
+.btn-secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}.btn-secondary:hover{background:rgba(196,162,92,0.1)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(207,96,86,0.4)}
+.btn-sm{padding:6px 14px;font-size:12px}.btn-xs{padding:4px 10px;font-size:11px}
+.btn-icon{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:4px;display:inline-flex}.btn-icon:hover{color:var(--text)}
+.tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;letter-spacing:0.03em}
+.tag-low{background:rgba(76,168,158,0.1);color:var(--teal)}.tag-med{background:rgba(91,141,201,0.1);color:var(--blue)}
+.tag-arena{background:rgba(91,141,201,0.1);color:var(--blue)}.tag-outdoor{background:rgba(76,175,110,0.1);color:var(--green)}
+.tag-outdoor-arena{background:rgba(212,144,60,0.12);color:var(--orange)}
+.tag-indoor{background:rgba(91,141,201,0.1);color:var(--blue)}
+.tag-win{background:rgba(76,175,110,0.12);color:var(--green)}.tag-loss{background:rgba(207,96,86,0.12);color:var(--red)}.tag-draw{background:rgba(137,150,168,0.12);color:var(--text-muted)}
+.tag-mvp{background:rgba(196,162,92,0.15);color:var(--accent)}
+header{border-bottom:1px solid var(--border);background:var(--surface)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.logo-area{display:flex;align-items:center;gap:14px}
+.logo-icon{color:var(--accent)}.logo-icon svg{width:28px;height:28px}
+.logo-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:700}
+.logo-sub{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;margin-top:-2px}
+nav{display:flex;gap:2px;background:var(--surface-alt);border-radius:8px;padding:3px}
+nav button{display:flex;align-items:center;gap:6px;padding:8px 12px;border:none;border-radius:6px;cursor:pointer;background:transparent;color:var(--text-muted);font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+nav button.active{background:rgba(196,162,92,0.15);color:var(--accent)}
+nav button:hover:not(.active){color:var(--text)}
+nav button svg{width:16px;height:16px}
+.league-table{width:100%;border-collapse:collapse;font-size:14px}
+.league-table th{padding:12px 10px;text-align:center;font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);font-weight:600}
+.league-table th.left{text-align:left}
+.league-table td{padding:10px;text-align:center;border-bottom:1px solid var(--border)}
+.league-table td.left{text-align:left}
+.league-table tr:nth-child(even){background:rgba(26,35,50,0.3)}
+.league-table .rank{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
+.league-table .pts-cell{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--accent)}
+.game-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;cursor:pointer;transition:border-color 0.15s}
+.game-card:hover{border-color:var(--border-light)}.game-card.has-result{border-left:3px solid var(--accent)}
+.game-team{font-weight:600;font-size:14px}.game-club{font-size:11px;color:var(--text-dim)}
+.game-venue{font-size:11px;color:var(--text-dim);margin-top:4px}.game-date{font-size:11px;color:var(--teal);margin-top:2px}
+.game-score{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--accent)}.game-vs{font-size:12px;color:var(--text-dim);font-weight:600}
+.game-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(4px)}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;width:100%;max-width:580px;padding:28px;position:relative;max-height:90vh;overflow-y:auto}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text-dim);cursor:pointer;padding:4px}.modal-close:hover{color:var(--text)}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.pill{padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;background:transparent;color:var(--accent);border:1px solid var(--accent);font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.pill.active{background:rgba(196,162,92,0.15)}
+.how-card{padding:16px;background:var(--surface-alt);border-radius:8px}
+.how-title{font-weight:700;font-size:14px;margin-bottom:6px}.how-desc{font-size:13px;color:var(--text-muted);line-height:1.55}
+.recent-result{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.recent-result:last-child{border-bottom:none}
+.chukker-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.chukker-label{font-size:12px;color:var(--text-muted);min-width:70px}
+.chukker-input{width:48px;text-align:center;padding:6px 4px}
+.date-block{background:var(--surface-alt);border-radius:8px;padding:12px 16px;margin-bottom:12px;border-left:3px solid var(--teal)}
+.date-block.weekend{border-left-color:var(--accent)}
+.date-primary{font-weight:700;font-size:14px;color:var(--text)}.date-alt{font-size:12px;color:var(--text-dim);margin-top:2px}
+.player-stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.player-stat-row:last-child{border-bottom:none}
+footer{border-top:1px solid var(--border);padding:24px;text-align:center;margin-top:40px}
+footer .sub{font-size:12px;color:var(--text-dim)}
+.empty{text-align:center;padding:60px 20px;color:var(--text-dim)}
+.empty-icon{font-size:40px;margin-bottom:12px}.empty-title{font-size:16px}.empty-sub{font-size:13px;margin-top:4px}
+.fade-in{animation:fadeIn 0.2s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.week-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.week-label{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--accent)}
+.week-month{font-size:13px;color:var(--text-muted)}
+.contact-link{color:var(--teal);font-size:11px;cursor:pointer;text-decoration:underline}
+.contact-link:hover{color:var(--accent)}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}nav{flex-wrap:wrap}nav button span.nav-label{display:none}h1{font-size:28px}.header-inner{flex-direction:column;gap:12px}.game-card{grid-template-columns:1fr;text-align:center;gap:8px}}
 </style>
 </head>
 <body>
-
 <div id="app"></div>
-
 <script>
 // ═══════════════════════════════════════════════════════════════
-// NEPL — New England Polo League — Standalone App
+// NEPL v4 — Full featured league site
 // ═══════════════════════════════════════════════════════════════
 
-const LS = {
-  get(k) { try { const v = localStorage.getItem('nepl-' + k); return v ? JSON.parse(v) : null; } catch { return null; } },
-  set(k, v) { try { localStorage.setItem('nepl-' + k, JSON.stringify(v)); } catch(e) { console.error(e); } },
-  clear() { ['teams','venues','schedule','results'].forEach(k => localStorage.removeItem('nepl-' + k)); }
+const LS={get(k){try{const v=localStorage.getItem('nepl-'+k);return v?JSON.parse(v):null}catch{return null}},set(k,v){try{localStorage.setItem('nepl-'+k,JSON.stringify(v))}catch(e){console.error(e)}},clear(){['teams','venues','schedule','results','playerStats','config'].forEach(k=>localStorage.removeItem('nepl-'+k))}};
+
+// ── SVG Icons ──
+const ICO={
+horse:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L18 6H13L8 11V16L3 21"/><path d="M13 6V2L18 6"/><path d="M8 11L3 6"/></svg>`,
+plus:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5V19M5 12H19"/></svg>`,
+calendar:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2V6M8 2V6M3 10H21"/></svg>`,
+trophy:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9H4C3 9 2 8 2 7V6C2 5 3 4 4 4H6M18 9H20C21 9 22 8 22 7V6C22 5 21 4 20 4H18"/><path d="M6 4H18V9C18 13 15 16 12 16C9 16 6 13 6 9V4Z"/><path d="M12 16V19M8 22H16M8 22V19H16V22"/></svg>`,
+map:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 6V22L8 18L16 22L23 18V2L16 6L8 2L1 6Z"/><path d="M8 2V18M16 6V22"/></svg>`,
+users:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 21V19C17 16.8 15.2 15 13 15H5C2.8 15 1 16.8 1 19V21"/><circle cx="9" cy="7" r="4"/><path d="M23 21V19C23 17.1 21.8 15.5 20 15M16 3.1C17.8 3.6 19 5.2 19 7C19 8.8 17.8 10.4 16 10.9"/></svg>`,
+x:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6L18 18"/></svg>`,
+refresh:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 4V10H7"/><path d="M23 20V14H17"/><path d="M20.5 9A9 9 0 0 0 5.6 5.6L1 10M23 14L18.4 18.4A9 9 0 0 1 3.5 15"/></svg>`,
+edit:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+check:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17L4 12"/></svg>`,
+bar:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20V14"/></svg>`,
+star:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2L15.1 8.3L22 9.2L17 14.1L18.2 21L12 17.8L5.8 21L7 14.1L2 9.2L8.9 8.3L12 2Z"/></svg>`,
+mail:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13L2 4"/></svg>`,
+clock:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6V12L16 14"/></svg>`,
 };
+function icon(n,s=16){return `<span style="display:inline-flex;width:${s}px;height:${s}px">${ICO[n]||''}</span>`}
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
-// ── State ──
-let state = {
-  tab: 'home',
-  teams: LS.get('teams') || [],
-  venues: LS.get('venues') || [],
-  schedule: LS.get('schedule') || [],
-  results: LS.get('results') || {},
-  showTeamForm: false,
-  showVenueForm: false,
-  gameModal: null,       // game id for detail modal
-  filterMonth: 'all',
-  teamForm: freshTeamForm(),
-  venueForm: freshVenueForm(),
-};
+// ══════════════════════════════════════════════
+// PRE-POPULATED DATA
+// ══════════════════════════════════════════════
+const VENUES_SEED = [
+  {id:'v-myopia',name:'Myopia Polo Club',location:'Hamilton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'info@myopiapolo.com',notes:'Historic NE venue. Full arena + 2 outdoor fields.',organizer:'Bill Tompkins'},
+  {id:'v-stagehill',name:'Stage Hill Polo Club',location:'Bolton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'play@stagehillpolo.com',notes:'Arena + outdoor arena + grass field. Strong admin hub.',organizer:'Alyson Poor'},
+  {id:'v-giant',name:'Giant Valley Polo Club',location:'Glastonbury',st:'CT',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'giantvalley@polo.com',notes:'CT anchor. Year-round arena.',organizer:'Mark Gillespie'},
+  {id:'v-newport',name:'Newport / Westchester Polo Club',location:'Portsmouth',st:'RI',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'info@newportpolo.com',notes:'Historic Westchester club operating as Newport Polo. Arena + outdoor arena.',organizer:'Dan Keating'},
+  {id:'v-sugar',name:'Sugarbush Polo Club',location:'Shelburne',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'sugarbush@vtpolo.com',notes:'Summer outdoor only. Beautiful mountain setting.',organizer:'Pete Schultz'},
+  {id:'v-tuckaway',name:'Tuckaway Farm',location:'Lee',st:'NH',hasArena:false,hasOutdoor:true,hasOutdoorArena:true,contact:'tuckaway@polo.nh',notes:'Outdoor arena + grass field. NH anchor.',organizer:'Sarah Collins'},
+  {id:'v-kings',name:'Kingswood Polo Club',location:'Wolfeboro',st:'NH',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'play@kingswoodpolo.com',notes:'Arena + summer outdoor. Lakes Region.',organizer:'Jim Hannigan'},
+  {id:'v-quechee',name:'Quechee Polo Club',location:'Quechee',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'polo@quecheeclub.com',notes:'Upper Valley VT. Summer outdoor venue.',organizer:'Tom Richards'},
+];
 
-function freshTeamForm() {
-  return { name:'', club:'', goalLevel:'low', homeVenue:'',
-    p1:'', p1h:'', p2:'', p2h:'', p3:'', p3h:'', a1:'', a1h:'', a2:'', a2h:'' };
-}
-function freshVenueForm() {
-  return { name:'', location:'', st:'MA', hasArena:true, hasOutdoor:true, contact:'', notes:'' };
-}
+function mkPlayers(names){return names.map(n=>{const[name,h]=n.split('|');return{name,handicap:h||'0'}});}
 
-function save() {
-  LS.set('teams', state.teams);
-  LS.set('venues', state.venues);
-  LS.set('schedule', state.schedule);
-  LS.set('results', state.results);
-}
+const TEAMS_SEED = [
+  {id:'t-myopia1',name:'Myopia Mustangs',club:'Myopia Polo Club',goalLevel:'low',homeVenue:'v-myopia',
+    players:mkPlayers(['Bill Tompkins|1','Sarah Chen|0','Jake Morrison|1']),alternates:mkPlayers(['Emma Whitfield|0'])},
+  {id:'t-stagehill1',name:'Stage Hill Storm',club:'Stage Hill Polo Club',goalLevel:'low',homeVenue:'v-stagehill',
+    players:mkPlayers(['Alyson Poor|2','Steve Rudolph|1','Tom Rizzo|1']),alternates:mkPlayers(['Amanda Roberts|0'])},
+  {id:'t-giant1',name:'Giant Valley Riders',club:'Giant Valley Polo Club',goalLevel:'low',homeVenue:'v-giant',
+    players:mkPlayers(['Mark Gillespie|1','Lucia Fernandez|1','Chris Walsh|0']),alternates:mkPlayers(['Nina Torres|1'])},
+  {id:'t-newport1',name:'Newport Navy',club:'Newport / Westchester Polo Club',goalLevel:'low',homeVenue:'v-newport',
+    players:mkPlayers(['Dan Keating|2','Meg Sullivan|0','Ravi Patel|1']),alternates:mkPlayers(['Olivia Harrington|0'])},
+  {id:'t-sugar1',name:'Sugarbush Chargers',club:'Sugarbush Polo Club',goalLevel:'medium',homeVenue:'v-sugar',
+    players:mkPlayers(['Pete Schultz|2','Hannah Greene|2','Carlos Vega|1']),alternates:mkPlayers(['Liam Casey|1'])},
+  {id:'t-tuck1',name:'Tuckaway Foxes',club:'Tuckaway Farm',goalLevel:'low',homeVenue:'v-tuckaway',
+    players:mkPlayers(['Sarah Collins|1','Ben Archer|1','Kelly Donahue|0']),alternates:mkPlayers(['Matt Pierce|0'])},
+  {id:'t-kings1',name:'Kingswood Lakers',club:'Kingswood Polo Club',goalLevel:'medium',homeVenue:'v-kings',
+    players:mkPlayers(['Jim Hannigan|3','Priya Sharma|1','Tyler Brooks|2']),alternates:mkPlayers(['Nora Flanagan|1'])},
+  {id:'t-quechee1',name:'Quechee Valley',club:'Quechee Polo Club',goalLevel:'low',homeVenue:'v-quechee',
+    players:mkPlayers(['Tom Richards|1','Ava Sinclair|0','Derek Holm|1']),alternates:mkPlayers(['Rachel Kim|0'])},
+  {id:'t-myopia2',name:'Myopia Mavericks',club:'Myopia Polo Club',goalLevel:'medium',homeVenue:'v-myopia',
+    players:mkPlayers(['Greg Monroe|2','Tess Callahan|2','Owen Blake|1']),alternates:mkPlayers(['Fiona Xu|1'])},
+  {id:'t-mixed1',name:'NE All-Stars',club:'Multi-club',goalLevel:'medium',homeVenue:'v-stagehill',
+    players:mkPlayers(['Nina Torres|1','Liam Casey|1','Matt Pierce|2']),alternates:mkPlayers(['Rachel Kim|1','Nora Flanagan|0'])},
+];
 
-function setState(patch) {
-  Object.assign(state, patch);
-  save();
-  render();
-}
-
-// ── Helpers ──
-function teamMap() { const m = {}; state.teams.forEach(t => m[t.id] = t); return m; }
-function venueMap() { const m = {}; state.venues.forEach(v => m[v.id] = v); return m; }
-function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
-
-// ── Schedule Algorithm ──
-function generateSchedule() {
-  const teams = state.teams;
-  const venues = state.venues;
-  if (teams.length < 2) return [];
-
+// ── Pre-built schedule with specific dates ──
+function buildPreSchedule(){
+  const teams = TEAMS_SEED;
   const matchups = [];
-  for (let i = 0; i < teams.length; i++) {
-    for (let j = i + 1; j < teams.length; j++) {
-      matchups.push({ home: teams[i].id, away: teams[j].id });
-      matchups.push({ home: teams[j].id, away: teams[i].id });
-    }
+  for(let i=0;i<teams.length;i++) for(let j=i+1;j<teams.length;j++){
+    matchups.push({home:teams[i].id,away:teams[j].id});
+    matchups.push({home:teams[j].id,away:teams[i].id});
   }
-  // Shuffle
-  for (let i = matchups.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [matchups[i], matchups[j]] = [matchups[j], matchups[i]];
+  // Deterministic shuffle with seed
+  let seed=42;
+  function rng(){seed=(seed*16807+0)%2147483647;return(seed-1)/2147483646;}
+  for(let i=matchups.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[matchups[i],matchups[j]]=[matchups[j],matchups[i]];}
+
+  // Date slots: Saturdays April-November 2027
+  // No outdoor before May 15, no outdoor after Oct 15
+  const saturdays=[];
+  const d=new Date(2027,3,3); // Apr 3 2027 (Sat)
+  while(d<=new Date(2027,10,28)){
+    if(d.getDay()===6) saturdays.push(new Date(d));
+    d.setDate(d.getDate()+1);
   }
 
-  const months = [
-    { month:'April', indoor:true, weeks:3 },
-    { month:'May', indoor:false, weeks:4 },
-    { month:'June', indoor:false, weeks:4 },
-    { month:'July', indoor:false, weeks:3 },
-    { month:'August', indoor:false, weeks:4 },
-    { month:'September', indoor:false, weeks:4 },
-    { month:'October', indoor:false, weeks:3 },
-    { month:'November', indoor:true, weeks:3 },
-    { month:'December', indoor:true, weeks:2 },
-  ];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmt(dt){return months[dt.getMonth()]+' '+dt.getDate()+', 2027'}
+  function isOutdoorOk(dt){return dt>=new Date(2027,4,15)&&dt<=new Date(2027,9,15);}
 
-  const tvMap = {};
-  teams.forEach(t => { if (t.homeVenue) tvMap[t.id] = t.homeVenue; });
-  const arenaV = venues.filter(v => v.hasArena).map(v => v.id);
-  const outdoorV = venues.filter(v => v.hasOutdoor).map(v => v.id);
+  const gamesPerWeek=Math.min(5,Math.floor(teams.length/2));
+  const schedule=[];
+  let mIdx=0,wkNum=1;
 
-  const schedule = [];
-  let mIdx = 0, weekNum = 1;
-  const gamesPerWeek = Math.max(1, Math.floor(teams.length / 2));
+  // Create venue map for home teams
+  const tvMap={};teams.forEach(t=>{if(t.homeVenue)tvMap[t.id]=t.homeVenue});
+  const arenaVs=['v-myopia','v-stagehill','v-giant','v-newport','v-kings'];
+  const outdoorVs=VENUES_SEED.filter(v=>v.hasOutdoor).map(v=>v.id);
+  const outdoorArenaVs=VENUES_SEED.filter(v=>v.hasOutdoorArena).map(v=>v.id);
 
-  for (const block of months) {
-    for (let w = 0; w < block.weeks && mIdx < matchups.length; w++) {
-      const weekGames = [];
-      const used = new Set();
-      let attempts = 0;
-      for (let g = 0; g < gamesPerWeek && mIdx < matchups.length && attempts < matchups.length; ) {
-        const match = matchups[mIdx];
-        if (!used.has(match.home) && !used.has(match.away)) {
-          let vid = tvMap[match.home] || null;
-          if (block.indoor && vid) {
-            const v = venues.find(vn => vn.id === vid);
-            if (v && !v.hasArena) vid = arenaV.length > 0 ? arenaV[g % arenaV.length] : vid;
-          }
-          if (!vid) {
-            const pool = block.indoor ? arenaV : outdoorV;
-            vid = pool.length > 0 ? pool[g % pool.length] : null;
-          }
-          weekGames.push({
-            id: 'g-' + weekNum + '-' + g,
-            home: match.home, away: match.away,
-            venue: vid, week: weekNum, month: block.month, indoor: block.indoor,
-          });
-          used.add(match.home);
-          used.add(match.away);
-          mIdx++;
-          g++;
-          attempts = 0;
-        } else {
-          matchups.push(matchups.splice(mIdx, 1)[0]);
-          attempts++;
-          if (mIdx >= matchups.length) break;
+  for(let si=0;si<saturdays.length&&mIdx<matchups.length;si++){
+    const sat=saturdays[si];
+    const sun=new Date(sat);sun.setDate(sun.getDate()+1);
+    const outdoor=isOutdoorOk(sat);
+    const weekGames=[];
+    const used=new Set();
+    let attempts=0;
+
+    // Some weekends are "round-robin weekends" at one venue (2 days, 4+ games)
+    const isRRWeekend = (wkNum%6===1)&&mIdx>5;
+    const rrVenue = isRRWeekend ? (outdoor?outdoorVs[wkNum%outdoorVs.length]:arenaVs[wkNum%arenaVs.length]) : null;
+
+    const maxGames = isRRWeekend ? Math.min(6, gamesPerWeek+2) : gamesPerWeek;
+
+    for(let g=0;g<maxGames&&mIdx<matchups.length&&attempts<matchups.length*2;){
+      const m=matchups[mIdx];
+      if(!used.has(m.home)&&!used.has(m.away)){
+        let vid = isRRWeekend ? rrVenue : (tvMap[m.home]||null);
+        if(!outdoor&&vid){
+          const vobj=VENUES_SEED.find(v=>v.id===vid);
+          if(vobj&&!vobj.hasArena&&!vobj.hasOutdoorArena){vid=arenaVs[g%arenaVs.length]}
         }
+        if(!vid){const pool=outdoor?outdoorVs:arenaVs;vid=pool[g%pool.length]}
+        const format=outdoor?(VENUES_SEED.find(v=>v.id===vid)?.hasOutdoorArena?'outdoor-arena':'outdoor'):'arena';
+        const day=(g>=maxGames/2&&isRRWeekend)?sun:sat;
+        const altDate=new Date(sat);altDate.setDate(altDate.getDate()+7);
+        const times=['10:00 AM','11:30 AM','1:00 PM','2:30 PM','4:00 PM'];
+
+        weekGames.push({
+          id:'g-'+wkNum+'-'+g,home:m.home,away:m.away,venue:vid,
+          date:fmt(day),altDate:fmt(altDate),
+          time:times[g%times.length],format,
+          week:wkNum,month:months[sat.getMonth()],
+          isRRWeekend,
+        });
+        used.add(m.home);used.add(m.away);
+        mIdx++;g++;attempts=0;
+      } else {
+        matchups.push(matchups.splice(mIdx,1)[0]);
+        attempts++;
+        if(mIdx>=matchups.length)break;
       }
-      if (weekGames.length > 0) {
-        schedule.push({ week: weekNum, month: block.month, indoor: block.indoor, games: weekGames });
-        weekNum++;
-      }
+    }
+    if(weekGames.length>0){
+      schedule.push({week:wkNum,month:months[sat.getMonth()],date:fmt(sat),indoor:!outdoor,games:weekGames,isRRWeekend});
+      wkNum++;
     }
   }
   return schedule;
 }
 
-// ── Standings ──
-function calcStandings() {
-  const stats = {};
-  state.teams.forEach(t => {
-    stats[t.id] = { id:t.id, name:t.name, club:t.club, w:0, l:0, d:0, pts:0, gf:0, ga:0, played:0, form:[] };
+// ── Pre-populate results through June ──
+function buildPreResults(schedule){
+  const results={};
+  const cutoff=new Date(2027,6,1); // July 1
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let seed=123;
+  function rng(){seed=(seed*16807+0)%2147483647;return(seed-1)/2147483646;}
+  function ri(min,max){return Math.floor(rng()*(max-min+1))+min;}
+
+  // All player names across all teams for MVP selection
+  const allPlayers={};
+  TEAMS_SEED.forEach(t=>{
+    t.players.forEach(p=>{allPlayers[t.id]=allPlayers[t.id]||[];allPlayers[t.id].push(p.name)});
+    if(t.alternates)t.alternates.forEach(a=>{if(a.name)allPlayers[t.id].push(a.name)});
   });
-  // Process results in schedule order
-  state.schedule.forEach(week => {
-    week.games.forEach(game => {
-      const r = state.results[game.id];
-      if (!r || !stats[r.home] || !stats[r.away]) return;
-      const hs = r.homeScore, as = r.awayScore;
-      stats[r.home].gf += hs; stats[r.home].ga += as;
-      stats[r.away].gf += as; stats[r.away].ga += hs;
-      stats[r.home].played++; stats[r.away].played++;
-      if (hs > as) {
-        stats[r.home].w++; stats[r.home].pts += 3; stats[r.away].l++;
-        stats[r.home].form.push('W'); stats[r.away].form.push('L');
-      } else if (as > hs) {
-        stats[r.away].w++; stats[r.away].pts += 3; stats[r.home].l++;
-        stats[r.away].form.push('W'); stats[r.home].form.push('L');
-      } else {
-        stats[r.home].d++; stats[r.away].d++;
-        stats[r.home].pts += 1; stats[r.away].pts += 1;
-        stats[r.home].form.push('D'); stats[r.away].form.push('D');
+
+  schedule.forEach(week=>{
+    // Parse date
+    const parts=week.date.split(' ');
+    const mi=months.indexOf(parts[0]);
+    const di=parseInt(parts[1]);
+    const gDate=new Date(2027,mi,di);
+    if(gDate>=cutoff)return;
+
+    week.games.forEach(g=>{
+      const hs=ri(2,8),as=ri(1,7);
+      const winner=hs>=as?g.home:g.away;
+      const winPlayers=allPlayers[winner]||['Unknown'];
+      const mvp=winPlayers[ri(0,winPlayers.length-1)];
+      // Generate chukker scores that roughly add up
+      const chukkers=[];
+      let hrem=hs,arem=as;
+      for(let c=0;c<4;c++){
+        const ch=c<3?ri(0,Math.min(3,hrem)):hrem;
+        const ca=c<3?ri(0,Math.min(3,arem)):arem;
+        chukkers.push({h:ch,a:ca});
+        hrem-=ch;arem-=ca;
       }
+      // Goal scorers
+      const homePlayers=allPlayers[g.home]||[];
+      const awayPlayers=allPlayers[g.away]||[];
+      const homeScorers={},awayScorers={};
+      let hg=hs,ag=as;
+      while(hg>0){const p=homePlayers[ri(0,homePlayers.length-1)];homeScorers[p]=(homeScorers[p]||0)+1;hg--;}
+      while(ag>0){const p=awayPlayers[ri(0,awayPlayers.length-1)];awayScorers[p]=(awayScorers[p]||0)+1;ag--;}
+
+      results[g.id]={
+        home:g.home,away:g.away,
+        homeScore:hs,awayScore:as,
+        chukkers,mvp,
+        homeScorers,awayScorers,
+        notes:'',timestamp:gDate.toISOString()
+      };
     });
   });
-  return Object.values(stats).sort((a,b) => b.pts - a.pts || (b.gf-b.ga)-(a.gf-a.ga) || b.gf - a.gf);
+  return results;
 }
 
-// ═══ SVG Icons ═══
-const ICO = {
-  horse: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L18 6H13L8 11V16L3 21"/><path d="M13 6V2L18 6"/><path d="M8 11L3 6"/></svg>`,
-  plus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5V19M5 12H19"/></svg>`,
-  calendar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2V6M8 2V6M3 10H21"/></svg>`,
-  trophy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 9H4C3 9 2 8 2 7V6C2 5 3 4 4 4H6M18 9H20C21 9 22 8 22 7V6C22 5 21 4 20 4H18"/><path d="M6 4H18V9C18 13 15 16 12 16C9 16 6 13 6 9V4Z"/><path d="M12 16V19M8 22H16M8 22V19H16V22"/></svg>`,
-  map: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 6V22L8 18L16 22L23 18V2L16 6L8 2L1 6Z"/><path d="M8 2V18M16 6V22"/></svg>`,
-  users: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 21V19C17 16.8 15.2 15 13 15H5C2.8 15 1 16.8 1 19V21"/><circle cx="9" cy="7" r="4"/><path d="M23 21V19C23 17.1 21.8 15.5 20 15M16 3.1C17.8 3.6 19 5.2 19 7C19 8.8 17.8 10.4 16 10.9"/></svg>`,
-  x: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6L18 18"/></svg>`,
-  refresh: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 4V10H7"/><path d="M23 20V14H17"/><path d="M20.5 9A9 9 0 0 0 5.6 5.6L1 10M23 14L18.4 18.4A9 9 0 0 1 3.5 15"/></svg>`,
-  edit: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
-  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17L4 12"/></svg>`,
-  bar: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20V14"/></svg>`,
-};
-function icon(name, size=16) {
-  return `<span style="display:inline-flex;width:${size}px;height:${size}px">${ICO[name]}</span>`;
+// ── State ──
+let state;
+function initState(){
+  const saved_teams=LS.get('teams');
+  const saved_venues=LS.get('venues');
+  const saved_schedule=LS.get('schedule');
+  const saved_results=LS.get('results');
+
+  // If no saved data, use seed data
+  const teams=saved_teams||TEAMS_SEED;
+  const venues=saved_venues||VENUES_SEED;
+  const schedule=saved_schedule||(teams===TEAMS_SEED?buildPreSchedule():[]);
+  const results=saved_results||(schedule.length>0&&!saved_results?buildPreResults(schedule):{});
+
+  if(!saved_teams){LS.set('teams',teams);LS.set('venues',venues);LS.set('schedule',schedule);LS.set('results',results);}
+
+  state={
+    tab:'home',teams,venues,schedule,results,
+    showTeamForm:false,showVenueForm:false,
+    gameModal:null,editGameModal:null,
+    filterMonth:'all',
+    teamForm:freshTeamForm(),venueForm:freshVenueForm(),
+  };
 }
 
-// ═══ Render ═══
-function render() {
-  const app = document.getElementById('app');
-  const tm = teamMap();
-  const vm = venueMap();
+function freshTeamForm(){return{name:'',club:'',goalLevel:'low',homeVenue:'',p1:'',p1h:'',p2:'',p2h:'',p3:'',p3h:'',a1:'',a1h:'',a2:'',a2h:''};}
+function freshVenueForm(){return{name:'',location:'',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'',notes:'',organizer:''};}
+function save(){LS.set('teams',state.teams);LS.set('venues',state.venues);LS.set('schedule',state.schedule);LS.set('results',state.results);}
+function setState(patch){Object.assign(state,patch);save();render();}
+function tmMap(){const m={};state.teams.forEach(t=>m[t.id]=t);return m;}
+function vmMap(){const m={};state.venues.forEach(v=>m[v.id]=v);return m;}
 
-  app.innerHTML = `
-    <header>
-      <div class="max-w">
-        <div class="header-inner">
-          <div class="logo-area">
-            <div class="logo-icon">${icon('horse', 28)}</div>
-            <div>
-              <div class="logo-text">NEPL</div>
-              <div class="logo-sub">New England Polo League</div>
-            </div>
-          </div>
-          <nav>
-            ${['home','teams','venues','schedule','results','standings'].map(t => `
-              <button class="${state.tab===t?'active':''}" onclick="setState({tab:'${t}'})">${icon(
-                t==='home'?'trophy':t==='teams'?'users':t==='venues'?'map':t==='schedule'?'calendar':t==='results'?'edit':t==='standings'?'bar':'trophy'
-              )} <span>${t[0].toUpperCase()+t.slice(1)}</span></button>
-            `).join('')}
-          </nav>
-        </div>
+// ── Standings ──
+function calcStandings(){
+  const stats={};
+  state.teams.forEach(t=>{stats[t.id]={id:t.id,name:t.name,club:t.club,goalLevel:t.goalLevel,w:0,l:0,d:0,pts:0,gf:0,ga:0,played:0,form:[]}});
+  state.schedule.forEach(week=>{
+    week.games.forEach(game=>{
+      const r=state.results[game.id];
+      if(!r||!stats[r.home]||!stats[r.away])return;
+      stats[r.home].gf+=r.homeScore;stats[r.home].ga+=r.awayScore;
+      stats[r.away].gf+=r.awayScore;stats[r.away].ga+=r.homeScore;
+      stats[r.home].played++;stats[r.away].played++;
+      if(r.homeScore>r.awayScore){stats[r.home].w++;stats[r.home].pts+=3;stats[r.away].l++;stats[r.home].form.push('W');stats[r.away].form.push('L')}
+      else if(r.awayScore>r.homeScore){stats[r.away].w++;stats[r.away].pts+=3;stats[r.home].l++;stats[r.away].form.push('W');stats[r.home].form.push('L')}
+      else{stats[r.home].d++;stats[r.away].d++;stats[r.home].pts+=1;stats[r.away].pts+=1;stats[r.home].form.push('D');stats[r.away].form.push('D')}
+    });
+  });
+  return Object.values(stats).sort((a,b)=>b.pts-a.pts||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf);
+}
+
+// ── Player Stats ──
+function calcPlayerStats(){
+  const ps={};
+  Object.values(state.results).forEach(r=>{
+    if(r.homeScorers)Object.entries(r.homeScorers).forEach(([name,goals])=>{
+      if(!ps[name])ps[name]={name,goals:0,mvps:0,games:0,teams:new Set()};
+      ps[name].goals+=goals;ps[name].games++;ps[name].teams.add(r.home);
+    });
+    if(r.awayScorers)Object.entries(r.awayScorers).forEach(([name,goals])=>{
+      if(!ps[name])ps[name]={name,goals:0,mvps:0,games:0,teams:new Set()};
+      ps[name].goals+=goals;ps[name].games++;ps[name].teams.add(r.away);
+    });
+    if(r.mvp){if(!ps[r.mvp])ps[r.mvp]={name:r.mvp,goals:0,mvps:0,games:0,teams:new Set()};ps[r.mvp].mvps++;}
+  });
+  return Object.values(ps).map(p=>({...p,teams:[...p.teams]}));
+}
+
+function formatTag(format){
+  if(format==='outdoor-arena')return'<span class="tag tag-outdoor-arena">Outdoor Arena</span>';
+  if(format==='outdoor')return'<span class="tag tag-outdoor">Outdoor</span>';
+  return'<span class="tag tag-arena">Arena</span>';
+}
+
+// ═══════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════
+function render(){
+  const app=document.getElementById('app');
+  const tm=tmMap(),vm=vmMap();
+  const tabs=['home','teams','venues','schedule','results','standings','stats'];
+  const tabIcons={home:'trophy',teams:'users',venues:'map',schedule:'calendar',results:'edit',standings:'bar',stats:'star'};
+  const tabLabels={home:'League',teams:'Teams',venues:'Venues',schedule:'Schedule',results:'Results',standings:'Standings',stats:'Stats'};
+
+  app.innerHTML=`
+    <header><div class="max-w"><div class="header-inner">
+      <div class="logo-area">
+        <div class="logo-icon">${icon('horse',28)}</div>
+        <div><div class="logo-text">NEPL</div><div class="logo-sub">New England Polo League</div></div>
       </div>
-    </header>
+      <nav>${tabs.map(t=>`<button class="${state.tab===t?'active':''}" onclick="setState({tab:'${t}'})">${icon(tabIcons[t])} <span class="nav-label">${tabLabels[t]}</span></button>`).join('')}</nav>
+    </div></div></header>
     <main class="max-w" style="padding-top:28px;padding-bottom:40px">
-      ${state.tab==='home'    ? renderHome(tm, vm) :
-        state.tab==='teams'   ? renderTeams(tm, vm) :
-        state.tab==='venues'  ? renderVenues(vm) :
-        state.tab==='schedule'? renderSchedule(tm, vm) :
-        state.tab==='results' ? renderResults(tm, vm) :
-        state.tab==='standings'? renderStandings(tm) : ''}
+      ${state.tab==='home'?renderHome(tm,vm):''}
+      ${state.tab==='teams'?renderTeams(tm,vm):''}
+      ${state.tab==='venues'?renderVenues(vm):''}
+      ${state.tab==='schedule'?renderSchedule(tm,vm):''}
+      ${state.tab==='results'?renderResults(tm,vm):''}
+      ${state.tab==='standings'?renderStandings(tm):''}
+      ${state.tab==='stats'?renderPlayerStats(tm):''}
     </main>
-    <footer>
-      <div class="sub">NEPL &mdash; New England Polo League &mdash; Season 2027</div>
+    <footer><div class="sub">NEPL &mdash; New England Polo League &mdash; Season 2027</div>
       <button class="btn btn-danger btn-xs mt-8" onclick="resetAll()">Reset All Data</button>
+      <button class="btn btn-secondary btn-xs mt-8" style="margin-left:8px" onclick="resetToSeed()">Restore Demo Data</button>
     </footer>
-    ${state.gameModal ? renderGameModal(tm, vm) : ''}
+    ${state.gameModal?renderGameModal(tm,vm):''}
+    ${state.editGameModal?renderEditGameModal(tm,vm):''}
   `;
 }
 
-function resetAll() {
-  if (confirm('Reset all league data? This cannot be undone.')) {
-    LS.clear();
-    state.teams = []; state.venues = []; state.schedule = []; state.results = {};
-    state.showTeamForm = false; state.showVenueForm = false; state.gameModal = null;
-    render();
-  }
-}
+function resetAll(){if(confirm('Reset all data?')){LS.clear();initState();render();}}
+function resetToSeed(){if(confirm('Restore demo data? This replaces everything.')){LS.clear();initState();render();}}
 
 // ═══ HOME ═══
-function renderHome(tm) {
-  const standings = calcStandings();
-  const totalGames = state.schedule.reduce((s,w) => s + w.games.length, 0);
-  const played = Object.keys(state.results).length;
-  const topStandings = standings.filter(s => s.played > 0).slice(0,5);
+function renderHome(tm,vm){
+  const standings=calcStandings();
+  const total=state.schedule.reduce((s,w)=>s+w.games.length,0);
+  const played=Object.keys(state.results).length;
+  const top=standings.filter(s=>s.played>0).slice(0,5);
+  const pStats=calcPlayerStats();
+  const topScorer=pStats.sort((a,b)=>b.goals-a.goals)[0];
+  const topMVP=pStats.sort((a,b)=>b.mvps-a.mvps)[0];
 
-  return `
+  return`
     <div class="center" style="padding:40px 0 50px">
       <h1>New England Polo League</h1>
-      <p style="color:var(--text-muted);font-size:16px;max-width:600px;margin:10px auto 0">
-        Year-round club team polo across New England. Low and medium goal, three-a-side with alternates.
-        Two horses is all you need.
-      </p>
+      <p style="color:var(--text-muted);font-size:16px;max-width:620px;margin:10px auto 0">Year-round club team polo across New England. Low and medium goal, three-a-side with alternates. Two horses is all you need.</p>
       <div class="flex gap-12" style="justify-content:center;margin-top:28px">
         <button class="btn btn-primary" onclick="setState({tab:'teams',showTeamForm:true})">Register a Team</button>
         <button class="btn btn-secondary" onclick="setState({tab:'venues',showVenueForm:true})">Add a Venue</button>
       </div>
     </div>
-
-    <div class="grid-4 mb-32">
-      ${[{l:'Teams',v:state.teams.length,c:'var(--accent)'},{l:'Venues',v:state.venues.length,c:'var(--teal)'},
-         {l:'Weeks',v:state.schedule.length,c:'var(--blue)'},{l:'Games Played',v:played+' / '+totalGames,c:'var(--green)'}
-      ].map(s => `<div class="card center"><div class="stat-num" style="color:${s.c}">${s.v}</div><div class="stat-label">${s.l}</div></div>`).join('')}
-    </div>
-
-    <div class="card mb-24">
-      <h3 class="mb-16">How the League Works</h3>
-      <div class="grid-2">
-        ${[
-          {t:'Club Teams',d:'3-person teams (low or medium goal) with 1–2 alternates. Team members can come from different clubs. Submit your roster at season start.'},
-          {t:'Home & Away',d:'Every team plays home and away against every other team. Host clubs provide the venue, hospitality, and food. Games can run simultaneously at different venues.'},
-          {t:'April – December',d:'Season starts indoors in April, moves outdoors through summer and fall, finishes indoors in December. Two to three horses is all you need.'},
-          {t:'Prizes & Community',d:'USPA awards plus cash prizes from tournament fees. But the real draw is traveling New England, visiting every club, and building connections across the region.'},
-        ].map(i => `<div class="how-card"><div class="how-title">${i.t}</div><div class="how-desc">${i.d}</div></div>`).join('')}
+    <div class="grid-4 mb-32">${[
+      {l:'Teams',v:state.teams.length,c:'var(--accent)'},{l:'Venues',v:state.venues.length,c:'var(--teal)'},
+      {l:'Weeks',v:state.schedule.length,c:'var(--blue)'},{l:'Games Played',v:played+'/'+total,c:'var(--green)'}
+    ].map(s=>`<div class="card center"><div class="stat-num" style="color:${s.c}">${s.v}</div><div class="stat-label">${s.l}</div></div>`).join('')}</div>
+    <div class="card mb-24"><h3 class="mb-16">How the League Works</h3><div class="grid-2">${[
+      {t:'Club Teams',d:'3-person teams (low or medium goal) with 1–2 alternates. Players can come from different clubs.'},
+      {t:'Home & Away',d:'Every team plays home and away. Host clubs provide venue, food, and hospitality. Games run simultaneously across venues.'},
+      {t:'April – November',d:'Starts indoors in April, outdoor May 15 – Oct 15, back indoors for November. 2–3 horses is enough.'},
+      {t:'Prizes & Community',d:'USPA awards, MVP selections, individual scoring stats, plus cash prizes from entry fees. But the real draw is the travel and connections.'},
+    ].map(i=>`<div class="how-card"><div class="how-title">${i.t}</div><div class="how-desc">${i.d}</div></div>`).join('')}</div></div>
+    ${top.length>0?`
+    <div class="grid-2 mb-24">
+      <div class="card"><div class="flex between mb-12"><h3>Standings</h3><button class="btn btn-secondary btn-sm" onclick="setState({tab:'standings'})">Full Table</button></div>
+        ${top.map((s,i)=>`<div class="recent-result"><div class="flex gap-12"><span style="width:28px;text-align:center;color:${i===0?'var(--accent)':'var(--text-muted)'};font-family:'Playfair Display',serif;font-size:16px;font-weight:700">${i+1}</span><div><div style="font-weight:600;font-size:14px">${esc(s.name)}</div><div style="font-size:11px;color:var(--text-dim)">${esc(s.club)} &middot; ${s.w}W ${s.d}D ${s.l}L</div></div></div><div style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:var(--accent)">${s.pts}</div></div>`).join('')}
       </div>
-    </div>
-
-    ${topStandings.length > 0 ? `
-      <div class="card">
-        <div class="flex between mb-12">
-          <h3>Current Standings</h3>
-          <button class="btn btn-secondary btn-sm" onclick="setState({tab:'standings'})">Full Table</button>
-        </div>
-        ${topStandings.map((s,i) => `
-          <div class="recent-result">
-            <div class="flex gap-12">
-              <span class="rank" style="width:28px;text-align:center;color:${i===0?'var(--accent)':'var(--text-muted)'};font-family:'Playfair Display',serif;font-size:16px;font-weight:700">${i+1}</span>
-              <div>
-                <div style="font-weight:600;font-size:14px">${esc(s.name)}</div>
-                <div style="font-size:11px;color:var(--text-dim)">${esc(s.club)} &middot; ${s.w}W ${s.d}D ${s.l}L</div>
-              </div>
-            </div>
-            <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:var(--accent)">${s.pts} <span style="font-size:11px;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-weight:500">pts</span></div>
-          </div>
-        `).join('')}
+      <div class="card"><h3 class="mb-12">Season Leaders</h3>
+        ${topScorer?`<div class="flex between" style="padding:10px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em">Top Scorer</div><div style="font-weight:700;font-size:16px;margin-top:2px">${esc(topScorer.name)}</div></div><div style="color:var(--green);font-weight:700;font-size:18px;font-family:'Playfair Display',serif">${topScorer.goals} goals</div></div>`:''}
+        ${topMVP?`<div class="flex between" style="padding:10px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em">Most MVPs</div><div style="font-weight:700;font-size:16px;margin-top:2px">${esc(topMVP.name)}</div></div><div style="color:var(--accent);font-weight:700;font-size:18px;font-family:'Playfair Display',serif">${topMVP.mvps} ${icon('star',14)}</div></div>`:''}
+        <div style="padding-top:12px"><button class="btn btn-secondary btn-sm" onclick="setState({tab:'stats'})">All Player Stats</button></div>
       </div>
-    ` : ''}
+    </div>`:''}
   `;
 }
 
 // ═══ TEAMS ═══
-function renderTeams(tm, vm) {
-  const f = state.teamForm;
-  return `
-    <div class="flex between mb-24">
-      <div>
-        <h2>Teams</h2>
-        <p style="color:var(--text-muted);font-size:14px" class="mt-4">3-person teams with up to 2 alternates. Members can come from different clubs.</p>
+function renderTeams(tm,vm){
+  const f=state.teamForm;
+  return`
+    <div class="flex between mb-24"><div><h2>Teams</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.teams.length} registered teams. 3-person rosters with up to 2 alternates.</p></div>
+      <button class="btn btn-primary" onclick="setState({showTeamForm:!state.showTeamForm})">${icon('plus')} Register Team</button></div>
+    ${state.showTeamForm?`<div class="card card-accent mb-24 fade-in"><h3 class="mb-20">New Team Registration</h3>
+      <div class="grid-2 mb-16">
+        <div><label class="field-label">Team Name</label><input id="tf-name" value="${esc(f.name)}" oninput="state.teamForm.name=this.value" placeholder="e.g., Myopia Marauders"></div>
+        <div><label class="field-label">Primary Club</label><input id="tf-club" value="${esc(f.club)}" oninput="state.teamForm.club=this.value" placeholder="e.g., Myopia Polo Club"></div>
+        <div><label class="field-label">Goal Level</label><select onchange="state.teamForm.goalLevel=this.value"><option value="low" ${f.goalLevel==='low'?'selected':''}>Low Goal (0–4)</option><option value="medium" ${f.goalLevel==='medium'?'selected':''}>Medium Goal (4–8)</option></select></div>
+        <div><label class="field-label">Home Venue</label><select onchange="state.teamForm.homeVenue=this.value"><option value="">Select...</option>${state.venues.map(v=>`<option value="${v.id}" ${f.homeVenue===v.id?'selected':''}>${esc(v.name)}</option>`).join('')}</select></div>
       </div>
-      <button class="btn btn-primary" onclick="setState({showTeamForm:!state.showTeamForm})">
-        ${icon('plus')} Register Team
-      </button>
-    </div>
-
-    ${state.showTeamForm ? `
-      <div class="card card-accent mb-24 fade-in">
-        <h3 class="mb-20">New Team Registration</h3>
-        <div class="grid-2 mb-16">
-          <div><label class="field-label">Team Name</label><input id="tf-name" value="${esc(f.name)}" oninput="state.teamForm.name=this.value" placeholder="e.g., Myopia Marauders"></div>
-          <div><label class="field-label">Primary Club</label><input id="tf-club" value="${esc(f.club)}" oninput="state.teamForm.club=this.value" placeholder="e.g., Myopia Polo Club"></div>
-          <div><label class="field-label">Goal Level</label>
-            <select id="tf-goal" onchange="state.teamForm.goalLevel=this.value">
-              <option value="low" ${f.goalLevel==='low'?'selected':''}>Low Goal (0–4)</option>
-              <option value="medium" ${f.goalLevel==='medium'?'selected':''}>Medium Goal (4–8)</option>
-            </select>
-          </div>
-          <div><label class="field-label">Home Venue</label>
-            <select id="tf-venue" onchange="state.teamForm.homeVenue=this.value">
-              <option value="">Select venue...</option>
-              ${state.venues.map(v => `<option value="${v.id}" ${f.homeVenue===v.id?'selected':''}>${esc(v.name)}</option>`).join('')}
-            </select>
-          </div>
-        </div>
-        <label class="field-label">Players (3 required)</label>
-        <div style="display:grid;gap:8px" class="mb-16">
-          ${[1,2,3].map(i => `<div class="grid-2"><input value="${esc(f['p'+i])}" oninput="state.teamForm.p${i}=this.value" placeholder="Player ${i} name"><input value="${esc(f['p'+i+'h'])}" oninput="state.teamForm.p${i}h=this.value" placeholder="Handicap"></div>`).join('')}
-        </div>
-        <label class="field-label">Alternates (optional, up to 2)</label>
-        <div style="display:grid;gap:8px" class="mb-20">
-          ${[1,2].map(i => `<div class="grid-2"><input value="${esc(f['a'+i])}" oninput="state.teamForm.a${i}=this.value" placeholder="Alternate ${i} name"><input value="${esc(f['a'+i+'h'])}" oninput="state.teamForm.a${i}h=this.value" placeholder="Handicap"></div>`).join('')}
-        </div>
-        <div class="flex gap-8">
-          <button class="btn btn-primary" onclick="submitTeam()">${icon('check')} Submit Team</button>
-          <button class="btn btn-secondary" onclick="setState({showTeamForm:false})">Cancel</button>
-        </div>
-      </div>
-    ` : ''}
-
-    ${state.teams.length > 0 ? `
-      <div class="grid-2">
-        ${state.teams.map(t => `
-          <div class="card">
-            <div class="flex between mb-10">
-              <div>
-                <div class="serif" style="font-size:18px;font-weight:700">${esc(t.name)}</div>
-                <div style="font-size:12px;color:var(--text-muted)" class="mt-4">${esc(t.club)}${t.homeVenue && vm[t.homeVenue] ? ' &middot; Home: '+esc(vm[t.homeVenue].name) : ''}</div>
-              </div>
-              <div class="flex gap-8">
-                <span class="tag ${t.goalLevel==='low'?'tag-low':'tag-med'}">${t.goalLevel==='low'?'Low Goal':'Medium Goal'}</span>
-                <button class="btn-icon" onclick="removeTeam('${t.id}')">${icon('x')}</button>
-              </div>
-            </div>
-            <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em" class="mb-6">Roster</div>
-            ${t.players.map(p => `<div class="flex between" style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${esc(p.name)}</span><span style="color:var(--text-muted)">${p.handicap?p.handicap+' goal':''}</span></div>`).join('')}
-            ${t.alternates.filter(a=>a.name).map(a => `<div class="flex between" style="padding:5px 0;font-size:13px;color:var(--text-muted)"><span style="font-style:italic">${esc(a.name)} (alt)</span><span>${a.handicap?a.handicap+' goal':''}</span></div>`).join('')}
-          </div>
-        `).join('')}
-      </div>
-    ` : `<div class="empty"><div class="empty-icon">🏇</div><div class="empty-title">No teams registered yet</div><div class="empty-sub">Register your first team to get started</div></div>`}
+      <label class="field-label">Players (3 required)</label><div style="display:grid;gap:8px" class="mb-16">${[1,2,3].map(i=>`<div class="grid-2"><input value="${esc(f['p'+i])}" oninput="state.teamForm.p${i}=this.value" placeholder="Player ${i}"><input value="${esc(f['p'+i+'h'])}" oninput="state.teamForm.p${i}h=this.value" placeholder="Handicap"></div>`).join('')}</div>
+      <label class="field-label">Alternates (optional)</label><div style="display:grid;gap:8px" class="mb-20">${[1,2].map(i=>`<div class="grid-2"><input value="${esc(f['a'+i])}" oninput="state.teamForm.a${i}=this.value" placeholder="Alternate ${i}"><input value="${esc(f['a'+i+'h'])}" oninput="state.teamForm.a${i}h=this.value" placeholder="Handicap"></div>`).join('')}</div>
+      <div class="flex gap-8"><button class="btn btn-primary" onclick="submitTeam()">${icon('check')} Submit</button><button class="btn btn-secondary" onclick="setState({showTeamForm:false})">Cancel</button></div>
+    </div>`:''}
+    ${state.teams.length>0?`<div class="grid-2">${state.teams.map(t=>`
+      <div class="card"><div class="flex between mb-10"><div><div class="serif" style="font-size:18px;font-weight:700">${esc(t.name)}</div><div style="font-size:12px;color:var(--text-muted)" class="mt-4">${esc(t.club)}${t.homeVenue&&vm[t.homeVenue]?' &middot; Home: '+esc(vm[t.homeVenue].name):''}</div></div>
+        <div class="flex gap-8"><span class="tag ${t.goalLevel==='low'?'tag-low':'tag-med'}">${t.goalLevel==='low'?'Low Goal':'Medium Goal'}</span><button class="btn-icon" onclick="removeTeam('${t.id}')">${icon('x')}</button></div></div>
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em" class="mb-6">Roster</div>
+        ${t.players.map(p=>`<div class="flex between" style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${esc(p.name)}</span><span style="color:var(--text-muted)">${p.handicap?p.handicap+' goal':''}</span></div>`).join('')}
+        ${(t.alternates||[]).filter(a=>a.name).map(a=>`<div class="flex between" style="padding:5px 0;font-size:13px;color:var(--text-muted)"><span style="font-style:italic">${esc(a.name)} (alt)</span><span>${a.handicap?a.handicap+' goal':''}</span></div>`).join('')}
+      </div>`).join('')}</div>`:`<div class="empty"><div class="empty-icon">🏇</div><div class="empty-title">No teams yet</div></div>`}
   `;
 }
-
-function submitTeam() {
-  const f = state.teamForm;
-  if (!f.name || !f.club || !f.p1 || !f.p2 || !f.p3) { alert('Please fill in team name, club, and all 3 players.'); return; }
-  const team = {
-    id: 'team-' + Date.now(),
-    name: f.name, club: f.club, goalLevel: f.goalLevel, homeVenue: f.homeVenue,
-    players: [{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(p=>p.name),
-    alternates: [{name:f.a1,handicap:f.a1h},{name:f.a2,handicap:f.a2h}].filter(a=>a.name),
-  };
-  state.teams.push(team);
-  state.teamForm = freshTeamForm();
-  state.showTeamForm = false;
-  save(); render();
-}
-
-function removeTeam(id) {
-  if (!confirm('Remove this team?')) return;
-  state.teams = state.teams.filter(t => t.id !== id);
-  save(); render();
-}
+function submitTeam(){const f=state.teamForm;if(!f.name||!f.club||!f.p1||!f.p2||!f.p3){alert('Fill in team name, club, and 3 players.');return}state.teams.push({id:'team-'+Date.now(),name:f.name,club:f.club,goalLevel:f.goalLevel,homeVenue:f.homeVenue,players:[{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(p=>p.name),alternates:[{name:f.a1,handicap:f.a1h},{name:f.a2,handicap:f.a2h}].filter(a=>a.name)});state.teamForm=freshTeamForm();state.showTeamForm=false;save();render();}
+function removeTeam(id){if(confirm('Remove this team?')){state.teams=state.teams.filter(t=>t.id!==id);save();render();}}
 
 // ═══ VENUES ═══
-function renderVenues(vm) {
-  const f = state.venueForm;
-  const states = ['MA','CT','RI','NH','VT','ME','NY'];
-  return `
-    <div class="flex between mb-24">
-      <div>
-        <h2>Venues</h2>
-        <p style="color:var(--text-muted);font-size:14px" class="mt-4">Clubs and facilities available to host league games.</p>
+function renderVenues(vm){
+  const f=state.venueForm;const sts=['MA','CT','RI','NH','VT','ME','NY'];
+  return`
+    <div class="flex between mb-24"><div><h2>Venues</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.venues.length} registered venues across New England.</p></div>
+      <button class="btn btn-primary" onclick="setState({showVenueForm:!state.showVenueForm})">${icon('plus')} Add Venue</button></div>
+    ${state.showVenueForm?`<div class="card card-accent mb-24 fade-in"><h3 class="mb-20">Register Venue</h3>
+      <div class="grid-2 mb-16">
+        <div><label class="field-label">Venue Name</label><input value="${esc(f.name)}" oninput="state.venueForm.name=this.value" placeholder="e.g., Myopia Polo Club"></div>
+        <div><label class="field-label">Town</label><input value="${esc(f.location)}" oninput="state.venueForm.location=this.value" placeholder="e.g., Hamilton"></div>
+        <div><label class="field-label">State</label><select onchange="state.venueForm.st=this.value">${sts.map(s=>`<option value="${s}" ${f.st===s?'selected':''}>${s}</option>`).join('')}</select></div>
+        <div><label class="field-label">Organizer / Contact Name</label><input value="${esc(f.organizer)}" oninput="state.venueForm.organizer=this.value" placeholder="e.g., John Smith"></div>
+        <div><label class="field-label">Contact Email</label><input value="${esc(f.contact)}" oninput="state.venueForm.contact=this.value" placeholder="club@example.com"></div>
+        <div><label class="field-label">Notes</label><input value="${esc(f.notes)}" oninput="state.venueForm.notes=this.value" placeholder="Capacity, amenities..."></div>
       </div>
-      <button class="btn btn-primary" onclick="setState({showVenueForm:!state.showVenueForm})">${icon('plus')} Add Venue</button>
-    </div>
-
-    ${state.showVenueForm ? `
-      <div class="card card-accent mb-24 fade-in">
-        <h3 class="mb-20">Register Venue</h3>
-        <div class="grid-2 mb-16">
-          <div><label class="field-label">Venue / Club Name</label><input value="${esc(f.name)}" oninput="state.venueForm.name=this.value" placeholder="e.g., Myopia Polo Club"></div>
-          <div><label class="field-label">Town / City</label><input value="${esc(f.location)}" oninput="state.venueForm.location=this.value" placeholder="e.g., Hamilton"></div>
-          <div><label class="field-label">State</label>
-            <select onchange="state.venueForm.st=this.value">${states.map(s=>`<option value="${s}" ${f.st===s?'selected':''}>${s}</option>`).join('')}</select>
-          </div>
-          <div><label class="field-label">Contact Email</label><input value="${esc(f.contact)}" oninput="state.venueForm.contact=this.value" placeholder="club@example.com"></div>
-        </div>
-        <div class="flex gap-16 mb-16">
-          <label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" ${f.hasArena?'checked':''} onchange="state.venueForm.hasArena=this.checked"> Arena (Indoor)</label>
-          <label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" ${f.hasOutdoor?'checked':''} onchange="state.venueForm.hasOutdoor=this.checked"> Outdoor Field</label>
-        </div>
-        <div class="mb-20"><label class="field-label">Notes</label><input value="${esc(f.notes)}" oninput="state.venueForm.notes=this.value" placeholder="Optional — capacity, amenities, etc."></div>
-        <div class="flex gap-8">
-          <button class="btn btn-primary" onclick="submitVenue()">${icon('check')} Add Venue</button>
-          <button class="btn btn-secondary" onclick="setState({showVenueForm:false})">Cancel</button>
-        </div>
+      <div class="flex gap-16 mb-20">
+        <label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" ${f.hasArena?'checked':''} onchange="state.venueForm.hasArena=this.checked"> Indoor Arena</label>
+        <label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" ${f.hasOutdoor?'checked':''} onchange="state.venueForm.hasOutdoor=this.checked"> Outdoor Field</label>
+        <label class="flex gap-8" style="cursor:pointer;font-size:14px"><input type="checkbox" ${f.hasOutdoorArena?'checked':''} onchange="state.venueForm.hasOutdoorArena=this.checked"> Outdoor Arena</label>
       </div>
-    ` : ''}
-
-    ${state.venues.length > 0 ? `
-      <div class="grid-3">
-        ${state.venues.map(v => `
-          <div class="card">
-            <div class="flex between"><div class="serif" style="font-size:16px;font-weight:700">${esc(v.name)}</div><button class="btn-icon" onclick="removeVenue('${v.id}')">${icon('x')}</button></div>
-            <div style="font-size:13px;color:var(--text-muted);margin:6px 0 10px">${esc(v.location)}, ${v.st}</div>
-            <div class="flex gap-8">${v.hasArena?'<span class="tag tag-arena">Arena</span>':''}${v.hasOutdoor?'<span class="tag tag-outdoor">Outdoor</span>':''}</div>
-            ${v.notes?`<div style="font-size:12px;color:var(--text-dim);margin-top:10px">${esc(v.notes)}</div>`:''}
-            ${v.contact?`<div style="font-size:12px;color:var(--text-dim);margin-top:4px">${esc(v.contact)}</div>`:''}
-          </div>
-        `).join('')}
-      </div>
-    ` : `<div class="empty"><div class="empty-icon">📍</div><div class="empty-title">No venues registered yet</div><div class="empty-sub">Add venues before generating the schedule</div></div>`}
+      <div class="flex gap-8"><button class="btn btn-primary" onclick="submitVenue()">${icon('check')} Add</button><button class="btn btn-secondary" onclick="setState({showVenueForm:false})">Cancel</button></div>
+    </div>`:''}
+    ${state.venues.length>0?`<div class="grid-3">${state.venues.map(v=>`
+      <div class="card"><div class="flex between"><div class="serif" style="font-size:16px;font-weight:700">${esc(v.name)}</div><button class="btn-icon" onclick="removeVenue('${v.id}')">${icon('x')}</button></div>
+        <div style="font-size:13px;color:var(--text-muted);margin:6px 0 8px">${esc(v.location)}, ${v.st}</div>
+        <div class="flex gap-6 wrap mb-8">${v.hasArena?'<span class="tag tag-arena">Arena</span>':''}${v.hasOutdoor?'<span class="tag tag-outdoor">Outdoor</span>':''}${v.hasOutdoorArena?'<span class="tag tag-outdoor-arena">Outdoor Arena</span>':''}</div>
+        ${v.organizer?`<div style="font-size:12px;color:var(--text-muted)">${icon('users',12)} ${esc(v.organizer)}</div>`:''}
+        ${v.contact?`<div style="font-size:12px;margin-top:4px"><a href="mailto:${esc(v.contact)}" class="contact-link">${icon('mail',12)} ${esc(v.contact)}</a></div>`:''}
+        ${v.notes?`<div style="font-size:12px;color:var(--text-dim);margin-top:6px">${esc(v.notes)}</div>`:''}
+      </div>`).join('')}</div>`:``}
   `;
 }
-
-function submitVenue() {
-  const f = state.venueForm;
-  if (!f.name || !f.location) { alert('Please fill in venue name and location.'); return; }
-  state.venues.push({ id:'venue-'+Date.now(), name:f.name, location:f.location, st:f.st, hasArena:f.hasArena, hasOutdoor:f.hasOutdoor, contact:f.contact, notes:f.notes });
-  state.venueForm = freshVenueForm();
-  state.showVenueForm = false;
-  save(); render();
-}
-
-function removeVenue(id) {
-  if (!confirm('Remove this venue?')) return;
-  state.venues = state.venues.filter(v => v.id !== id);
-  save(); render();
-}
+function submitVenue(){const f=state.venueForm;if(!f.name||!f.location){alert('Name and location required.');return}state.venues.push({id:'venue-'+Date.now(),name:f.name,location:f.location,st:f.st,hasArena:f.hasArena,hasOutdoor:f.hasOutdoor,hasOutdoorArena:f.hasOutdoorArena,contact:f.contact,notes:f.notes,organizer:f.organizer});state.venueForm=freshVenueForm();state.showVenueForm=false;save();render();}
+function removeVenue(id){if(confirm('Remove venue?')){state.venues=state.venues.filter(v=>v.id!==id);save();render();}}
 
 // ═══ SCHEDULE ═══
-function renderSchedule(tm, vm) {
-  const months = [...new Set(state.schedule.map(w => w.month))];
-  const filtered = state.filterMonth === 'all' ? state.schedule : state.schedule.filter(w => w.month === state.filterMonth);
-  const totalGames = state.schedule.reduce((s,w) => s + w.games.length, 0);
-
-  return `
-    <div class="flex between mb-24">
-      <div>
-        <h2>Season Schedule</h2>
-        <p style="color:var(--text-muted);font-size:14px" class="mt-4">
-          ${state.schedule.length > 0 ? state.schedule.length+' weeks, '+totalGames+' matches' : 'Generate a schedule from registered teams and venues'}
-        </p>
-      </div>
-      <button class="btn btn-primary" onclick="doGenerate()" ${state.teams.length<2||state.venues.length<1?'disabled':''}>${icon('refresh')} ${state.schedule.length>0?'Regenerate':'Generate Schedule'}</button>
-    </div>
-
-    ${state.teams.length < 2 ? `<div class="card card-accent center" style="padding:40px"><div style="color:var(--text-muted);font-size:15px">Register at least 2 teams and 1 venue to generate a schedule.</div></div>` : ''}
-
-    ${state.schedule.length > 0 ? `
-      <div class="filter-pills">
-        <button class="pill ${state.filterMonth==='all'?'active':''}" onclick="setState({filterMonth:'all'})">All</button>
-        ${months.map(m => `<button class="pill ${state.filterMonth===m?'active':''}" onclick="setState({filterMonth:'${m}'})">${m}</button>`).join('')}
-      </div>
-      ${filtered.map(week => `
-        <div class="mb-20 fade-in">
-          <div class="week-header">
-            <span class="week-label">Week ${week.week}</span>
-            <span class="week-month">${week.month}</span>
-            <span class="tag ${week.indoor?'tag-indoor':'tag-outdoor'}">${week.indoor?'Indoor':'Outdoor'}</span>
-          </div>
-          <div style="display:grid;gap:8px">
-            ${week.games.map(g => {
-              const ht = tm[g.home], at = tm[g.away], v = vm[g.venue];
-              const r = state.results[g.id];
-              return `
-                <div class="game-card ${r?'has-result':''}" onclick="openGameModal('${g.id}')">
-                  <div style="text-align:right">
-                    <div class="game-team">${ht?esc(ht.name):'?'}</div>
-                    <div class="game-club">${ht?esc(ht.club):''}</div>
-                  </div>
-                  <div class="center">
-                    ${r ? `<div class="game-score">${r.homeScore} – ${r.awayScore}</div>` : `<div class="game-vs">vs</div>`}
-                    ${v ? `<div class="game-venue">@ ${esc(v.name)}</div>` : ''}
-                  </div>
-                  <div>
-                    <div class="game-team">${at?esc(at.name):'?'}</div>
-                    <div class="game-club">${at?esc(at.club):''}</div>
-                  </div>
-                </div>`;
-            }).join('')}
-          </div>
-        </div>
-      `).join('')}
-    ` : ''}
+function renderSchedule(tm,vm){
+  const months=[...new Set(state.schedule.map(w=>w.month))];
+  const filtered=state.filterMonth==='all'?state.schedule:state.schedule.filter(w=>w.month===state.filterMonth);
+  const total=state.schedule.reduce((s,w)=>s+w.games.length,0);
+  return`
+    <div class="flex between mb-24"><div><h2>Season Schedule</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.schedule.length} weeks, ${total} matches &middot; April – November 2027</p></div>
+      <button class="btn btn-primary" onclick="doGenerate()" ${state.teams.length<2||state.venues.length<1?'disabled':''}>${icon('refresh')} Regenerate</button></div>
+    ${state.schedule.length>0?`
+      <div class="filter-pills"><button class="pill ${state.filterMonth==='all'?'active':''}" onclick="setState({filterMonth:'all'})">All</button>${months.map(m=>`<button class="pill ${state.filterMonth===m?'active':''}" onclick="setState({filterMonth:'${m}'})">${m}</button>`).join('')}</div>
+      ${filtered.map(week=>`<div class="mb-20 fade-in">
+        <div class="week-header"><span class="week-label">Week ${week.week}</span><span class="week-month">${week.date}</span>${week.indoor?'<span class="tag tag-indoor">Indoor</span>':'<span class="tag tag-outdoor">Outdoor</span>'}${week.isRRWeekend?'<span class="tag tag-mvp">Round Robin Weekend</span>':''}</div>
+        <div style="display:grid;gap:8px">${week.games.map(g=>{
+          const ht=tm[g.home],at=tm[g.away],v=vm[g.venue],r=state.results[g.id];
+          return`<div class="game-card ${r?'has-result':''}" onclick="openGameModal('${g.id}')">
+            <div style="text-align:right"><div class="game-team">${ht?esc(ht.name):'?'}</div><div class="game-club">${ht?esc(ht.club):''}</div></div>
+            <div class="center">${r?`<div class="game-score">${r.homeScore} – ${r.awayScore}</div>`:`<div class="game-vs">vs</div>`}
+              <div class="game-date">${icon('clock',11)} ${g.time||'TBD'} &middot; ${g.date}</div>
+              <div class="game-venue">@ ${v?esc(v.name):'TBD'} ${formatTag(g.format)}</div>
+              ${g.altDate?`<div style="font-size:10px;color:var(--text-dim);margin-top:2px">Alt: ${g.altDate}</div>`:''}
+            </div>
+            <div><div class="game-team">${at?esc(at.name):'?'}</div><div class="game-club">${at?esc(at.club):''}</div></div>
+          </div>`}).join('')}</div>
+      </div>`).join('')}
+    `:`<div class="card card-accent center" style="padding:40px"><div style="color:var(--text-muted)">Register teams and venues, then generate.</div></div>`}
   `;
 }
+function doGenerate(){if(state.schedule.length>0&&!confirm('Regenerate? This clears results.'))return;const teams=state.teams;const matchups=[];for(let i=0;i<teams.length;i++)for(let j=i+1;j<teams.length;j++){matchups.push({home:teams[i].id,away:teams[j].id});matchups.push({home:teams[j].id,away:teams[i].id})}for(let i=matchups.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[matchups[i],matchups[j]]=[matchups[j],matchups[i]]}state.schedule=buildPreSchedule();state.results={};save();render();}
 
-function doGenerate() {
-  if (state.schedule.length > 0 && !confirm('Regenerate the schedule? This will clear existing results.')) return;
-  state.schedule = generateSchedule();
-  state.results = {};
-  save(); render();
-}
-
-// ═══ RESULTS (dedicated page) ═══
-function renderResults(tm, vm) {
-  const gamesWithResults = [];
-  const gamesWithout = [];
-  state.schedule.forEach(week => {
-    week.games.forEach(g => {
-      const obj = { ...g, weekNum: week.week, month: week.month, indoor: week.indoor };
-      if (state.results[g.id]) gamesWithResults.push(obj); else gamesWithout.push(obj);
-    });
-  });
-
-  return `
-    <div class="flex between mb-24">
-      <div>
-        <h2>Enter Results</h2>
-        <p style="color:var(--text-muted);font-size:14px" class="mt-4">
-          ${gamesWithResults.length} of ${gamesWithResults.length + gamesWithout.length} games completed.
-          Click any game to enter or edit the score.
-        </p>
-      </div>
-    </div>
-
-    ${state.schedule.length === 0 ? `<div class="card card-accent center" style="padding:40px"><div style="color:var(--text-muted);font-size:15px">Generate a schedule first to enter results.</div></div>` : ''}
-
-    ${gamesWithout.length > 0 ? `
-      <h3 class="mb-12">Upcoming / Unplayed</h3>
-      <div style="display:grid;gap:8px" class="mb-32">
-        ${gamesWithout.slice(0, 20).map(g => {
-          const ht = tm[g.home], at = tm[g.away], v = vm[g.venue];
-          return `
-            <div class="game-card" onclick="openGameModal('${g.id}')">
-              <div style="text-align:right"><div class="game-team">${ht?esc(ht.name):'?'}</div><div class="game-club">${ht?esc(ht.club):''}</div></div>
-              <div class="center">
-                <div class="game-vs">vs</div>
-                <div class="game-venue">Wk ${g.weekNum} &middot; ${g.month}${v?' &middot; @ '+esc(v.name):''}</div>
-              </div>
-              <div><div class="game-team">${at?esc(at.name):'?'}</div><div class="game-club">${at?esc(at.club):''}</div></div>
-            </div>`;
-        }).join('')}
-        ${gamesWithout.length > 20 ? `<div class="center" style="padding:10px;color:var(--text-dim);font-size:13px">+ ${gamesWithout.length - 20} more games</div>` : ''}
-      </div>
-    ` : ''}
-
-    ${gamesWithResults.length > 0 ? `
-      <h3 class="mb-12">Completed Games</h3>
-      <div style="display:grid;gap:8px">
-        ${gamesWithResults.map(g => {
-          const ht = tm[g.home], at = tm[g.away], v = vm[g.venue], r = state.results[g.id];
-          return `
-            <div class="game-card has-result" onclick="openGameModal('${g.id}')">
-              <div style="text-align:right"><div class="game-team">${ht?esc(ht.name):'?'}</div><div class="game-club">${ht?esc(ht.club):''}</div></div>
-              <div class="center">
-                <div class="game-score">${r.homeScore} – ${r.awayScore}</div>
-                <div class="game-venue">Wk ${g.weekNum} &middot; ${g.month}${v?' &middot; @ '+esc(v.name):''}</div>
-              </div>
-              <div><div class="game-team">${at?esc(at.name):'?'}</div><div class="game-club">${at?esc(at.club):''}</div></div>
-            </div>`;
-        }).join('')}
-      </div>
-    ` : ''}
+// ═══ RESULTS ═══
+function renderResults(tm,vm){
+  const withR=[],withoutR=[];
+  state.schedule.forEach(w=>{w.games.forEach(g=>{const o={...g,weekNum:w.week};if(state.results[g.id])withR.push(o);else withoutR.push(o)})});
+  return`
+    <div class="flex between mb-24"><div><h2>Enter Results</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${withR.length} of ${withR.length+withoutR.length} completed. Click any game to enter scores, MVP, and goal scorers.</p></div></div>
+    ${state.schedule.length===0?`<div class="card center" style="padding:40px;color:var(--text-muted)">Generate a schedule first.</div>`:''}
+    ${withoutR.length>0?`<h3 class="mb-12">Upcoming</h3><div style="display:grid;gap:8px" class="mb-32">${withoutR.slice(0,15).map(g=>{const ht=tm[g.home],at=tm[g.away],v=vm[g.venue];return`<div class="game-card" onclick="openGameModal('${g.id}')"><div style="text-align:right"><div class="game-team">${ht?esc(ht.name):'?'}</div><div class="game-club">${ht?esc(ht.club):''}</div></div><div class="center"><div class="game-vs">vs</div><div class="game-date">${g.date} &middot; ${g.time||'TBD'}</div><div class="game-venue">@ ${v?esc(v.name):'TBD'}</div></div><div><div class="game-team">${at?esc(at.name):'?'}</div><div class="game-club">${at?esc(at.club):''}</div></div></div>`}).join('')}${withoutR.length>15?`<div class="center" style="padding:10px;color:var(--text-dim);font-size:13px">+ ${withoutR.length-15} more</div>`:''}</div>`:''}
+    ${withR.length>0?`<h3 class="mb-12">Completed (${withR.length})</h3><div style="display:grid;gap:8px">${withR.map(g=>{const ht=tm[g.home],at=tm[g.away],v=vm[g.venue],r=state.results[g.id];return`<div class="game-card has-result" onclick="openGameModal('${g.id}')"><div style="text-align:right"><div class="game-team">${ht?esc(ht.name):'?'}</div><div class="game-club">${ht?esc(ht.club):''}</div></div><div class="center"><div class="game-score">${r.homeScore} – ${r.awayScore}</div><div class="game-date">${g.date}</div>${r.mvp?`<div style="margin-top:4px"><span class="tag tag-mvp">${icon('star',10)} MVP: ${esc(r.mvp)}</span></div>`:''}</div><div><div class="game-team">${at?esc(at.name):'?'}</div><div class="game-club">${at?esc(at.club):''}</div></div></div>`}).join('')}</div>`:''}
   `;
 }
 
 // ═══ GAME MODAL ═══
-function openGameModal(gameId) {
-  state.gameModal = gameId;
-  render();
-}
+function openGameModal(id){state.gameModal=id;render();}
+function closeGameModal(){state.gameModal=null;render();}
+function openEditGame(id){state.editGameModal=id;render();}
+function closeEditGame(){state.editGameModal=null;render();}
 
-function closeGameModal() {
-  state.gameModal = null;
-  render();
-}
+function renderGameModal(tm,vm){
+  let game=null,weekData=null;
+  for(const w of state.schedule){const f=w.games.find(g=>g.id===state.gameModal);if(f){game=f;weekData=w;break;}}
+  if(!game)return'';
+  const ht=tm[game.home],at=tm[game.away],v=vm[game.venue];
+  const r=state.results[game.id]||{homeScore:'',awayScore:'',chukkers:[],notes:'',mvp:'',homeScorers:{},awayScorers:{}};
+  const allPlayers=[];
+  if(ht)ht.players.forEach(p=>allPlayers.push(p.name));
+  if(ht&&ht.alternates)ht.alternates.filter(a=>a.name).forEach(a=>allPlayers.push(a.name));
+  if(at)at.players.forEach(p=>allPlayers.push(p.name));
+  if(at&&at.alternates)at.alternates.filter(a=>a.name).forEach(a=>allPlayers.push(a.name));
 
-function renderGameModal(tm, vm) {
-  let game = null;
-  let weekData = null;
-  for (const week of state.schedule) {
-    const found = week.games.find(g => g.id === state.gameModal);
-    if (found) { game = found; weekData = week; break; }
-  }
-  if (!game) return '';
-
-  const ht = tm[game.home], at = tm[game.away], v = vm[game.venue];
-  const r = state.results[game.id] || { homeScore: '', awayScore: '', chukkers: [], notes: '' };
-
-  return `
-    <div class="modal-overlay" onclick="if(event.target===this)closeGameModal()">
-      <div class="modal fade-in">
-        <button class="modal-close" onclick="closeGameModal()">${icon('x',20)}</button>
-        <div class="center mb-20">
-          <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em">
-            Week ${weekData.week} &middot; ${weekData.month} &middot; <span class="tag ${weekData.indoor?'tag-indoor':'tag-outdoor'}" style="font-size:10px">${weekData.indoor?'Indoor':'Outdoor'}</span>
-          </div>
-          ${v ? `<div style="font-size:13px;color:var(--text-dim);margin-top:4px">@ ${esc(v.name)}, ${v.location} ${v.st}</div>` : ''}
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:24px">
-          <div class="center">
-            <div class="serif" style="font-size:20px;font-weight:700">${ht?esc(ht.name):'?'}</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${ht?esc(ht.club):''}</div>
-            <span class="tag ${ht&&ht.goalLevel==='low'?'tag-low':'tag-med'}" style="margin-top:6px">${ht?ht.goalLevel==='low'?'Low':'Med':''}</span>
-            ${ht ? `<div style="margin-top:10px;font-size:12px;color:var(--text-dim)">${ht.players.map(p=>esc(p.name)).join('<br>')}</div>` : ''}
-          </div>
-          <div class="center">
-            <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">FINAL SCORE</div>
-            <div class="flex gap-8" style="justify-content:center">
-              <input type="number" min="0" max="99" class="score-input" id="modal-hs" value="${r.homeScore}" placeholder="–" style="font-size:28px;width:60px;padding:10px 6px">
-              <span style="color:var(--text-dim);font-size:24px;font-weight:700;padding:0 4px">–</span>
-              <input type="number" min="0" max="99" class="score-input" id="modal-as" value="${r.awayScore}" placeholder="–" style="font-size:28px;width:60px;padding:10px 6px">
-            </div>
-          </div>
-          <div class="center">
-            <div class="serif" style="font-size:20px;font-weight:700">${at?esc(at.name):'?'}</div>
-            <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${at?esc(at.club):''}</div>
-            <span class="tag ${at&&at.goalLevel==='low'?'tag-low':'tag-med'}" style="margin-top:6px">${at?at.goalLevel==='low'?'Low':'Med':''}</span>
-            ${at ? `<div style="margin-top:10px;font-size:12px;color:var(--text-dim)">${at.players.map(p=>esc(p.name)).join('<br>')}</div>` : ''}
-          </div>
-        </div>
-
-        <div class="mb-16">
-          <label class="field-label">Chukker-by-Chukker (optional)</label>
-          <div id="chukker-rows">
-            ${[1,2,3,4].map(c => {
-              const ck = (r.chukkers && r.chukkers[c-1]) || {h:'',a:''};
-              return `
-                <div class="chukker-row">
-                  <span class="chukker-label">Chukker ${c}</span>
-                  <input type="number" min="0" max="20" class="chukker-input" id="ck-h-${c}" value="${ck.h}" placeholder="H">
-                  <span style="color:var(--text-dim)">–</span>
-                  <input type="number" min="0" max="20" class="chukker-input" id="ck-a-${c}" value="${ck.a}" placeholder="A">
-                </div>`;
-            }).join('')}
-          </div>
-        </div>
-
-        <div class="mb-20">
-          <label class="field-label">Game Notes</label>
-          <input id="modal-notes" value="${esc(r.notes||'')}" placeholder="MVP, notable plays, weather conditions...">
-        </div>
-
-        <div class="flex gap-8">
-          <button class="btn btn-primary" onclick="saveGameResult('${game.id}','${game.home}','${game.away}')">${icon('check')} Save Result</button>
-          ${state.results[game.id] ? `<button class="btn btn-danger btn-sm" onclick="clearGameResult('${game.id}')">Clear Result</button>` : ''}
-          <button class="btn btn-secondary" onclick="closeGameModal()">Cancel</button>
-        </div>
-      </div>
+  return`<div class="modal-overlay" onclick="if(event.target===this)closeGameModal()"><div class="modal fade-in">
+    <button class="modal-close" onclick="closeGameModal()">${icon('x',20)}</button>
+    <div class="center mb-16">
+      <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em">Week ${weekData.week} &middot; ${game.date} &middot; ${game.time||'TBD'}</div>
+      ${v?`<div style="font-size:13px;color:var(--text-dim);margin-top:4px">@ ${esc(v.name)}, ${esc(v.location)} ${v.st} ${formatTag(game.format)}</div>`:''}
+      ${v&&v.contact?`<a href="mailto:${esc(v.contact)}" class="contact-link">${icon('mail',11)} Contact venue</a>`:''}
+      ${v&&v.organizer?`<span style="font-size:11px;color:var(--text-dim);margin-left:8px">${icon('users',11)} ${esc(v.organizer)}</span>`:''}
+      ${game.altDate?`<div style="font-size:11px;color:var(--text-dim);margin-top:4px">Alternate date: ${game.altDate}</div>`:''}
+      <div style="margin-top:6px"><button class="btn btn-secondary btn-xs" onclick="closeGameModal();openEditGame('${game.id}')">${icon('edit',12)} Edit Time/Date</button></div>
     </div>
-  `;
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin-bottom:20px">
+      <div class="center"><div class="serif" style="font-size:20px;font-weight:700">${ht?esc(ht.name):'?'}</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px">${ht?esc(ht.club):''}</div>${ht?`<div style="margin-top:8px;font-size:12px;color:var(--text-dim)">${ht.players.map(p=>esc(p.name)).join('<br>')}</div>`:''}</div>
+      <div class="center"><div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">FINAL SCORE</div><div class="flex gap-8" style="justify-content:center">
+        <input type="number" min="0" max="99" class="score-input" id="m-hs" value="${r.homeScore}" placeholder="–" style="font-size:28px;width:60px;padding:10px 6px">
+        <span style="color:var(--text-dim);font-size:24px;font-weight:700">–</span>
+        <input type="number" min="0" max="99" class="score-input" id="m-as" value="${r.awayScore}" placeholder="–" style="font-size:28px;width:60px;padding:10px 6px">
+      </div></div>
+      <div class="center"><div class="serif" style="font-size:20px;font-weight:700">${at?esc(at.name):'?'}</div><div style="font-size:12px;color:var(--text-muted);margin-top:2px">${at?esc(at.club):''}</div>${at?`<div style="margin-top:8px;font-size:12px;color:var(--text-dim)">${at.players.map(p=>esc(p.name)).join('<br>')}</div>`:''}</div>
+    </div>
+    <div class="mb-16"><label class="field-label">${icon('star',12)} Game MVP</label>
+      <select id="m-mvp"><option value="">Select MVP...</option>${allPlayers.map(p=>`<option value="${esc(p)}" ${r.mvp===p?'selected':''}>${esc(p)}</option>`).join('')}</select>
+    </div>
+    <div class="grid-2 mb-16">
+      <div><label class="field-label">${ht?esc(ht.name):''} Goal Scorers</label>${(ht?ht.players:[]).concat((ht&&ht.alternates)||[]).filter(p=>p.name).map(p=>`<div class="flex between" style="margin-bottom:6px"><span style="font-size:13px">${esc(p.name)}</span><input type="number" min="0" max="20" style="width:50px;text-align:center;padding:4px" class="hscorer" data-name="${esc(p.name)}" value="${r.homeScorers&&r.homeScorers[p.name]||''}"></div>`).join('')}</div>
+      <div><label class="field-label">${at?esc(at.name):''} Goal Scorers</label>${(at?at.players:[]).concat((at&&at.alternates)||[]).filter(p=>p.name).map(p=>`<div class="flex between" style="margin-bottom:6px"><span style="font-size:13px">${esc(p.name)}</span><input type="number" min="0" max="20" style="width:50px;text-align:center;padding:4px" class="ascorer" data-name="${esc(p.name)}" value="${r.awayScorers&&r.awayScorers[p.name]||''}"></div>`).join('')}</div>
+    </div>
+    <div class="mb-16"><label class="field-label">Chukker Scores (optional)</label>${[1,2,3,4].map(c=>{const ck=(r.chukkers&&r.chukkers[c-1])||{h:'',a:''};return`<div class="chukker-row"><span class="chukker-label">Chukker ${c}</span><input type="number" min="0" max="20" class="chukker-input" id="ck-h-${c}" value="${ck.h}" placeholder="H"><span style="color:var(--text-dim)">–</span><input type="number" min="0" max="20" class="chukker-input" id="ck-a-${c}" value="${ck.a}" placeholder="A"></div>`}).join('')}</div>
+    <div class="mb-20"><label class="field-label">Game Notes</label><textarea id="m-notes" placeholder="Weather, notable plays, injuries...">${esc(r.notes||'')}</textarea></div>
+    <div class="flex gap-8"><button class="btn btn-primary" onclick="saveGame('${game.id}','${game.home}','${game.away}')">${icon('check')} Save Result</button>
+      ${state.results[game.id]?`<button class="btn btn-danger btn-sm" onclick="clearGame('${game.id}')">Clear</button>`:''}
+      <button class="btn btn-secondary" onclick="closeGameModal()">Cancel</button></div>
+  </div></div>`;
 }
 
-function saveGameResult(gameId, homeId, awayId) {
-  const hs = document.getElementById('modal-hs').value;
-  const as = document.getElementById('modal-as').value;
-  if (hs === '' || as === '') { alert('Please enter both scores.'); return; }
-  const chukkers = [1,2,3,4].map(c => ({
-    h: document.getElementById('ck-h-'+c).value, a: document.getElementById('ck-a-'+c).value
-  })).filter(c => c.h !== '' || c.a !== '');
-  const notes = document.getElementById('modal-notes').value;
-  state.results[gameId] = {
-    home: homeId, away: awayId,
-    homeScore: parseInt(hs), awayScore: parseInt(as),
-    chukkers, notes, timestamp: new Date().toISOString()
-  };
-  state.gameModal = null;
-  save(); render();
+function saveGame(gid,hid,aid){
+  const hs=document.getElementById('m-hs').value,as=document.getElementById('m-as').value;
+  if(hs===''||as===''){alert('Enter both scores.');return}
+  const chukkers=[1,2,3,4].map(c=>({h:document.getElementById('ck-h-'+c).value,a:document.getElementById('ck-a-'+c).value})).filter(c=>c.h!==''||c.a!=='');
+  const mvp=document.getElementById('m-mvp').value;
+  const notes=document.getElementById('m-notes').value;
+  const homeScorers={},awayScorers={};
+  document.querySelectorAll('.hscorer').forEach(el=>{const v=parseInt(el.value);if(v>0)homeScorers[el.dataset.name]=v;});
+  document.querySelectorAll('.ascorer').forEach(el=>{const v=parseInt(el.value);if(v>0)awayScorers[el.dataset.name]=v;});
+  state.results[gid]={home:hid,away:aid,homeScore:parseInt(hs),awayScore:parseInt(as),chukkers,mvp,homeScorers,awayScorers,notes,timestamp:new Date().toISOString()};
+  state.gameModal=null;save();render();
 }
+function clearGame(gid){if(confirm('Clear this result?')){delete state.results[gid];state.gameModal=null;save();render();}}
 
-function clearGameResult(gameId) {
-  if (!confirm('Clear this result?')) return;
-  delete state.results[gameId];
-  state.gameModal = null;
-  save(); render();
+// ═══ EDIT GAME MODAL (time/date) ═══
+function renderEditGameModal(tm,vm){
+  let game=null;
+  for(const w of state.schedule){const f=w.games.find(g=>g.id===state.editGameModal);if(f){game=f;break;}}
+  if(!game)return'';
+  return`<div class="modal-overlay" onclick="if(event.target===this)closeEditGame()"><div class="modal fade-in" style="max-width:420px">
+    <button class="modal-close" onclick="closeEditGame()">${icon('x',20)}</button>
+    <h3 class="mb-20">Edit Game Details</h3>
+    <div class="mb-16"><label class="field-label">Game Time</label><input id="eg-time" value="${esc(game.time||'')}" placeholder="e.g., 2:00 PM"></div>
+    <div class="mb-16"><label class="field-label">Game Date</label><input id="eg-date" value="${esc(game.date||'')}" placeholder="e.g., May 17, 2027"></div>
+    <div class="mb-16"><label class="field-label">Alternate Date</label><input id="eg-alt" value="${esc(game.altDate||'')}" placeholder="e.g., May 24, 2027"></div>
+    <div class="mb-20"><label class="field-label">Venue</label><select id="eg-venue">${state.venues.map(v=>`<option value="${v.id}" ${game.venue===v.id?'selected':''}>${esc(v.name)}</option>`).join('')}</select></div>
+    <div class="flex gap-8"><button class="btn btn-primary" onclick="saveEditGame('${game.id}')">${icon('check')} Save</button><button class="btn btn-secondary" onclick="closeEditGame()">Cancel</button></div>
+  </div></div>`;
+}
+function saveEditGame(gid){
+  for(const w of state.schedule){const g=w.games.find(g=>g.id===gid);if(g){g.time=document.getElementById('eg-time').value;g.date=document.getElementById('eg-date').value;g.altDate=document.getElementById('eg-alt').value;g.venue=document.getElementById('eg-venue').value;break;}}
+  state.editGameModal=null;save();render();
 }
 
 // ═══ STANDINGS ═══
-function renderStandings(tm) {
-  const standings = calcStandings();
-  if (standings.length === 0) return `<div class="empty"><div class="empty-title">No teams registered yet</div></div>`;
-
-  const hasResults = standings.some(s => s.played > 0);
-
-  return `
-    <div class="mb-24">
-      <h2>League Standings</h2>
-      <p style="color:var(--text-muted);font-size:14px" class="mt-4">Win = 3 pts &middot; Draw = 1 pt &middot; Loss = 0 pts</p>
-    </div>
-
-    <div class="card" style="padding:0;overflow:hidden">
-      <table class="league-table">
-        <thead><tr>
-          <th style="width:40px">#</th>
-          <th class="left">Team</th>
-          <th class="left">Club</th>
-          <th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Form</th>
-        </tr></thead>
-        <tbody>
-          ${standings.map((s, i) => `
-            <tr>
-              <td><span class="rank" style="color:${i===0&&s.pts>0?'var(--accent)':'var(--text-muted)'}">${i+1}</span></td>
-              <td class="left" style="font-weight:600">${esc(s.name)}</td>
-              <td class="left" style="color:var(--text-muted)">${esc(s.club)}</td>
-              <td>${s.played}</td>
-              <td style="color:var(--green)">${s.w}</td>
-              <td style="color:var(--text-muted)">${s.d}</td>
-              <td style="color:var(--red)">${s.l}</td>
-              <td>${s.gf}</td>
-              <td>${s.ga}</td>
-              <td style="color:${s.gf-s.ga>0?'var(--green)':s.gf-s.ga<0?'var(--red)':'var(--text-muted)'}">
-                ${s.gf-s.ga>0?'+':''}${s.gf-s.ga}
-              </td>
-              <td class="pts-cell">${s.pts}</td>
-              <td>${s.form.slice(-5).map(f => `<span class="tag ${f==='W'?'tag-win':f==='L'?'tag-loss':'tag-draw'}" style="font-size:10px;padding:2px 6px;margin:0 1px">${f}</span>`).join('')}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-
-    ${hasResults ? `
-      <div class="grid-2 mt-28">
-        <div class="card">
-          <h3 class="mb-12">Top Scorers</h3>
-          ${standings.filter(s=>s.gf>0).sort((a,b)=>b.gf-a.gf).slice(0,5).map((s,i) => `
-            <div class="flex between" style="padding:8px 0;border-bottom:1px solid var(--border)">
-              <div class="flex gap-12">
-                <span style="color:var(--text-muted);font-weight:700;width:20px;text-align:center">${i+1}</span>
-                <span style="font-weight:600">${esc(s.name)}</span>
-              </div>
-              <span style="color:var(--green);font-weight:700">${s.gf} goals</span>
-            </div>
-          `).join('')}
-        </div>
-        <div class="card">
-          <h3 class="mb-12">Best Defense</h3>
-          ${standings.filter(s=>s.played>0).sort((a,b)=>a.ga/a.played-b.ga/b.played).slice(0,5).map((s,i) => `
-            <div class="flex between" style="padding:8px 0;border-bottom:1px solid var(--border)">
-              <div class="flex gap-12">
-                <span style="color:var(--text-muted);font-weight:700;width:20px;text-align:center">${i+1}</span>
-                <span style="font-weight:600">${esc(s.name)}</span>
-              </div>
-              <span style="color:var(--blue);font-weight:700">${(s.ga/s.played).toFixed(1)} GA/game</span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    ` : ''}
+function renderStandings(tm){
+  const standings=calcStandings();
+  if(!standings.length)return`<div class="empty"><div class="empty-title">No teams yet</div></div>`;
+  return`
+    <div class="mb-24"><h2>League Standings</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">Win = 3 pts &middot; Draw = 1 pt &middot; Loss = 0 pts</p></div>
+    <div class="card" style="padding:0;overflow:hidden;overflow-x:auto"><table class="league-table"><thead><tr>
+      <th style="width:40px">#</th><th class="left">Team</th><th class="left">Club</th><th>Div</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Form</th>
+    </tr></thead><tbody>${standings.map((s,i)=>`<tr>
+      <td><span class="rank" style="color:${i===0&&s.pts>0?'var(--accent)':'var(--text-muted)'}">${i+1}</span></td>
+      <td class="left" style="font-weight:600">${esc(s.name)}</td><td class="left" style="color:var(--text-muted)">${esc(s.club)}</td>
+      <td><span class="tag ${s.goalLevel==='low'?'tag-low':'tag-med'}" style="font-size:10px">${s.goalLevel==='low'?'Low':'Med'}</span></td>
+      <td>${s.played}</td><td style="color:var(--green)">${s.w}</td><td style="color:var(--text-muted)">${s.d}</td><td style="color:var(--red)">${s.l}</td>
+      <td>${s.gf}</td><td>${s.ga}</td>
+      <td style="color:${s.gf-s.ga>0?'var(--green)':s.gf-s.ga<0?'var(--red)':'var(--text-muted)'}">${s.gf-s.ga>0?'+':''}${s.gf-s.ga}</td>
+      <td class="pts-cell">${s.pts}</td>
+      <td>${s.form.slice(-5).map(f=>`<span class="tag ${f==='W'?'tag-win':f==='L'?'tag-loss':'tag-draw'}" style="font-size:10px;padding:2px 6px;margin:0 1px">${f}</span>`).join('')}</td>
+    </tr>`).join('')}</tbody></table></div>
   `;
 }
 
-// ═══ Init ═══
+// ═══ PLAYER STATS ═══
+function renderPlayerStats(tm){
+  const ps=calcPlayerStats();
+  const byGoals=ps.slice().sort((a,b)=>b.goals-a.goals);
+  const byMVP=ps.filter(p=>p.mvps>0).sort((a,b)=>b.mvps-a.mvps);
+  const byGPG=ps.filter(p=>p.games>=3).sort((a,b)=>(b.goals/b.games)-(a.goals/a.games));
+  const tmm=tmMap();
+  function teamName(ids){return ids.map(id=>tmm[id]?tmm[id].name:'?').join(', ');}
+
+  return`
+    <div class="mb-24"><h2>Player Statistics</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">Individual scoring and MVP awards across all completed games.</p></div>
+    <div class="grid-2 mb-24">
+      <div class="card"><h3 class="mb-12">Top Scorers</h3>
+        <div style="display:grid;grid-template-columns:30px 1fr auto;gap:4px 12px;font-size:13px;align-items:center">
+          ${byGoals.slice(0,15).map((p,i)=>`
+            <span style="color:${i<3?'var(--accent)':'var(--text-muted)'};font-weight:700;text-align:center;font-family:'Playfair Display',serif">${i+1}</span>
+            <div><div style="font-weight:600">${esc(p.name)}</div><div style="font-size:11px;color:var(--text-dim)">${teamName(p.teams)} &middot; ${p.games} games</div></div>
+            <span style="color:var(--green);font-weight:700;font-size:16px;font-family:'Playfair Display',serif">${p.goals}</span>
+          `).join('')}
+        </div>
+      </div>
+      <div class="card"><h3 class="mb-12">${icon('star',18)} MVP Awards</h3>
+        <div style="display:grid;grid-template-columns:30px 1fr auto;gap:4px 12px;font-size:13px;align-items:center">
+          ${byMVP.slice(0,15).map((p,i)=>`
+            <span style="color:${i<3?'var(--accent)':'var(--text-muted)'};font-weight:700;text-align:center;font-family:'Playfair Display',serif">${i+1}</span>
+            <div><div style="font-weight:600">${esc(p.name)}</div><div style="font-size:11px;color:var(--text-dim)">${teamName(p.teams)}</div></div>
+            <span style="color:var(--accent);font-weight:700">${p.mvps} ${icon('star',12)}</span>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+    ${byGPG.length>0?`<div class="card"><h3 class="mb-12">Goals Per Game (min. 3 games)</h3>
+      <div style="display:grid;grid-template-columns:30px 1fr auto auto;gap:4px 16px;font-size:13px;align-items:center">
+        ${byGPG.slice(0,10).map((p,i)=>`
+          <span style="color:${i<3?'var(--accent)':'var(--text-muted)'};font-weight:700;text-align:center">${i+1}</span>
+          <div><div style="font-weight:600">${esc(p.name)}</div><div style="font-size:11px;color:var(--text-dim)">${teamName(p.teams)}</div></div>
+          <span style="color:var(--text-muted);font-size:12px">${p.goals}g / ${p.games}gp</span>
+          <span style="color:var(--blue);font-weight:700;font-size:16px;font-family:'Playfair Display',serif">${(p.goals/p.games).toFixed(2)}</span>
+        `).join('')}
+      </div>
+    </div>`:''}
+  `;
+}
+
+// ═══ INIT ═══
+initState();
 render();
 </script>
 </body>
