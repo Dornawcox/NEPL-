@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEPL — New England Polo League</title>
+<meta name="description" content="New England Polo League — Club team polo. Register teams, manage schedules, track standings, coordinate game-day resources.">
 <meta name="description" content="New England Polo League — Club team polo across New England.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -111,6 +112,19 @@ footer .sub{font-size:12px;color:var(--text-dim)}
 .sub-tab.active{background:rgba(196,162,92,0.15);color:var(--accent)}
 .sub-tab:hover:not(.active){color:var(--text)}
 
+
+.season-bar{background:var(--surface-alt);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.season-select{width:auto;padding:6px 12px;font-size:13px;font-weight:600;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--accent)}
+.season-badge{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600}
+.season-active{background:rgba(76,175,110,0.12);color:var(--green)}
+.season-completed{background:rgba(137,150,168,0.12);color:var(--text-muted)}
+.season-reg{background:rgba(196,162,92,0.15);color:var(--accent)}
+.resource-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px}
+.resource-slot{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.resource-slot:last-child{border-bottom:none}
+.resource-filled{color:var(--green)}.resource-open{color:var(--text-dim)}
+.resource-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.rb-filled{background:rgba(76,175,110,0.1);color:var(--green)}.rb-open{background:rgba(90,106,126,0.1);color:var(--text-dim)}.rb-urgent{background:rgba(207,96,86,0.12);color:var(--red)}
 @media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}nav{flex-wrap:wrap}nav button span.nav-label{display:none}h1{font-size:28px}.header-inner{flex-direction:column;gap:12px}.game-card{grid-template-columns:1fr;text-align:center;gap:8px}}
 </style>
 </head>
@@ -181,6 +195,53 @@ const TEAMS_SEED = [
   {id:'t-mixed1',name:'NE All-Stars',logo:'⭐',club:'Multi-club',goalLevel:'medium',homeVenue:'v-stagehill',
     players:mkPlayers(['Nina Torres|1','Liam Casey|1','Matt Pierce|2']),alternates:mkPlayers(['Rachel Kim|1','Nora Flanagan|0'])},
 ];
+
+
+// ═══ SEASONS ═══
+const SEASONS_SEED = [
+  {id:'s-2027',name:'2027 Spring–Fall',startDate:'2027-04-01',endDate:'2027-11-30',status:'active'},
+  {id:'s-2026-demo',name:'2026 Demo Season',startDate:'2026-04-01',endDate:'2026-11-30',status:'completed'},
+];
+
+// ═══ GAME-DAY RESOURCES ═══
+const RESOURCE_TYPES = [
+  {id:'umpire',name:'Umpire',icon:'🏇',required:true,needsApproval:true},
+  {id:'third-man',name:'Third Man / Referee',icon:'⚖️',required:false,needsApproval:true},
+  {id:'timekeeper',name:'Timekeeper',icon:'⏱️',required:true,needsApproval:false},
+  {id:'umpire-horse',name:'Umpire Horse',icon:'🐴',required:true,needsApproval:false,hasDetails:true},
+  {id:'spare-horse',name:'Spare Horse',icon:'🐎',required:false,needsApproval:false,hasDetails:true},
+  {id:'venue-official',name:'Venue Official',icon:'📋',required:false,needsApproval:false},
+  {id:'announcer',name:'Announcer / Scorer',icon:'📢',required:false,needsApproval:false},
+];
+
+function buildPreResources(schedule) {
+  const resources = {};
+  let seed = 77;
+  function rng(){seed=(seed*16807+0)%2147483647;return(seed-1)/2147483646;}
+  const names = ['Bill Tompkins','Sarah Chen','Alyson Poor','Steve Rudolph','Mark Gillespie','Dan Keating','Pete Schultz','Sarah Collins','Jim Hannigan','Tom Richards','Meg Sullivan','Hannah Greene'];
+  const horses = ['Thunder','Blaze','Captain','Luna','Shadow','Copper','Penny','Duke','Scout','Arrow'];
+  schedule.forEach(week => {
+    week.games.forEach(g => {
+      const r = {gameId:g.id,slots:{}};
+      // Pre-fill some resources for early games
+      const mi = ['Jan','Feb','Mar','Apr','May','Jun'].indexOf(week.month.substring(0,3));
+      const filled = mi >= 0 && mi < 4;
+      RESOURCE_TYPES.forEach(rt => {
+        if (rt.id === 'umpire') {
+          r.slots[rt.id] = filled ? {filled:true,volunteer:names[Math.floor(rng()*names.length)],confirmed:true} : {filled:false};
+        } else if (rt.id === 'timekeeper') {
+          r.slots[rt.id] = filled ? {filled:true,volunteer:names[Math.floor(rng()*names.length)],confirmed:true} : {filled:false};
+        } else if (rt.id === 'umpire-horse') {
+          r.slots[rt.id] = filled ? {filled:true,volunteer:names[Math.floor(rng()*names.length)],horseName:horses[Math.floor(rng()*horses.length)],confirmed:true} : {filled:false};
+        } else {
+          r.slots[rt.id] = {filled:false};
+        }
+      });
+      resources[g.id] = r;
+    });
+  });
+  return resources;
+}
 
 // ── Pre-built schedule with specific dates ──
 function buildPreSchedule(){
@@ -330,6 +391,8 @@ function buildPreResults(schedule){
 // ── State ──
 let state;
 function initState(){
+  const saved_seasons=LS.get('seasons');
+  const saved_resources=LS.get('resources');
   const saved_teams=LS.get('teams');
   const saved_venues=LS.get('venues');
   const saved_schedule=LS.get('schedule');
@@ -340,11 +403,14 @@ function initState(){
   const venues=saved_venues||VENUES_SEED;
   const schedule=saved_schedule||(teams===TEAMS_SEED?buildPreSchedule():[]);
   const results=saved_results||(schedule.length>0&&!saved_results?buildPreResults(schedule):{});
+  const seasons=saved_seasons||SEASONS_SEED;
+  const resources=saved_resources||(schedule.length>0?buildPreResources(schedule):{});
 
-  if(!saved_teams){LS.set('teams',teams);LS.set('venues',venues);LS.set('schedule',schedule);LS.set('results',results);}
+  if(!saved_teams){LS.set('teams',teams);LS.set('venues',venues);LS.set('schedule',schedule);LS.set('results',results);LS.set('seasons',seasons);LS.set('resources',resources);}
 
   state={
-    tab:'home',teams,venues,schedule,results,
+    tab:'home',teams,venues,schedule,results,seasons,resources,
+    currentSeason:'s-2027',resourceModal:null,
     showTeamForm:false,showVenueForm:false,
     gameModal:null,editGameModal:null,editTeamModal:null,editVenueModal:null,
     filterMonth:'all',statsSubTab:'team',_editTeamLogo:null,_editVenueLogo:null,
@@ -354,7 +420,7 @@ function initState(){
 
 function freshTeamForm(){return{name:'',club:'',goalLevel:'low',homeVenue:'',logo:'🏇',p1:'',p1h:'',p2:'',p2h:'',p3:'',p3h:'',a1:'',a1h:'',a2:'',a2h:''};}
 function freshVenueForm(){return{name:'',location:'',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'',notes:'',organizer:'',logo:'📍'};}
-function save(){LS.set('teams',state.teams);LS.set('venues',state.venues);LS.set('schedule',state.schedule);LS.set('results',state.results);}
+function save(){LS.set('teams',state.teams);LS.set('venues',state.venues);LS.set('schedule',state.schedule);LS.set('results',state.results);LS.set('seasons',state.seasons);LS.set('resources',state.resources);}
 function setState(patch){Object.assign(state,patch);save();render();}
 function tmMap(){const m={};state.teams.forEach(t=>m[t.id]=t);return m;}
 function vmMap(){const m={};state.venues.forEach(v=>m[v.id]=v);return m;}
@@ -411,9 +477,9 @@ function formatTag(format){
 function render(){
   const app=document.getElementById('app');
   const tm=tmMap(),vm=vmMap();
-  const tabs=['home','teams','venues','schedule','results','standings','stats'];
-  const tabIcons={home:'trophy',teams:'users',venues:'map',schedule:'calendar',results:'edit',standings:'bar',stats:'star'};
-  const tabLabels={home:'League',teams:'Teams',venues:'Venues',schedule:'Schedule',results:'Results',standings:'Standings',stats:'Stats'};
+  const tabs=['home','teams','venues','schedule','results','standings','stats','resources'];
+  const tabIcons={home:'trophy',teams:'users',venues:'map',schedule:'calendar',results:'edit',standings:'bar',stats:'star',resources:'horse'};
+  const tabLabels={home:'League',teams:'Teams',venues:'Venues',schedule:'Schedule',results:'Results',standings:'Standings',stats:'Stats',resources:'Game Day'};
 
   app.innerHTML=`
     <header><div class="max-w"><div class="header-inner">
@@ -431,8 +497,9 @@ function render(){
       ${state.tab==='results'?renderResults(tm,vm):''}
       ${state.tab==='standings'?renderStandings(tm):''}
       ${state.tab==='stats'?renderPlayerStats(tm):''}
+      ${state.tab==='resources'?renderResourcesPage(tm,vm):''}
     </main>
-    <footer><div class="sub">NEPL &mdash; New England Polo League &mdash; Season 2027</div>
+    <footer><div class="sub">NEPL &mdash; New England Polo League &mdash; Season 2027<br><a href='NEPL_Chukker_Scheduler.html' style='color:var(--accent);font-size:12px'>Chukker Scheduler Tool</a></div>
       <button class="btn btn-danger btn-xs mt-8" onclick="resetAll()">Reset All Data</button>
       <button class="btn btn-secondary btn-xs mt-8" style="margin-left:8px" onclick="resetToSeed()">Restore Demo Data</button>
     </footer>
@@ -440,6 +507,7 @@ function render(){
     ${state.editGameModal?renderEditGameModal(tm,vm):''}
     ${state.editTeamModal?renderEditTeamModal(tm,vm):''}
     ${state.editVenueModal?renderEditVenueModal(vm):''}
+    ${state.resourceModal?renderResourceModal(tm,vm):''}
   `;
 }
 
@@ -834,6 +902,129 @@ function saveEditVenue(vid){
   v.hasOutdoorArena=document.getElementById('ev-oa').checked;
   v.logo=state._editVenueLogo||v.logo;
   state.editVenueModal=null;save();render();
+}
+
+
+
+function seasonBar(){
+  return '<div class="season-bar"><span style="font-size:12px;color:var(--text-muted);font-weight:600">SEASON:</span><select class="season-select" onchange="setState({currentSeason:this.value})">'+state.seasons.map(function(s){return '<option value="'+s.id+'"'+(state.currentSeason===s.id?' selected':'')+'>'+esc(s.name)+'</option>';}).join('')+'</select>'+state.seasons.filter(function(s){return s.id===state.currentSeason}).map(function(s){return '<span class="season-badge '+(s.status==='active'?'season-active':s.status==='completed'?'season-completed':'season-reg')+'">'+s.status.toUpperCase()+'</span>';}).join('')+'</div>';
+}
+
+
+// ═══ RESOURCES PAGE ═══
+function renderResourcesPage(tm,vm){
+  const upcoming=[];
+  state.schedule.forEach(function(w){w.games.forEach(function(g){
+    if(!state.results[g.id])upcoming.push({...g,weekNum:w.week,month:w.month,weekDate:w.date});
+  });});
+  const filled=[];
+  state.schedule.forEach(function(w){w.games.forEach(function(g){
+    if(state.results[g.id])filled.push({...g,weekNum:w.week,month:w.month});
+  });});
+
+  return seasonBar()+
+    '<div class="flex between mb-24"><div><h2>Game Day Resources</h2><p style="color:var(--text-muted);font-size:14px;margin-top:4px">Sign up to umpire, provide horses, or volunteer for game-day roles.</p></div></div>'+
+    '<div class="grid-3 mb-24">'+
+    countResourceStats(upcoming)+
+    '</div>'+
+    (upcoming.length>0?
+      '<h3 style="color:var(--accent);margin-bottom:12px">Upcoming Games — Resource Needs</h3>'+
+      upcoming.slice(0,12).map(function(g){
+        var ht=tm[g.home],at=tm[g.away],v=vm[g.venue];
+        var res=state.resources[g.id]||{slots:{}};
+        var filledCount=0,totalReq=0;
+        RESOURCE_TYPES.forEach(function(rt){if(rt.required){totalReq++;if(res.slots[rt.id]&&res.slots[rt.id].filled)filledCount++;}});
+        var urgent=totalReq>0&&filledCount<totalReq;
+        return '<div class="resource-card"><div class="flex between mb-8">'+
+          '<div><span style="font-weight:600;font-size:14px">'+(ht?esc(ht.name):'?')+' vs '+(at?esc(at.name):'?')+'</span><div style="font-size:11px;color:var(--text-dim)">'+g.date+' &middot; '+(g.time||'TBD')+' &middot; '+(v?esc(v.name):'TBD')+'</div></div>'+
+          '<div class="flex gap-8"><span class="resource-badge '+(urgent?'rb-urgent':'rb-filled')+'">'+filledCount+'/'+totalReq+' required filled</span>'+
+          '<button class="btn btn-secondary btn-sm" onclick="openResourceModal(&apos;'+g.id+'&apos;)">Manage</button></div></div>'+
+          '<div class="flex gap-8 wrap">'+RESOURCE_TYPES.map(function(rt){
+            var slot=res.slots[rt.id]||{};
+            return '<span class="resource-badge '+(slot.filled?'rb-filled':'rb-open')+'">'+rt.icon+' '+(slot.filled?esc(slot.volunteer||'Filled'):'Open')+'</span>';
+          }).join('')+'</div></div>';
+      }).join('')+
+      (upcoming.length>12?'<div style="text-align:center;padding:12px;color:var(--text-dim);font-size:13px">+ '+(upcoming.length-12)+' more games</div>':'')
+    :'<div style="text-align:center;padding:40px;color:var(--text-dim)">All games have been played.</div>');
+}
+
+function countResourceStats(upcoming){
+  var umpires=0,timekeepers=0,horses=0,total=upcoming.length;
+  upcoming.forEach(function(g){
+    var res=state.resources[g.id]||{slots:{}};
+    if(res.slots['umpire']&&res.slots['umpire'].filled)umpires++;
+    if(res.slots['timekeeper']&&res.slots['timekeeper'].filled)timekeepers++;
+    if(res.slots['umpire-horse']&&res.slots['umpire-horse'].filled)horses++;
+  });
+  return [{l:'Umpires Filled',v:umpires+'/'+total,c:'var(--green)'},{l:'Timekeepers',v:timekeepers+'/'+total,c:'var(--blue)'},{l:'Umpire Horses',v:horses+'/'+total,c:'var(--accent)'}].map(function(s){
+    return '<div class="card center"><div style="font-family:\'Playfair Display\',serif;font-size:28px;font-weight:700;color:'+s.c+'">'+s.v+'</div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px">'+s.l+'</div></div>';
+  }).join('');
+}
+
+function openResourceModal(gid){state.resourceModal=gid;render();}
+function closeResourceModal(){state.resourceModal=null;render();}
+
+function renderResourceModal(tm,vm){
+  var game=null;
+  for(var w of state.schedule){var f=w.games.find(function(g){return g.id===state.resourceModal;});if(f){game=f;break;}}
+  if(!game)return'';
+  var ht=tm[game.home],at=tm[game.away],v=vm[game.venue];
+  var res=state.resources[game.id]||{gameId:game.id,slots:{}};
+
+  return '<div class="modal-overlay" onclick="if(event.target===this)closeResourceModal()"><div class="modal fade-in" style="max-width:620px">'+
+    '<button class="modal-close" onclick="closeResourceModal()">'+icon('x',20)+'</button>'+
+    '<div style="text-align:center;margin-bottom:20px"><h3>Game Day Resources</h3>'+
+    '<div style="font-size:14px;margin-top:6px">'+(ht?esc(ht.name):'?')+' vs '+(at?esc(at.name):'?')+'</div>'+
+    '<div style="font-size:12px;color:var(--text-dim)">'+game.date+' &middot; '+(game.time||'TBD')+(v?' &middot; '+esc(v.name):'')+'</div></div>'+
+    RESOURCE_TYPES.map(function(rt){
+      var slot=res.slots[rt.id]||{};
+      return '<div class="resource-slot"><div class="flex gap-8"><span style="font-size:18px">'+rt.icon+'</span><div><div style="font-weight:600;font-size:14px">'+rt.name+(rt.required?' <span style="color:var(--red);font-size:11px">REQUIRED</span>':'')+'</div>'+
+        (slot.filled?'<div style="font-size:12px;color:var(--green)">'+esc(slot.volunteer||'')+( slot.horseName?' — '+esc(slot.horseName):'')+(slot.confirmed?' ✓ Confirmed':'')+'</div>':'<div style="font-size:12px;color:var(--text-dim)">Open — needs volunteer</div>')+
+        '</div></div>'+
+        (slot.filled?
+          '<button class="btn btn-danger btn-sm" onclick="clearResource(&apos;'+game.id+'&apos;,&apos;'+rt.id+'&apos;)">Clear</button>'
+          :'<button class="btn btn-secondary btn-sm" onclick="fillResource(&apos;'+game.id+'&apos;,&apos;'+rt.id+'&apos;)">Sign Up</button>')+
+        '</div>';
+    }).join('')+
+    '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">'+
+    '<h4 style="margin-bottom:8px;color:var(--accent)">🐎 Spare Horses Available</h4>'+
+    '<div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">List a horse available for visiting players at this game.</div>'+
+    '<div class="flex gap-8"><input id="rm-spare-name" placeholder="Horse name" style="flex:1"><input id="rm-spare-owner" placeholder="Owner" style="flex:1"><input id="rm-spare-terms" placeholder="Free / Fee / Reciprocal" style="flex:1"><button class="btn btn-secondary btn-sm" onclick="addSpareHorse(&apos;'+game.id+'&apos;)">Add</button></div>'+
+    (res.spareHorses&&res.spareHorses.length>0?res.spareHorses.map(function(h,i){
+      return '<div class="resource-slot"><div><span style="font-weight:600">🐎 '+esc(h.name)+'</span> <span style="color:var(--text-muted)">— '+esc(h.owner)+'</span> <span style="font-size:11px;color:var(--text-dim)">('+esc(h.terms)+')</span></div><button class="btn-icon" onclick="rmSpareHorse(&apos;'+game.id+'&apos;,'+i+')">&times;</button></div>';
+    }).join(''):'<div style="font-size:12px;color:var(--text-dim);padding:8px 0">No spare horses listed yet.</div>')+
+    '</div>'+
+    '<div style="margin-top:16px;text-align:right"><button class="btn btn-primary" onclick="closeResourceModal()">Done</button></div>'+
+  '</div></div>';
+}
+
+function fillResource(gid,rtid){
+  var name=prompt('Your name (volunteer):');if(!name)return;
+  if(!state.resources[gid])state.resources[gid]={gameId:gid,slots:{},spareHorses:[]};
+  var slot={filled:true,volunteer:name,confirmed:false};
+  if(rtid==='umpire-horse'){var hname=prompt('Horse name:');slot.horseName=hname||'';}
+  state.resources[gid].slots[rtid]=slot;
+  save();render();
+}
+function clearResource(gid,rtid){
+  if(!state.resources[gid])return;
+  state.resources[gid].slots[rtid]={filled:false};
+  save();render();
+}
+function addSpareHorse(gid){
+  var n=document.getElementById('rm-spare-name').value;
+  var o=document.getElementById('rm-spare-owner').value;
+  var t=document.getElementById('rm-spare-terms').value||'TBD';
+  if(!n||!o){alert('Enter horse name and owner.');return;}
+  if(!state.resources[gid])state.resources[gid]={gameId:gid,slots:{},spareHorses:[]};
+  if(!state.resources[gid].spareHorses)state.resources[gid].spareHorses=[];
+  state.resources[gid].spareHorses.push({name:n,owner:o,terms:t});
+  save();render();
+}
+function rmSpareHorse(gid,i){
+  if(state.resources[gid]&&state.resources[gid].spareHorses){
+    state.resources[gid].spareHorses.splice(i,1);save();render();
+  }
 }
 
 // ═══ INIT ═══

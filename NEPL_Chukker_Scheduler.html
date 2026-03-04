@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chukker Scheduler — NEPL Practice Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF8F5;--surface:#fff;--surface-alt:#F3F0EB;--border:#E0D8CC;--text:#2C2418;--text-muted:#7A7060;--text-dim:#A09880;--accent:#8B4513;--accent-light:#A0572A;--green:#4A7C59;--red:#A84032;--blue:#3A6B8C;--teal:#507060;--gold:#B8860B;--navy:#2C3E50}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+.serif{font-family:'Libre Baskerville',serif}
+.max-w{max-width:960px;margin:0 auto;padding:0 24px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+h1{font-family:'Libre Baskerville',serif;font-size:32px;color:var(--accent);letter-spacing:-0.02em}
+h2{font-family:'Libre Baskerville',serif;font-size:22px;color:var(--text)}
+h3{font-family:'Libre Baskerville',serif;font-size:17px;color:var(--accent)}
+label.fl{display:block;font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px}
+input,select{width:100%;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;font-family:'Source Sans 3',sans-serif;outline:none}
+input:focus,select:focus{border-color:var(--accent)}
+input[type=number]{-moz-appearance:textfield}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;font-family:'Source Sans 3',sans-serif;transition:all 0.15s}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-light)}
+.btn-secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}.btn-secondary:hover{background:rgba(139,69,19,0.06)}
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(168,64,50,0.3)}.btn-danger:hover{background:rgba(168,64,50,0.06)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-icon{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:4px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.flex{display:flex;align-items:center}.between{justify-content:space-between}.gap-8{gap:8px}.gap-12{gap:12px}.wrap{flex-wrap:wrap}
+.mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}.mb-20{margin-bottom:20px}.mb-24{margin-bottom:24px}
+.mt-12{margin-top:12px}.mt-16{margin-top:16px}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.tag-low{background:rgba(74,124,89,0.1);color:var(--green)}.tag-med{background:rgba(58,107,140,0.1);color:var(--blue)}
+.tag-high{background:rgba(184,134,11,0.12);color:var(--gold)}
+header{border-bottom:2px solid var(--border);background:var(--surface);padding:16px 0}
+.player-row{display:grid;grid-template-columns:2fr 80px 80px 80px 40px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
+.player-row:last-child{border-bottom:none}
+.player-header{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em}
+/* Chukker chart */
+.chart-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
+.chart-table th{padding:10px 8px;background:var(--accent);color:#fff;font-weight:600;text-align:center;font-size:12px;text-transform:uppercase;letter-spacing:0.04em}
+.chart-table th:first-child{text-align:left;border-radius:6px 0 0 0}
+.chart-table th:last-child{border-radius:0 6px 0 0}
+.chart-table td{padding:8px;text-align:center;border-bottom:1px solid var(--border);vertical-align:middle}
+.chart-table td:first-child{text-align:left;font-weight:600}
+.chart-table tr:nth-child(even){background:var(--surface-alt)}
+.chart-table .team-a{background:rgba(139,69,19,0.08);font-weight:600;color:var(--accent)}
+.chart-table .team-b{background:rgba(58,107,140,0.08);font-weight:600;color:var(--blue)}
+.chart-table .rest{color:var(--text-dim);font-style:italic;font-size:12px}
+.chart-table .doubled{font-size:10px;color:var(--red);display:block}
+.option-card{background:var(--surface-alt);border:2px solid transparent;border-radius:8px;padding:14px;cursor:pointer;text-align:center;transition:all 0.15s}
+.option-card:hover{border-color:var(--border)}.option-card.sel{border-color:var(--accent);background:rgba(139,69,19,0.04)}
+.option-label{font-weight:700;font-size:15px;margin-bottom:4px}.option-desc{font-size:12px;color:var(--text-muted)}
+.divider{height:1px;background:var(--border);margin:20px 0}
+footer{padding:20px;text-align:center;font-size:12px;color:var(--text-dim);margin-top:40px}
+@media print{
+  body{background:#fff}header,.no-print{display:none!important}
+  .card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
+  .chart-table th{background:#444!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .chart-table .team-a,.chart-table .team-b{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(max-width:640px){.player-row{grid-template-columns:1fr 60px 60px 60px 32px}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="no-print"><div class="max-w"><div class="flex between"><div><h1>Chukker Scheduler</h1><div style="font-size:13px;color:var(--text-muted);margin-top:2px">NEPL Practice Tool — Organize fair, balanced chukkers</div></div><a href="#" style="font-size:13px;color:var(--accent)" onclick="location.reload();return false">New Session</a></div></div></header>
+<main class="max-w" style="padding:28px 24px 40px">
+<div id="app"></div>
+</main>
+<footer class="no-print"><div>NEPL — New England Polo League — Chukker Scheduler</div></footer>
+<script>
+const LS_KEY='nepl-chukker';
+function lsGet(){try{const v=localStorage.getItem(LS_KEY);return v?JSON.parse(v):null}catch{return null}}
+function lsSave(d){try{localStorage.setItem(LS_KEY,JSON.stringify(d))}catch{}}
+
+let S=lsGet()||{
+  players:[],
+  settings:{format:'3v3',balance:'balanced',chukkers:6,clubName:'',date:''},
+  chart:null,step:'players'
+};
+function save(){lsSave(S)}
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+
+function render(){
+  const app=document.getElementById('app');
+  if(S.step==='players')app.innerHTML=renderPlayers();
+  else if(S.step==='settings')app.innerHTML=renderSettings();
+  else if(S.step==='chart')app.innerHTML=renderChart();
+}
+
+// ═══ STEP 1: PLAYERS ═══
+function renderPlayers(){
+  return `
+    <div class="card mb-24">
+      <div class="flex between mb-16"><h2>1. Add Players</h2><span style="font-size:13px;color:var(--text-muted)">${S.players.length} player${S.players.length!==1?'s':''}</span></div>
+      <div class="player-row player-header"><span>Name</span><span style="text-align:center">Handicap</span><span style="text-align:center">Horses</span><span style="text-align:center">Doubling</span><span></span></div>
+      ${S.players.map((p,i)=>`
+        <div class="player-row">
+          <input value="${esc(p.name)}" onchange="updP(${i},'name',this.value)" placeholder="Player name" style="border:none;padding:4px 0;font-size:14px;background:transparent">
+          <input type="number" min="-2" max="10" value="${p.hcp}" onchange="updP(${i},'hcp',+this.value)" style="text-align:center;padding:6px 4px">
+          <input type="number" min="1" max="8" value="${p.horses}" onchange="updP(${i},'horses',+this.value)" style="text-align:center;padding:6px 4px">
+          <select onchange="updP(${i},'doubling',this.value)" style="text-align:center;padding:6px 2px;font-size:13px">
+            <option value="no" ${p.doubling==='no'?'selected':''}>No</option>
+            <option value="yes" ${p.doubling==='yes'?'selected':''}>Yes</option>
+          </select>
+          <button class="btn-icon" onclick="rmP(${i})" title="Remove">&times;</button>
+        </div>
+      `).join('')}
+      <div style="margin-top:12px" class="flex gap-8">
+        <button class="btn btn-secondary btn-sm" onclick="addP()">+ Add Player</button>
+        <button class="btn btn-secondary btn-sm" onclick="addMultiple()">+ Add 4 Blank</button>
+      </div>
+    </div>
+    ${S.players.length>=6?`<div style="text-align:right"><button class="btn btn-primary" onclick="S.step='settings';save();render()">Next: Settings &rarr;</button></div>`
+    :`<div class="card" style="text-align:center;padding:40px;color:var(--text-muted)">Add at least 6 players to continue</div>`}
+  `;
+}
+function addP(){S.players.push({name:'',hcp:0,horses:2,doubling:'no'});save();render();}
+function addMultiple(){for(let i=0;i<4;i++)S.players.push({name:'',hcp:0,horses:2,doubling:'no'});save();render();}
+function rmP(i){S.players.splice(i,1);save();render();}
+function updP(i,k,v){S.players[i][k]=v;save();render();}
+
+// ═══ STEP 2: SETTINGS ═══
+function renderSettings(){
+  const s=S.settings;
+  return `
+    <div class="flex between mb-24 no-print">
+      <button class="btn btn-secondary btn-sm" onclick="S.step='players';save();render()">&larr; Back to Players</button>
+      <span style="font-size:13px;color:var(--text-muted)">${S.players.filter(p=>p.name).length} players ready</span>
+    </div>
+    <div class="card mb-24">
+      <h2 class="mb-16">2. Chukker Settings</h2>
+      <div class="grid-2 mb-20">
+        <div><label class="fl">Club / Location</label><input value="${esc(s.clubName)}" onchange="S.settings.clubName=this.value;save()" placeholder="e.g., Myopia Polo Club"></div>
+        <div><label class="fl">Date</label><input type="date" value="${s.date}" onchange="S.settings.date=this.value;save()"></div>
+      </div>
+      <div class="mb-20">
+        <label class="fl">Format</label>
+        <div class="grid-3">
+          ${[{v:'3v3',l:'3 on 3',d:'6+ players'},{v:'4v4',l:'4 on 4',d:'8+ players'},{v:'auto',l:'Auto',d:'Best fit for player count'}].map(o=>`
+            <div class="option-card ${s.format===o.v?'sel':''}" onclick="S.settings.format='${o.v}';save();render()"><div class="option-label">${o.l}</div><div class="option-desc">${o.d}</div></div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="mb-20">
+        <label class="fl">Team Balancing</label>
+        <div class="grid-3">
+          ${[{v:'balanced',l:'Balanced',d:'Even handicap split'},{v:'slow',l:'Tend Slower',d:'Lower-hcp players together'},{v:'fast',l:'Tend Faster',d:'Higher-hcp players together'}].map(o=>`
+            <div class="option-card ${s.balance===o.v?'sel':''}" onclick="S.settings.balance='${o.v}';save();render()"><div class="option-label">${o.l}</div><div class="option-desc">${o.d}</div></div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="mb-20">
+        <label class="fl">Number of Chukkers</label>
+        <div class="grid-4">
+          ${[4,5,6,8].map(n=>`<div class="option-card ${s.chukkers===n?'sel':''}" onclick="S.settings.chukkers=${n};save();render()"><div class="option-label">${n}</div><div class="option-desc">chukkers</div></div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div style="text-align:right"><button class="btn btn-primary" onclick="generateChart()">Generate Chukker Chart &rarr;</button></div>
+  `;
+}
+
+// ═══ SCHEDULE ALGORITHM ═══
+function generateChart(){
+  const players=S.players.filter(p=>p.name.trim());
+  if(players.length<6){alert('Need at least 6 named players.');return;}
+  const s=S.settings;
+  const perSide=s.format==='4v4'?4:s.format==='3v3'?3:(players.length>=8?4:3);
+  const perChukker=perSide*2;
+  const numChukkers=s.chukkers;
+
+  // Calculate max chukkers each player can play based on horses and doubling
+  players.forEach(p=>{
+    p.maxChukkers=p.doubling==='yes'?p.horses*2:p.horses;
+    p.maxChukkers=Math.min(p.maxChukkers,numChukkers);
+    p.assigned=[];
+    p.lastChukker=-10; // Track last played for doubling spacing
+  });
+
+  // Sort players for assignment
+  function sortForBalance(arr,mode){
+    const sorted=[...arr].sort((a,b)=>b.hcp-a.hcp);
+    if(mode==='slow')return sorted.reverse();
+    if(mode==='fast')return sorted;
+    return sorted; // balanced uses snake draft
+  }
+
+  const chart=[];
+
+  for(let c=0;c<numChukkers;c++){
+    // Determine eligible players for this chukker
+    let eligible=players.filter(p=>{
+      if(p.assigned.length>=p.maxChukkers)return false;
+      // If doubling, must skip at least 1 chukker between plays
+      if(p.doubling==='yes'&&p.lastChukker===c-1)return false;
+      return true;
+    });
+
+    // Sort eligible by fewest chukkers played (fairness), then by handicap
+    eligible.sort((a,b)=>a.assigned.length-b.assigned.length||(b.hcp-a.hcp));
+
+    // Pick players for this chukker
+    const playing=eligible.slice(0,perChukker);
+
+    // Split into teams based on balance mode
+    let teamA,teamB;
+    if(s.balance==='balanced'){
+      // Snake draft: sort by hcp desc, alternate picks
+      const sorted=[...playing].sort((a,b)=>b.hcp-a.hcp);
+      teamA=[];teamB=[];
+      sorted.forEach((p,i)=>{
+        if(i%4<2)teamA.push(p);else teamB.push(p);
+      });
+      // Trim to perSide
+      while(teamA.length>perSide)teamB.push(teamA.pop());
+      while(teamB.length>perSide)teamA.push(teamB.pop());
+    } else if(s.balance==='slow'){
+      const sorted=[...playing].sort((a,b)=>a.hcp-b.hcp);
+      teamA=sorted.slice(0,perSide);
+      teamB=sorted.slice(perSide,perSide*2);
+    } else {
+      const sorted=[...playing].sort((a,b)=>b.hcp-a.hcp);
+      teamA=sorted.slice(0,perSide);
+      teamB=sorted.slice(perSide,perSide*2);
+    }
+
+    const sitting=players.filter(p=>!playing.includes(p));
+
+    // Record assignments
+    playing.forEach(p=>{p.assigned.push(c+1);p.lastChukker=c;});
+
+    const hcpA=teamA.reduce((s,p)=>s+p.hcp,0);
+    const hcpB=teamB.reduce((s,p)=>s+p.hcp,0);
+
+    chart.push({chukker:c+1,teamA,teamB,sitting,hcpA,hcpB});
+  }
+
+  S.chart=chart;
+  S.step='chart';
+  save();render();
+}
+
+// ═══ STEP 3: CHART DISPLAY ═══
+function renderChart(){
+  const ch=S.chart;
+  const s=S.settings;
+  const players=S.players.filter(p=>p.name.trim());
+  const perSide=ch[0]?ch[0].teamA.length:3;
+  const dateStr=s.date?new Date(s.date+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}):'';
+
+  // Player summary
+  const summary={};
+  players.forEach(p=>{summary[p.name]={chukkers:0,doubled:p.doubling==='yes'}});
+  ch.forEach(c=>{
+    [...c.teamA,...c.teamB].forEach(p=>{if(summary[p.name])summary[p.name].chukkers++});
+  });
+
+  return `
+    <div class="flex between mb-24 no-print">
+      <button class="btn btn-secondary btn-sm" onclick="S.step='settings';save();render()">&larr; Back to Settings</button>
+      <div class="flex gap-8">
+        <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨 Print Chart</button>
+        <button class="btn btn-primary btn-sm" onclick="shareChart()">📧 Copy for Email</button>
+      </div>
+    </div>
+
+    <div class="card mb-24" id="chart-card">
+      <div style="text-align:center;margin-bottom:20px">
+        <h1 style="font-size:28px;margin-bottom:4px">Chukker Chart</h1>
+        ${s.clubName?'<div style="font-size:16px;color:var(--text-muted);font-family:Libre Baskerville,serif">'+esc(s.clubName)+'</div>':''}
+        ${dateStr?'<div style="font-size:14px;color:var(--text-dim);margin-top:2px">'+dateStr+'</div>':''}
+        <div style="font-size:13px;color:var(--text-muted);margin-top:6px">${ch.length} chukkers &middot; ${perSide}v${perSide} &middot; ${players.length} players &middot; ${s.balance==='balanced'?'Balanced':'Tend '+(s.balance==='slow'?'Slower':'Faster')}</div>
+      </div>
+
+      <table class="chart-table">
+        <thead><tr>
+          <th style="width:60px">Chukker</th>
+          <th>Team A (Brown)</th>
+          <th style="width:50px">HCP</th>
+          <th>Team B (Blue)</th>
+          <th style="width:50px">HCP</th>
+          <th>Sitting Out</th>
+        </tr></thead>
+        <tbody>
+          ${ch.map(c=>`<tr>
+            <td style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--accent)">${c.chukker}</td>
+            <td class="team-a">${c.teamA.map(p=>esc(p.name)+(p.doubling==='yes'&&isDoubled(p,c.chukker)?'<span class="doubled">(doubled)</span>':'')).join('<br>')}</td>
+            <td style="font-weight:700;color:var(--accent)">${c.hcpA}</td>
+            <td class="team-b">${c.teamB.map(p=>esc(p.name)+(p.doubling==='yes'&&isDoubled(p,c.chukker)?'<span class="doubled">(doubled)</span>':'')).join('<br>')}</td>
+            <td style="font-weight:700;color:var(--blue)">${c.hcpB}</td>
+            <td class="rest">${c.sitting.map(p=>esc(p.name)).join(', ')||'—'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+
+      <div class="divider"></div>
+      <h3 class="mb-12">Player Summary</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">
+        ${Object.entries(summary).map(([name,d])=>`
+          <div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--surface-alt);border-radius:6px;font-size:13px">
+            <span style="font-weight:600">${esc(name)}</span>
+            <span style="color:var(--text-muted)">${d.chukkers} chukkers${d.doubled?' (dbl)':''}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="no-print" style="text-align:center;margin-top:16px">
+      <button class="btn btn-secondary" onclick="generateChart()">🔄 Regenerate (shuffle teams)</button>
+    </div>
+  `;
+}
+
+function isDoubled(player,chukkerNum){
+  // Check if this player is playing on a doubled horse this chukker
+  const assigned=player.assigned||[];
+  if(assigned.length<=player.horses)return false;
+  return true;
+}
+
+function shareChart(){
+  const ch=S.chart;if(!ch)return;
+  const s=S.settings;
+  const perSide=ch[0]?ch[0].teamA.length:3;
+  let text='CHUKKER CHART\n';
+  if(s.clubName)text+=s.clubName+'\n';
+  if(s.date)text+=s.date+'\n';
+  text+=ch.length+' chukkers, '+perSide+'v'+perSide+'\n\n';
+  ch.forEach(c=>{
+    text+='--- Chukker '+c.chukker+' ---\n';
+    text+='Team A ('+c.hcpA+'): '+c.teamA.map(p=>p.name).join(', ')+'\n';
+    text+='Team B ('+c.hcpB+'): '+c.teamB.map(p=>p.name).join(', ')+'\n';
+    if(c.sitting.length)text+='Sitting: '+c.sitting.map(p=>p.name).join(', ')+'\n';
+    text+='\n';
+  });
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>alert('Chart copied to clipboard! Paste into email.'));
+  } else {
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Chart copied!');
+  }
+}
+
+render();
+</script>
+</body>
+</html>
