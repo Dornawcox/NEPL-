@@ -128,9 +128,6 @@ footer .sub{font-size:12px;color:var(--text-dim)}
 
 .hero{position:relative;overflow:hidden;border-radius:12px;margin-bottom:32px;min-height:320px;display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 32px}
 .hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1591985666643-4ee764490083?w=1200&q=80') center/cover no-repeat;filter:brightness(0.35)}
-.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#1B3A5C 0%,#2E8B8B 50%,#1B3A5C 100%);opacity:0}
-.hero-bg.fallback{background:none}
-.hero-bg.fallback::after{opacity:1}
 .hero-content{position:relative;z-index:1;max-width:640px}
 .hero h1{font-size:48px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.5);margin-bottom:12px}
 .hero p{color:rgba(255,255,255,0.85);font-size:17px;line-height:1.6;text-shadow:0 1px 6px rgba(0,0,0,0.4)}
@@ -425,7 +422,7 @@ function initState(){
 
   state={
     tab:'home',teams,venues,schedule,results,seasons,resources,
-    currentSeason:'s-2027',resourceModal:null,
+    currentSeason:'s-2027',resourceModal:null,_dupModal:false,_dupTeamId:null,
     showTeamForm:false,showVenueForm:false,
     gameModal:null,editGameModal:null,editTeamModal:null,editVenueModal:null,
     filterMonth:'all',statsSubTab:'team',_editTeamLogo:null,_editVenueLogo:null,
@@ -507,7 +504,18 @@ function render(){
         <div><div class="logo-text">NEPL</div><div class="logo-sub">New England Polo League</div></div>
       </div>
       <nav>${tabs.map(t=>`<button class="${state.tab===t?'active':''}" onclick="setState({tab:'${t}'})">${icon(tabIcons[t])} <span class="nav-label">${tabLabels[t]}</span></button>`).join('')}</nav>
-    </div></div></header>
+      </div></div>
+      <div style="background:var(--surface-alt);border-bottom:1px solid var(--border);padding:6px 0">
+        <div class="max-w" style="padding:0 24px">
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <span style="font-size:11px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.06em">Season:</span>
+            ${state.seasons.map(s=>`<button style="padding:5px 14px;border-radius:6px;border:1px solid ${state.currentSeason===s.id?'var(--accent)':'var(--border)'};background:${state.currentSeason===s.id?'rgba(196,162,92,0.12)':'transparent'};color:${state.currentSeason===s.id?'var(--accent)':'var(--text-muted)'};font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif" onclick="setState({currentSeason:'${s.id}'})">${esc(s.name)} <span style="font-size:10px;opacity:0.7">${s.status==='active'?'●':s.status==='completed'?'✓':'○'}</span></button>`).join('')}
+            <button style="padding:5px 10px;border-radius:6px;border:1px dashed var(--border);background:transparent;color:var(--text-dim);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif" onclick="addNewSeason()">+ New Season</button>
+          </div>
+        </div>
+        </div>
+      </div>
+    </header>
     <main class="max-w" style="padding-top:28px;padding-bottom:40px">
       ${state.tab==='home'?renderHome(tm,vm):''}
       ${state.tab==='teams'?renderTeams(tm,vm):''}
@@ -527,9 +535,21 @@ function render(){
     ${state.editTeamModal?renderEditTeamModal(tm,vm):''}
     ${state.editVenueModal?renderEditVenueModal(vm):''}
     ${state.resourceModal?renderResourceModal(tm,vm):''}
+    ${state._dupModal?renderDupModal():''}
   `;
 }
 
+
+function addNewSeason(){
+  var name=prompt('Season name (e.g., "2028 Spring–Fall"):');
+  if(!name)return;
+  var id='s-'+Date.now();
+  var start=prompt('Start date (YYYY-MM-DD):','2028-04-01');
+  var end=prompt('End date (YYYY-MM-DD):','2028-11-30');
+  state.seasons.push({id:id,name:name,startDate:start||'',endDate:end||'',status:'registration'});
+  state.currentSeason=id;
+  save();render();
+}
 function resetAll(){if(confirm('Reset all data?')){LS.clear();initState();render();}}
 function resetToSeed(){if(confirm('Restore demo data? This replaces everything.')){LS.clear();initState();render();}}
 
@@ -545,11 +565,12 @@ function renderHome(tm,vm){
 
   return`
     <div class="hero">
-      <div class="hero-bg"></div>
-      <div class="hero-content">
+            <div class="hero-content">
+        <span class="hero-emoji">🏇</span>
         <h1>New England Polo League</h1>
-        <p>Club team polo across New England. Three-a-side, home and away, April through November. Low and medium goal divisions with USPA-registered players. Two horses is all you need to compete.</p>
-        <p style="margin-top:12px;font-size:14px;color:rgba(255,255,255,0.65)">Welcome to the NEPL — where every weekend is a road trip, every club is a host, and the goal is as much about community as competition.</p>
+        <div class="accent-line"></div>
+        <p>Club team polo across New England. Three-a-side, home and away, April through November. Low and medium goal with USPA-registered players. Two horses is all you need.</p>
+        <p style="margin-top:10px;font-size:14px;color:rgba(255,255,255,0.55)">Every weekend is a road trip. Every club is a host. The goal is community as much as competition.</p>
         <div class="flex gap-12" style="justify-content:center;margin-top:24px">
           <button class="btn btn-primary" onclick="setState({tab:'teams',showTeamForm:true})">Register a Team</button>
           <button class="btn btn-secondary" style="color:#fff;border-color:rgba(255,255,255,0.4)" onclick="setState({tab:'venues',showVenueForm:true})">Add a Venue</button>
@@ -583,7 +604,7 @@ function renderHome(tm,vm){
 // ═══ TEAMS ═══
 function renderTeams(tm,vm){
   const f=state.teamForm;
-  return seasonBar()+`
+  return `
     <div class="flex between mb-24"><div><h2>Teams</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.teams.filter(t=>!t.season||t.season===state.currentSeason).length} teams this season. 3-person rosters with up to 2 alternates.</p></div>
       <button class="btn btn-primary" onclick="setState({showTeamForm:!state.showTeamForm})">${icon('plus')} Register Team</button></div>
     ${state.showTeamForm?`<div class="card card-accent mb-24 fade-in"><h3 class="mb-20">New Team Registration</h3>
@@ -600,7 +621,7 @@ function renderTeams(tm,vm){
     </div>`:''}
     ${state.teams.filter(t=>!t.season||t.season===state.currentSeason).length>0?`<div class="grid-2">${state.teams.filter(t=>!t.season||t.season===state.currentSeason).map(t=>`
       <div class="card"><div class="flex between mb-10"><div class="flex gap-12">${logoCircle(t.logo)}<div><div class="serif" style="font-size:18px;font-weight:700">${esc(t.name)}</div><div style="font-size:12px;color:var(--text-muted)" class="mt-4">${esc(t.club)}${t.homeVenue&&vm[t.homeVenue]?' &middot; Home: '+esc(vm[t.homeVenue].name):''}</div></div></div>
-        <div class="flex gap-6"><span class="tag ${t.goalLevel==='low'?'tag-low':'tag-med'}">${t.goalLevel==='low'?'Low Goal':'Medium Goal'}</span>${t.season?'<span class="season-tag">'+esc(t.season)+'</span>':''}<button class="dup-btn" onclick="duplicateTeam('${t.id}')" title="Duplicate for another season">Copy</button><button class="btn-icon" onclick="openEditTeam('${t.id}')" title="Edit">${icon('edit')}</button><button class="btn-icon" onclick="removeTeam('${t.id}')" title="Remove">${icon('x')}</button></div></div>
+        <div class="flex gap-6"><span class="tag ${t.goalLevel==='low'?'tag-low':'tag-med'}">${t.goalLevel==='low'?'Low Goal':'Medium Goal'}</span><button class="dup-btn" onclick="duplicateTeam('${t.id}')" title="Duplicate for another season">Copy</button><button class="btn-icon" onclick="openEditTeam('${t.id}')" title="Edit">${icon('edit')}</button><button class="btn-icon" onclick="removeTeam('${t.id}')" title="Remove">${icon('x')}</button></div></div>
         <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em" class="mb-6">Roster</div>
         ${t.players.map(p=>`<div class="flex between" style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${esc(p.name)} <a href="${uspaLookupUrl(p.name)}" target="_blank" class="uspa-link" title="Look up on USPA">USPA</a></span><span style="color:var(--text-muted)">${p.handicap?p.handicap+' goal':''}</span></div>`).join('')}
         ${(t.alternates||[]).filter(a=>a.name).map(a=>`<div class="flex between" style="padding:5px 0;font-size:13px;color:var(--text-muted)"><span style="font-style:italic">${esc(a.name)} (alt)</span><span>${a.handicap?a.handicap+' goal':''}</span></div>`).join('')}
@@ -612,21 +633,46 @@ function submitTeam(){const f=state.teamForm;if(!f.name||!f.club||!f.p1||!f.p2||
 function duplicateTeam(tid){
   var t=state.teams.find(function(x){return x.id===tid});
   if(!t)return;
-  var targetSeason=prompt('Duplicate team "'+t.name+'" for which season ID?\n\nAvailable: '+state.seasons.map(function(s){return s.id+' ('+s.name+')'}).join(', '));
-  if(!targetSeason)return;
+  // Build a list of other seasons
+  var others=state.seasons.filter(function(s){return s.id!==t.season});
+  if(others.length===0){alert('No other seasons available. Create a new season first.');return;}
+  // Show picker
+  state._dupTeamId=tid;
+  state._dupModal=true;
+  render();
+}
+function closeDupModal(){state._dupModal=false;state._dupTeamId=null;render();}
+function confirmDup(seasonId){
+  var t=state.teams.find(function(x){return x.id===state._dupTeamId});
+  if(!t)return;
   var newT=JSON.parse(JSON.stringify(t));
   newT.id='team-'+Date.now();
-  newT.season=targetSeason;
+  newT.season=seasonId;
   state.teams.push(newT);
+  state._dupModal=false;state._dupTeamId=null;
   save();render();
-  alert('Team duplicated for '+targetSeason+'. Edit the copy to update handicaps or roster.');
+}
+function renderDupModal(){
+  var t=state.teams.find(function(x){return x.id===state._dupTeamId});
+  if(!t)return'';
+  return '<div class="modal-overlay" onclick="if(event.target===this)closeDupModal()"><div class="modal fade-in" style="max-width:420px">'+
+    '<button class="modal-close" onclick="closeDupModal()">'+icon('x',20)+'</button>'+
+    '<h3 style="margin-bottom:8px">Copy Team to Season</h3>'+
+    '<p style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Duplicate <strong>'+esc(t.name)+'</strong> to another season. You can then edit the copy to update handicaps or roster.</p>'+
+    state.seasons.filter(function(s){return s.id!==t.season}).map(function(s){
+      return '<div style="padding:12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:border-color 0.15s" onmouseover="this.style.borderColor=\'var(--accent)\'" onmouseout="this.style.borderColor=\'var(--border)\'" onclick="confirmDup(&apos;'+s.id+'&apos;)">'+
+        '<div><div style="font-weight:600">'+esc(s.name)+'</div><div style="font-size:12px;color:var(--text-dim)">'+s.status+'</div></div>'+
+        '<span style="color:var(--accent);font-weight:600;font-size:13px">Select &rarr;</span></div>';
+    }).join('')+
+    '<div style="margin-top:12px;text-align:right"><button class="btn btn-secondary btn-sm" onclick="closeDupModal()">Cancel</button></div>'+
+  '</div></div>';
 }
 function removeTeam(id){if(confirm('Remove this team?')){state.teams=state.teams.filter(t=>t.id!==id);save();render();}}
 
 // ═══ VENUES ═══
 function renderVenues(vm){
   const f=state.venueForm;const sts=['MA','CT','RI','NH','VT','ME','NY'];
-  return seasonBar()+`
+  return `
     <div class="flex between mb-24"><div><h2>Venues</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.venues.length} registered venues across New England.</p></div>
       <button class="btn btn-primary" onclick="setState({showVenueForm:!state.showVenueForm})">${icon('plus')} Add Venue</button></div>
     ${state.showVenueForm?`<div class="card card-accent mb-24 fade-in"><h3 class="mb-20">Register Venue</h3>
@@ -692,7 +738,7 @@ function doGenerate(){if(state.schedule.length>0&&!confirm('Regenerate? This cle
 function renderResults(tm,vm){
   const withR=[],withoutR=[];
   state.schedule.forEach(w=>{w.games.forEach(g=>{const o={...g,weekNum:w.week};if(state.results[g.id])withR.push(o);else withoutR.push(o)})});
-  return seasonBar()+`
+  return `
     <div class="flex between mb-24"><div><h2>Enter Results</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${withR.length} of ${withR.length+withoutR.length} completed. Click any game to enter scores, MVP, and goal scorers.</p></div></div>
     ${state.schedule.length===0?`<div class="card center" style="padding:40px;color:var(--text-muted)">Generate a schedule first.</div>`:''}
     ${withoutR.length>0?`<h3 class="mb-12">Upcoming</h3><div style="display:grid;gap:8px" class="mb-32">${withoutR.slice(0,15).map(g=>{const ht=tm[g.home],at=tm[g.away],v=vm[g.venue];return`<div class="game-card" onclick="openGameModal('${g.id}')"><div style="text-align:right"><div class="game-team">${ht?esc(ht.name):'?'}</div><div class="game-club">${ht?esc(ht.club):''}</div></div><div class="center"><div class="game-vs">vs</div><div class="game-date">${g.date} &middot; ${g.time||'TBD'}</div><div class="game-venue">@ ${v?esc(v.name):'TBD'}</div></div><div><div class="game-team">${at?esc(at.name):'?'}</div><div class="game-club">${at?esc(at.club):''}</div></div></div>`}).join('')}${withoutR.length>15?`<div class="center" style="padding:10px;color:var(--text-dim);font-size:13px">+ ${withoutR.length-15} more</div>`:''}</div>`:''}
@@ -814,7 +860,7 @@ function renderPlayerStats(tm){
   const tmm=tmMap();
   function teamName(ids){return ids.map(function(id){return tmm[id]?tmm[id].name:'?';}).join(', ');}
 
-  return seasonBar()+`
+  return `
     <div class="flex between mb-16"><h2>Statistics</h2></div>
     <div class="sub-tabs">
       <button class="sub-tab ${state.statsSubTab==='team'?'active':''}" onclick="setState({statsSubTab:'team'})">Team Stats</button>
@@ -942,9 +988,7 @@ function saveEditVenue(vid){
 
 
 
-function seasonBar(){
-  return '<div class="season-bar"><span style="font-size:12px;color:var(--text-muted);font-weight:600">SEASON:</span><select class="season-select" onchange="setState({currentSeason:this.value})">'+state.seasons.map(function(s){return '<option value="'+s.id+'"'+(state.currentSeason===s.id?' selected':'')+'>'+esc(s.name)+'</option>';}).join('')+'</select>'+state.seasons.filter(function(s){return s.id===state.currentSeason}).map(function(s){return '<span class="season-badge '+(s.status==='active'?'season-active':s.status==='completed'?'season-completed':'season-reg')+'">'+s.status.toUpperCase()+'</span>';}).join('')+'</div>';
-}
+function seasonBar(){return '';}
 
 
 // ═══ RESOURCES PAGE ═══
@@ -958,8 +1002,7 @@ function renderResourcesPage(tm,vm){
     if(state.results[g.id])filled.push({...g,weekNum:w.week,month:w.month});
   });});
 
-  return seasonBar()+
-    '<div class="flex between mb-24"><div><h2>Game Day Resources</h2><p style="color:var(--text-muted);font-size:14px;margin-top:4px">Sign up to umpire, provide horses, or volunteer for game-day roles.</p></div></div>'+
+  return '<div class="flex between mb-24"><div><h2>Game Day Resources</h2><p style="color:var(--text-muted);font-size:14px;margin-top:4px">Sign up to umpire, provide horses, or volunteer for game-day roles.</p></div></div>'+
     '<div class="grid-3 mb-24">'+
     countResourceStats(upcoming)+
     '</div>'+
