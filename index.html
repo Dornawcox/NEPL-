@@ -432,6 +432,14 @@ function buildPreResults(schedule){
 // ── State ──
 let state;
 function initState(){
+  // Version check - auto-reset if data is from older version
+  var savedVer = localStorage.getItem('nepl-version');
+  if(savedVer !== 'v10') {
+    console.log('Data version mismatch, resetting to v10 demo data');
+    ['teams','venues','schedule','results','seasons','resources'].forEach(function(k){localStorage.removeItem('nepl-'+k)});
+    localStorage.setItem('nepl-version','v10');
+  }
+
   const saved_seasons=LS.get('seasons');
   const saved_resources=LS.get('resources');
   const saved_teams=LS.get('teams');
@@ -614,19 +622,6 @@ function formatTag(format){
 function render(){
   const app=document.getElementById('app');
   setTimeout(renderSeasonBar,0);
-  setTimeout(function(){
-    if(state.tab==='teams'&&state.showTeamForm){
-      [1,2,3].forEach(function(i){playerAutocomplete('tf-p'+i,'tf-ph'+i);});
-      [1,2].forEach(function(i){playerAutocomplete('tf-a'+i,'tf-ah'+i);});
-    }
-    if(state.editTeamModal){
-      var t=state.teams.find(function(x){return x.id===state.editTeamModal});
-      if(t){
-        t.players.forEach(function(p,i){playerAutocomplete('et-p'+i,'et-ph'+i);});
-        [0,1].forEach(function(i){playerAutocomplete('et-a'+i,'et-ah'+i);});
-      }
-    }
-  },50);
   const tm=tmMap(),vm=vmMap();
   const tabs=['home','teams','venues','schedule','results','standings','stats','resources'];
   const tabIcons={home:'trophy',teams:'users',venues:'map',schedule:'calendar',results:'edit',standings:'bar',stats:'star',resources:'horse'};
@@ -664,6 +659,20 @@ function render(){
     ${state._dupModal?renderDupModal():''}
     ${state._newSeasonModal?renderNewSeasonModal():''}
   `;
+  // Post-render: attach autocomplete to player inputs
+  setTimeout(function(){
+    if(state.tab==='teams'&&state.showTeamForm){
+      [1,2,3].forEach(function(i){playerAutocomplete('tf-p'+i,'tf-ph'+i);});
+      [1,2].forEach(function(i){playerAutocomplete('tf-a'+i,'tf-ah'+i);});
+    }
+    if(state.editTeamModal){
+      var t=state.teams.find(function(x){return x.id===state.editTeamModal});
+      if(t){
+        t.players.forEach(function(p,i){playerAutocomplete('et-p'+i,'et-ph'+i);});
+        [0,1].forEach(function(i){playerAutocomplete('et-a'+i,'et-ah'+i);});
+      }
+    }
+  },80);
 }
 
 
