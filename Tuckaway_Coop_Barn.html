@@ -183,10 +183,10 @@ var DOCS=[
 var SEED={
   vars:Object.assign({},DEFAULTS),
   members:[
-    {id:'m1',name:'Dorn Cox',email:'dorn@tuckaway.farm',phone:'603-555-0101',type:'owner',pronouns:'he/him',address:'Tuckaway Farm, Lee NH',emergencyName:'Rachael Duffy',emergencyPhone:'603-555-0103',emergencyRelation:'Partner',medical:'',relationship:'Owner',trainer:'',vehicle:'Ford F-250, Blue',trailer:'2-horse bumper pull'},
-    {id:'m2',name:'Rachael Duffy',email:'rachael@tuckaway.farm',phone:'603-555-0103',type:'boarder',pronouns:'she/her',address:'Lee NH',emergencyName:'Dorn Cox',emergencyPhone:'603-555-0101',emergencyRelation:'Partner',medical:'',relationship:'Boarder',trainer:'',vehicle:'Subaru Outback, Green',trailer:''},
-    {id:'m3',name:'Carl Lieder',email:'carl@example.com',phone:'603-555-0104',type:'boarder',pronouns:'he/him',address:'Durham NH',emergencyName:'Nancy Lieder',emergencyPhone:'603-555-0105',emergencyRelation:'Spouse',medical:'',relationship:'Member',trainer:'',vehicle:'Toyota Tacoma, White',trailer:'2-horse bumper pull'},
-    {id:'m4',name:'Nancy Lieder',email:'nancy@example.com',phone:'603-555-0105',type:'boarder',pronouns:'she/her',address:'Durham NH',emergencyName:'Carl Lieder',emergencyPhone:'603-555-0104',emergencyRelation:'Spouse',medical:'',relationship:'Member',trainer:'',vehicle:'Honda CR-V, Gray',trailer:''}
+    {id:'m1',name:'Dorn Cox',email:'dorn@tuckaway.farm',phone:'603-555-0101',type:'owner',address:'Tuckaway Farm, Lee NH',emergencyName:'Sarah Cox',emergencyPhone:'603-555-0102',emergencyRelation:'Spouse',medical:'',relationship:'Owner',vehicle:'Ford F-250, Blue',trailer:'2-horse bumper pull'},
+    {id:'m2',name:'Rachael Duffy',email:'rachael@tuckaway.farm',phone:'603-555-0103',type:'boarder',address:'Lee NH',emergencyName:'Chris Duffy',emergencyPhone:'603-555-0106',emergencyRelation:'Partner',medical:'',relationship:'Boarder',vehicle:'Subaru Outback, Green',trailer:''},
+    {id:'m3',name:'Carl Lieder',email:'carl@example.com',phone:'603-555-0104',type:'boarder',address:'Durham NH',emergencyName:'Nancy Lieder',emergencyPhone:'603-555-0105',emergencyRelation:'Spouse',medical:'',relationship:'Member',vehicle:'Toyota Tacoma, White',trailer:'2-horse bumper pull'},
+    {id:'m4',name:'Nancy Lieder',email:'nancy@example.com',phone:'603-555-0105',type:'boarder',address:'Durham NH',emergencyName:'Carl Lieder',emergencyPhone:'603-555-0104',emergencyRelation:'Spouse',medical:'',relationship:'Member',vehicle:'Honda CR-V, Gray',trailer:''}
   ],
   horses:[
     {id:'h1',name:'Chunky',breed:'Thoroughbred',color:'Bay',markings:'Star',sex:'Mare',height:'15.2',age:10,owner:'m1',vet:'Dr. Sarah Adams',vetPhone:'603-659-3400',farrier:'Jake Morrison',farrierSchedule:'Every 6 weeks',coggins:'2025-03-15',vaccines:'Spring 2025',conditions:'None',meds:'',hay:'Grass mix, 20 lbs/day',grain:'Strategy 2 lbs AM/PM',supplements:'Joint supplement',turnout:'Small group',buddies:'Pocket, Indy',shoes:'Front shoes',blanket:'Medium below 30F',temperament:'Generally calm',quirks:'',level:'Intermediate+',disciplines:'Polo, trail',emergencyCare:'Up to $3000.',notes:'Reliable polo mare.',photo:''},
@@ -325,13 +325,13 @@ function rMembers(M,H){
           '</div>'+
         '</div>'+
         '<div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">'+
-          (m.pronouns?esc(m.pronouns)+' \u00B7 ':'')+esc(m.phone||'')+
+          esc(m.phone||'')+
           (m.address?' \u00B7 '+esc(m.address):'')+
         '</div>'+
         (m.vehicle||m.trailer?'<div style="font-size:11px;color:var(--text-dim)">'+(m.vehicle?'\u{1F697} '+esc(m.vehicle):'')+(m.trailer?' \u00B7 \u{1F69B} '+esc(m.trailer):'')+'</div>':'')+
         (m.emergencyName?'<div style="font-size:11px;color:var(--text-dim)">Emergency: '+esc(m.emergencyName)+' ('+esc(m.emergencyRelation||'')+') '+esc(m.emergencyPhone||'')+'</div>':'')+
         (m.medical?'<div style="font-size:11px;color:var(--red)">\u26A0 '+esc(m.medical)+'</div>':'')+
-        (m.trainer?'<div style="font-size:11px;color:var(--text-dim)">Trainer: '+esc(m.trainer)+'</div>':'')+
+        
         (horses.length?'<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">'+
           '<div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;margin-bottom:3px">Horses</div>'+
           horses.map(function(h){
@@ -431,7 +431,7 @@ function rCircle(){
 // === RESOURCES (editable) ===
 function rRes(){
   return '<div class="flex between mb20"><div><h2>Barn Resources & Contacts</h2></div>'+
-    '<button class="btn btn-p" onclick="openM(\'addResCat\')">+ Add Category</button></div>'+
+    '<div class="flex gap"><button class="btn btn-s" onclick="downloadResourcesPdf()">📥 Download PDF</button><button class="btn btn-p" onclick="openM(\'addResCat\')">+ Add Category</button></div></div>'+
     '<div style="background:rgba(184,55,43,0.06);border:1px solid rgba(184,55,43,0.15);border-radius:8px;padding:12px;margin-bottom:16px;font-size:12px"><strong style="color:var(--red)">EMERGENCY:</strong> Call 911. Farm: <strong>Tuckaway Farm, Lee NH 03861</strong>. Then Dorn Cox 603-555-0101.</div>'+
     S.resources.map(function(cat,ci){
       return '<div class="rc"><div class="flex between mb8"><h4>'+esc(cat.cat)+'</h4><div class="flex gap"><button class="btn btn-s btn-sm" onclick="openM(\'addResC\',{ci:'+ci+'})">+ Add</button><button class="btn-d btn-sm" onclick="delResCat('+ci+')">&times;</button></div></div>'+
@@ -447,7 +447,7 @@ function rRes(){
 function renderModal(M,H){
   if(!mdl)return'';
   var t=mdl.t;
-  if(t==='addMember')return mWrap('Add Member','<div class="mb12"><label class="fl">Name</label><input id="f-name"></div><div class="g2 mb12"><div><label class="fl">Email</label><input id="f-email"></div><div><label class="fl">Phone</label><input id="f-phone"></div></div><div class="g2 mb12"><div><label class="fl">Type</label><select id="f-type"><option value="owner">Owner Member</option><option value="boarder">Boarding Member</option><option value="rider">Riding Member</option><option value="guest">Guest</option></select></div><div><label class="fl">Pronouns</label><input id="f-pro" placeholder="e.g., she/her"></div></div><div class="mb12"><label class="fl">Address</label><input id="f-addr"></div><div class="g2 mb12"><div><label class="fl">Emergency Contact</label><input id="f-ec"></div><div><label class="fl">Emergency Phone</label><input id="f-ep"></div></div><div class="g2 mb12"><div><label class="fl">Vehicle</label><input id="f-veh"></div><div><label class="fl">Trailer</label><input id="f-tr"></div></div>','submitMember()');
+  if(t==='addMember')return mWrap('Add Member','<div class="mb12"><label class="fl">Profile Photo (optional)</label><input type="file" id="f-photo" accept="image/*" style="font-size:11px"></div><div class="g2 mb12"><div><label class="fl">Name</label><input id="f-name"></div><div><label class="fl">Email</label><input id="f-email"></div></div><div class="g2 mb12"><div><label class="fl">Phone</label><input id="f-phone"></div><div><label class="fl">Type</label><select id="f-type"><option value="owner">Owner Member</option><option value="boarder">Boarding Member</option><option value="rider">Riding Member</option><option value="guest">Guest</option></select></div></div><div class="mb12"><label class="fl">Address</label><input id="f-addr"></div><div class="g2 mb12"><div><label class="fl">Emergency Contact</label><input id="f-ec"></div><div><label class="fl">Emergency Phone</label><input id="f-ep"></div></div><div class="g2 mb12"><div><label class="fl">Emergency Relation</label><input id="f-er" placeholder="e.g., Spouse, Partner"></div><div><label class="fl">Medical Notes</label><input id="f-med" placeholder="Allergies, conditions"></div></div><div class="g2 mb12"><div><label class="fl">Vehicle</label><input id="f-veh" placeholder="Make, color"></div><div><label class="fl">Trailer</label><input id="f-tr" placeholder="Type, description"></div></div>','submitMember()');
   if(t==='addHorse')return mWrap('Add Horse','<div class="g2 mb12"><div><label class="fl">Name</label><input id="f-hn"></div><div><label class="fl">Breed</label><input id="f-hb"></div></div><div class="g2 mb12"><div><label class="fl">Color</label><input id="f-hc"></div><div><label class="fl">Owner</label><select id="f-ho">'+S.members.filter(function(m){return m.type==='owner'||m.type==='boarder'}).map(function(m){return '<option value="'+m.id+'">'+esc(m.name)+'</option>'}).join('')+'</select></div></div><div class="g2 mb12"><div><label class="fl">Sex</label><select id="f-hx"><option>Gelding</option><option>Mare</option><option>Stallion</option></select></div><div><label class="fl">Age</label><input id="f-ha" type="number" value="10"></div></div><div class="mb12"><label class="fl">Notes</label><textarea id="f-hn2"></textarea></div><div class="mb12"><label class="fl">Horse Photo (optional)</label><input type="file" id="f-hp" accept="image/*" style="font-size:11px"></div>','submitHorse()');
   if(t==='addEvent')return mWrap('Add Event','<div class="mb12"><label class="fl">Title</label><input id="f-et"></div><div class="g2 mb12"><div><label class="fl">Date</label><input id="f-ed" type="date" value="'+td()+'"></div><div><label class="fl">Time</label><input id="f-etm" placeholder="4:00 PM"></div></div><div class="g2 mb12"><div><label class="fl">Type</label><select id="f-ety"><option value="polo">Polo</option><option value="hunt">Hunt</option><option value="vet">Vet/Farrier</option><option value="work">Work Party</option><option value="community">Community</option><option value="farm">Farm</option></select></div><div><label class="fl">Location</label><input id="f-el" placeholder="Indoor Arena"></div></div><div class="mb12"><label class="fl">Notes</label><textarea id="f-en"></textarea></div>','submitEvent()');
   if(t==='addChore')return mWrap('Log Chore','<div class="mb12"><label class="fl">Task</label><input id="f-ct" placeholder="AM Feed & Turnout"></div><div class="g2 mb12"><div><label class="fl">Member</label><select id="f-cm">'+S.members.map(function(m){return '<option value="'+m.id+'">'+esc(m.name)+'</option>'}).join('')+'</select></div><div><label class="fl">Hours</label><input id="f-ch" type="number" value="1" step="0.5"></div></div><div class="mb12"><label class="fl">Date</label><input id="f-cd" type="date" value="'+td()+'"></div><div class="mb12"><label class="fl">Photo (optional)</label><input type="file" id="f-cp" accept="image/*" style="font-size:11px"></div>','submitChore()');
@@ -485,11 +485,10 @@ function renderModal(M,H){
     '<input type="file" id="em-photo" accept="image/*" onchange="previewPhoto(this,\'member\',\''+m.id+'\')" style="font-size:11px"></div></div>'+
     '<div class="g2 mb12"><div><label class="fl">Name</label><input id="em-name" value="'+esc(m.name)+'"></div><div><label class="fl">Email</label><input id="em-email" value="'+esc(m.email)+'"></div></div>'+
       '<div class="g2 mb12"><div><label class="fl">Phone</label><input id="em-phone" value="'+esc(m.phone)+'"></div><div><label class="fl">Type</label><select id="em-type"><option value="owner"'+(m.type==='owner'?' selected':'')+'>Owner Member</option><option value="boarder"'+(m.type==='boarder'?' selected':'')+'>Boarding Member</option><option value="rider"'+(m.type==='rider'?' selected':'')+'>Riding Member</option><option value="guest"'+(m.type==='guest'?' selected':'')+'>Guest</option></select></div></div>'+
-      '<div class="g2 mb12"><div><label class="fl">Pronouns</label><input id="em-pro" value="'+esc(m.pronouns||'')+'"></div><div><label class="fl">Address</label><input id="em-addr" value="'+esc(m.address||'')+'"></div></div>'+
+      '<div class="mb12"><label class="fl">Address</label><input id="em-addr" value="'+esc(m.address||'')+'"></div>'+
       '<div class="g2 mb12"><div><label class="fl">Emergency Contact</label><input id="em-ec" value="'+esc(m.emergencyName||'')+'"></div><div><label class="fl">Emergency Phone</label><input id="em-ep" value="'+esc(m.emergencyPhone||'')+'"></div></div>'+
       '<div class="g2 mb12"><div><label class="fl">Emergency Relation</label><input id="em-er" value="'+esc(m.emergencyRelation||'')+'"></div><div><label class="fl">Medical Notes</label><input id="em-med" value="'+esc(m.medical||'')+'"></div></div>'+
-      '<div class="g2 mb12"><div><label class="fl">Vehicle</label><input id="em-veh" value="'+esc(m.vehicle||'')+'"></div><div><label class="fl">Trailer</label><input id="em-tr" value="'+esc(m.trailer||'')+'"></div></div>'+
-      '<div class="mb12"><label class="fl">Trainer</label><input id="em-trn" value="'+esc(m.trainer||'')+'"></div>',
+      '<div class="g2 mb12"><div><label class="fl">Vehicle</label><input id="em-veh" value="'+esc(m.vehicle||'')+'"></div><div><label class="fl">Trailer</label><input id="em-tr" value="'+esc(m.trailer||'')+'"></div></div>',
       "saveEditMember('"+m.id+"')");}
 
   if(t==='editHorse'){var h=S.horses.find(function(x){return x.id===mdl.d.id});if(!h)return'';
@@ -559,7 +558,27 @@ function mWrap(title,body,submitFn){
 
 // === SUBMIT FUNCTIONS ===
 function gv(id){var e=document.getElementById(id);return e?e.value:'';}
-function submitMember(){var n=gv('f-name');if(!n){alert('Name required');return;}S.members.push({id:uid(),name:n,email:gv('f-email'),phone:gv('f-phone'),type:gv('f-type'),pronouns:gv('f-pro'),address:gv('f-addr'),emergencyName:gv('f-ec'),emergencyPhone:gv('f-ep'),emergencyRelation:'',medical:'',relationship:'',trainer:'',vehicle:gv('f-veh'),trailer:gv('f-tr'),horses:[],choreHours:0,joined:td()});mdl=null;sv();render();}
+function submitMember(){
+  var n=gv('f-name');if(!n){alert('Name required');return;}
+  var memberObj={id:uid(),name:n,email:gv('f-email'),phone:gv('f-phone'),type:gv('f-type'),address:gv('f-addr'),emergencyName:gv('f-ec'),emergencyPhone:gv('f-ep'),emergencyRelation:gv('f-er'),medical:gv('f-med'),relationship:'',vehicle:gv('f-veh'),trailer:gv('f-tr'),horses:[],choreHours:0,joined:td(),photo:''};
+  var fileInput=document.getElementById('f-photo');
+  if(fileInput&&fileInput.files&&fileInput.files[0]){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var img=new window.Image();
+      img.onload=function(){
+        var canvas=document.createElement('canvas');
+        var mw=200;var scale=Math.min(mw/img.width,1);
+        canvas.width=img.width*scale;canvas.height=img.height*scale;
+        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+        memberObj.photo=canvas.toDataURL('image/jpeg',0.6);
+        S.members.push(memberObj);mdl=null;sv();render();
+      };img.src=e.target.result;
+    };reader.readAsDataURL(fileInput.files[0]);
+  } else {
+    S.members.push(memberObj);mdl=null;sv();render();
+  }
+}
 function delMember(id){if(confirm('Remove member?')){S.members=S.members.filter(function(m){return m.id!==id});sv();render();}}
 function submitHorse(){
   var n=gv('f-hn');if(!n){alert('Name required');return;}
@@ -685,8 +704,8 @@ function saveEditEvent(id){
 function saveEditMember(id){
   var m=S.members.find(function(x){return x.id===id});if(!m)return;
   m.name=gv('em-name');m.email=gv('em-email');m.phone=gv('em-phone');m.type=gv('em-type');
-  m.pronouns=gv('em-pro');m.address=gv('em-addr');m.emergencyName=gv('em-ec');m.emergencyPhone=gv('em-ep');
-  m.emergencyRelation=gv('em-er');m.medical=gv('em-med');m.vehicle=gv('em-veh');m.trailer=gv('em-tr');m.trainer=gv('em-trn');
+  m.address=gv('em-addr');m.emergencyName=gv('em-ec');m.emergencyPhone=gv('em-ep');
+  m.emergencyRelation=gv('em-er');m.medical=gv('em-med');m.vehicle=gv('em-veh');m.trailer=gv('em-tr');
   mdl=null;sv();render();
 }
 function saveEditHorse(id){
@@ -761,6 +780,112 @@ function dlSig(did,mid){
   var mem=S.members.find(function(m){return m.id===mid});
   var sig=S.sigs.find(function(s){return s.did===did&&s.mid===mid});
   if(doc&&mem)genPdf(doc,mem,sig?sig.sigData:'',true);
+}
+
+// === RESOURCES PDF ===
+function downloadResourcesPdf(){
+  if(!window.jspdf)return;
+  var J=window.jspdf.jsPDF;
+  var pdf=new J({unit:'pt',format:'letter'});
+  var mg=54,y=mg,pw=612-mg*2;
+  
+  // Header
+  pdf.setFont('helvetica','bold');
+  pdf.setFontSize(18);
+  pdf.text('TUCKAWAY COOPERATIVE RIDING CLUB',mg,y);
+  y+=20;
+  pdf.setFont('helvetica','normal');
+  pdf.setFontSize(10);
+  pdf.text('Barn Resources & Emergency Contacts',mg,y);
+  y+=14;
+  pdf.setFontSize(8);
+  pdf.setTextColor(100);
+  pdf.text('Tuckaway Farm, Lee, New Hampshire',mg,y);
+  pdf.setTextColor(0);
+  y+=20;
+  
+  // Emergency box
+  pdf.setFillColor(255,240,240);
+  pdf.setDrawColor(180,55,43);
+  pdf.rect(mg,y,pw,36,'FD');
+  y+=14;
+  pdf.setFont('helvetica','bold');
+  pdf.setFontSize(11);
+  pdf.setTextColor(180,55,43);
+  pdf.text('EMERGENCY: Call 911',mg+10,y);
+  y+=12;
+  pdf.setFont('helvetica','normal');
+  pdf.setFontSize(9);
+  pdf.setTextColor(0);
+  pdf.text('Farm Address: Tuckaway Farm, Lee NH 03861  |  Dorn Cox: 603-555-0101',mg+10,y);
+  y+=26;
+  
+  // Divider
+  pdf.setDrawColor(107,28,42);
+  pdf.setLineWidth(0.5);
+  pdf.line(mg,y,612-mg,y);
+  y+=16;
+  
+  // Resources by category
+  S.resources.forEach(function(cat){
+    // Check page break
+    if(y>680){pdf.addPage();y=mg;}
+    
+    // Category header
+    pdf.setFont('helvetica','bold');
+    pdf.setFontSize(12);
+    pdf.setTextColor(107,28,42);
+    pdf.text(cat.cat,mg,y);
+    pdf.setTextColor(0);
+    y+=16;
+    
+    // Contacts
+    cat.contacts.forEach(function(c){
+      if(y>700){pdf.addPage();y=mg;}
+      
+      pdf.setFont('helvetica','bold');
+      pdf.setFontSize(10);
+      pdf.text(c.n,mg+10,y);
+      
+      if(c.p){
+        pdf.setFont('helvetica','normal');
+        var nameW=pdf.getTextWidth(c.n);
+        pdf.text('  '+c.p,mg+10+nameW,y);
+      }
+      y+=12;
+      
+      if(c.r){
+        pdf.setFont('helvetica','normal');
+        pdf.setFontSize(9);
+        pdf.setTextColor(80);
+        pdf.text(c.r,mg+10,y);
+        pdf.setTextColor(0);
+        y+=11;
+      }
+      
+      if(c.t){
+        pdf.setFont('helvetica','italic');
+        pdf.setFontSize(8);
+        pdf.setTextColor(120);
+        var lines=pdf.splitTextToSize(c.t,pw-20);
+        lines.forEach(function(line){
+          pdf.text(line,mg+10,y);
+          y+=10;
+        });
+        pdf.setTextColor(0);
+      }
+      y+=6;
+    });
+    y+=10;
+  });
+  
+  // Footer
+  pdf.setFont('helvetica','normal');
+  pdf.setFontSize(7);
+  pdf.setTextColor(140);
+  pdf.text('Tuckaway Farm LLC -- Generated '+new Date().toLocaleDateString(),mg,755);
+  
+  pdf.save('Tuckaway_Barn_Resources.pdf');
 }
 
 // === INIT ===
