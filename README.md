@@ -1,38 +1,56 @@
-# NEPL — New England Polo League (v6)
+# NEPL — New England Polo League
 
-Club team polo league platform with multi-season support, game-day resource management, and a chukker scheduling tool.
-
-## What's New in v6
-
-- **Multi-Season Support** — Season selector bar on schedule and standings pages. Create and switch between seasons. Data scoped per season.
-- **Game Day Resources Tab** — Sign up as umpire, timekeeper, third man, announcer. Provide umpire horses or spare horses for visiting players. Resource dashboard shows coverage gaps across upcoming games.
-- **Spare Horse Board** — Per-game listings where horse owners can offer mounts for visiting players with terms (free/fee/reciprocal).
-- **Resource Needs Alerts** — Visual indicators when games are missing required resources (umpire, timekeeper, umpire horse).
-- **Chukker Scheduler** — Standalone practice tool (`NEPL_Chukker_Scheduler.html`). Enter players with handicaps and horse counts, set format (3v3/4v4) and balance style, generate a printable chukker chart.
+League management site and chukker scheduling tool for New England polo clubs.
 
 ## Files
 
-- `index.html` — Main NEPL league site
-- `NEPL_Chukker_Scheduler.html` — Standalone chukker scheduling tool
-- `.nojekyll` — GitHub Pages config
+| File | Purpose |
+|------|---------|
+| `index.html` | Main NEPL league site (teams, venues, schedule, results, standings, stats, game-day resources) |
+| `NEPL_Chukker_Scheduler.html` | Standalone practice chukker scheduling tool |
+| `.nojekyll` | Tells GitHub Pages to serve files as-is (no Jekyll processing) |
 
 ## Deploy to GitHub Pages
 
+### Option A: Upload via GitHub.com (no git needed)
+
+1. Go to [github.com/new](https://github.com/new) and create a repository (e.g., `nepl-league`)
+2. Check "Add a README file" and click **Create repository**
+3. Click **Add file → Upload files**
+4. Drag all 4 files from this zip (`index.html`, `NEPL_Chukker_Scheduler.html`, `.nojekyll`, `README.md`) into the upload area
+5. Click **Commit changes**
+6. Go to **Settings → Pages**
+7. Under "Source" select **Deploy from a branch**
+8. Select branch **main** and folder **/ (root)**
+9. Click **Save**
+10. Wait 1–2 minutes. Your site is live at `https://YOUR_USERNAME.github.io/nepl-league/`
+
+### Option B: Using git from the command line
+
 ```bash
-git init && git add . && git commit -m "NEPL v6"
+# In the folder where you unzipped these files:
+git init
+git add .
+git commit -m "NEPL league site"
 git branch -M main
 git remote add origin https://github.com/YOUR_USERNAME/nepl-league.git
 git push -u origin main
 ```
 
-Settings → Pages → main branch → / (root) → Save
+Then enable Pages in Settings as described above.
 
-## Supabase Migration Path
+### Custom domain (optional)
 
-This frontend is architected for migration to Supabase + Next.js:
-- All data access goes through a centralized state/save layer (currently localStorage)
-- Role concepts (Admin, Venue Manager, Team Captain, Player) are reflected in the UI
-- Resource sign-up workflows mirror the confirmation model described in the Platform Recommendation doc
-- Season scoping is built into the data model
+To use a custom domain like `newenglandpolo.org`:
 
-The next step is to replace `localStorage` calls with Supabase client SDK calls and add real authentication.
+1. In your repo, go to **Settings → Pages → Custom domain**
+2. Enter your domain and click Save
+3. At your domain registrar, add a CNAME record pointing to `YOUR_USERNAME.github.io`
+
+## Local use
+
+Just open `index.html` in any browser. No server required.
+
+## Data
+
+All data is stored in your browser's localStorage. Click **Restore Demo Data** in the footer to reload the demo season with 10 teams, 8 venues, and pre-populated results.
