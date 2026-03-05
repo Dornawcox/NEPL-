@@ -195,6 +195,7 @@ const VENUES_SEED = [
   {id:'v-kings',name:'Kingswood Polo Club',location:'Wolfeboro',st:'NH',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'play@kingswoodpolo.com',notes:'Indoor arena + summer outdoor. Lakes Region. Strong pro roster.',organizer:'Federico Wulff',logo:'🌲',seasons:['s-2027','s-2026-demo']},
   {id:'v-farmington',name:'Farmington Polo Club',location:'Farmington',st:'CT',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'polo@farmingtonpolo.com',notes:'Fields + outdoor arenas. Active CT club.',organizer:'Andrew Gale',logo:'🌾',seasons:['s-2027','s-2026-demo']},
   {id:'v-acoaxet',name:'Acoaxet Polo Club',location:'Westport',st:'RI',hasArena:false,hasOutdoor:true,hasOutdoorArena:true,contact:'polo@acoaxet.com',notes:'Fields + outdoor arenas. Active RI club.',organizer:'Charles Bullis',logo:'🌊',seasons:['s-2027','s-2026-demo']},
+  {id:'v-hbc',name:'HBC Polo Club',location:'Hamilton',st:'MA',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'polo@hbc.com',notes:'Hamilton MA. USPA club.',organizer:'Robin Cox',logo:'🐎',seasons:['s-2027','s-2026-demo']},
   {id:'v-fairfield',name:'Fairfield County Hunt Club',location:'Westport',st:'CT',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'polo@fchc.org',notes:'Fields + outdoor arenas + indoor arena. Full facility.',organizer:'Luc Hardy',logo:'🦌',seasons:['s-2027','s-2026-demo']},
 ];
 
@@ -202,25 +203,31 @@ function mkPlayers(names){return names.map(n=>{const[name,h]=n.split('|');return
 
 const TEAMS_SEED = [
   {id:'t-myopia1',name:'Myopia Mustangs',club:'Myopia Polo Club',goalLevel:'low',homeVenue:'v-myopia',logo:'🐎',season:'s-2027',
-    players:mkPlayers(['Neil Raymond Jr.|3','Carl Scherer|4','Walter Eayrs|2']),alternates:mkPlayers(['Grace Grotnik|1','Augustus Grotnik|2'])},
+    players:mkPlayers(['Walter Eayrs|2','Grace Grotnik|1','Phoebe Ingram|0']),alternates:mkPlayers(['William Ellis|1','Chelsea Messinger|0'])},
   {id:'t-stagehill1',name:'Stage Hill Storm',club:'Stage Hill Polo Club',goalLevel:'low',homeVenue:'v-stagehill',logo:'🌩️',season:'s-2027',
-    players:mkPlayers(['Alyson Poor|0','Amanda Roberts|2','Jose Barrientos|2']),alternates:mkPlayers(['Peter Poor|3','Kimberly Maguire|1'])},
+    players:mkPlayers(['Amanda Roberts|2','Kimberly Maguire|1','Alyson Poor|0']),alternates:mkPlayers(['Jose Barrientos|2'])},
   {id:'t-giant1',name:'Giant Valley Riders',club:'Giant Valley Polo Club',goalLevel:'low',homeVenue:'v-giant',logo:'🦅',season:'s-2027',
-    players:mkPlayers(['Hunter Jelsch|3','Christopher Green|2','Hilary Mroz-Blythe|2']),alternates:mkPlayers(['Dennis Fitzpatrick|2'])},
+    players:mkPlayers(['Hilary Mroz-Blythe|2','Loryn Butterworth|0','Dennis Fitzpatrick|1']),alternates:mkPlayers(['Dennis Fitzpatrick|2'])},
   {id:'t-newport1',name:'Newport Navy',club:'Westchester Polo Club (Newport)',goalLevel:'low',homeVenue:'v-newport',logo:'⚓',season:'s-2027',
-    players:mkPlayers(['Daniel Keating|2','Rory Torrey|3','Oscar Monzon|3']),alternates:mkPlayers(['Zoeline Keating|2','Samuel Shore|2'])},
+    players:mkPlayers(['Caroline Vissers|2','Mia Purdom|1','Patrick Quigley|0']),alternates:mkPlayers(['Timothy Day|1','Brendan Tetreault|0'])},
   {id:'t-sugar1',name:'Sugarbush Chargers',club:'Sugarbush Polo Club',goalLevel:'low',homeVenue:'v-sugar',logo:'⚡',season:'s-2027',
-    players:mkPlayers(['Mark Tashjian|3','Patrick Andrew|2','Seth Gardner|1']),alternates:mkPlayers([])},
+    players:mkPlayers(['Patrick Andrew|2','Seth Gardner|1','Thomas Taylor|0']),alternates:mkPlayers([])},
   {id:'t-tuck1',name:'Tuckaway Foxes',club:'Tuckaway Polo',goalLevel:'low',homeVenue:'v-tuckaway',logo:'🦊',season:'s-2027',
-    players:mkPlayers(['Dorn Cox|2','Donald Little Jr.|3','David Dunstan|1']),alternates:mkPlayers(['Estanislao Robledo Puch|1'])},
+    players:mkPlayers(['Dorn Cox|2','Maverick Cox|0','David Strouss|1']),alternates:mkPlayers(['Estanislao Robledo Puch|1'])},
   {id:'t-kings1',name:'Kingswood Lakers',club:'Kingswood Polo Club',goalLevel:'medium',homeVenue:'v-kings',logo:'🌊',season:'s-2027',
-    players:mkPlayers(['Federico Wulff|5','Ernesto Trotz II|5','Segundo Caimi|4']),alternates:mkPlayers(['Celestino Rivera|3','Agustin Wulff Sr.|3'])},
-  {id:'t-farmington1',name:'Farmington Flyers',club:'Farmington Polo Club',goalLevel:'low',homeVenue:'v-farmington',logo:'🌾',season:'s-2027',
-    players:mkPlayers(['Andrew Gale|3','Heather Souto|2','Luis Alfredo Rodriguez|2']),alternates:mkPlayers(['Guillermo Gibelli|2'])},
+    players:mkPlayers(['Fernando Baldocchi|2','Ariadne Dogani|2','Frederick Borja|2']),alternates:mkPlayers(['Leonardo Borja|2','James Thames|1'])},
+  {id:'t-farmington1',name:'Farmington Flyers',club:'Farmington Polo Club',goalLevel:'medium',homeVenue:'v-farmington',logo:'🌾',season:'s-2027',
+    players:mkPlayers(['Heather Souto|2','Luis Alfredo Rodriguez|2','Guillermo Gibelli|2']),alternates:mkPlayers(['Abigail Caset|0'])},
   {id:'t-myopia2',name:'Myopia Mavericks',club:'Myopia Polo Club',goalLevel:'medium',homeVenue:'v-myopia',logo:'🔥',season:'s-2027',
-    players:mkPlayers(['Nicholas Snow|4','Estanislao Robledo puch Sr.|4','Dennis Carrion-Diaz|3']),alternates:mkPlayers(['Jacek Grotnik|2','Robert Mehm|2'])},
+    players:mkPlayers(['Augustus Grotnik|2','Robert Mehm|2','Simon Colloredo-Mansfeld|2']),alternates:mkPlayers(['Jacek Grotnik|2','Stephen Burr Jr.|2'])},
   {id:'t-acoaxet1',name:'Acoaxet Aces',club:'Acoaxet Polo Club',goalLevel:'low',homeVenue:'v-acoaxet',logo:'🌊',season:'s-2027',
-    players:mkPlayers(['Charles Bullis|3','Eduardo Amaya Sr.|2','Carlos Maldonado|3']),alternates:mkPlayers(['Stephanie Still|1','Ursula Green|0'])},
+    players:mkPlayers(['Eduardo Amaya Sr.|2','Stephanie Still|1','Ursula Green|0']),alternates:mkPlayers(['Peter Friedman MD|0'])},
+  {id:'t-newport2',name:'Newport Navigators',club:'Westchester Polo Club (Newport)',goalLevel:'medium',homeVenue:'v-newport',logo:'🔱',season:'s-2027',
+    players:mkPlayers(['Daniel Keating|2','Rory Torrey|3','Oscar Monzon|3']),alternates:mkPlayers(['Kevin Horan|2','Samuel Shore|2'])},
+  {id:'t-hbc1',name:'HBC Horsemen',club:'HBC Polo Club',goalLevel:'low',homeVenue:'v-hbc',logo:'🐎',season:'s-2027',
+    players:mkPlayers(['Robin Cox|1','Erica Kratz|1','Reed Miller|1']),alternates:mkPlayers(['Robert Wilkinson|1'])},
+  {id:'t-fairfield1',name:'Fairfield Foxhounds',club:'Fairfield County Hunt Club',goalLevel:'low',homeVenue:'v-fairfield',logo:'🦌',season:'s-2027',
+    players:mkPlayers(['Luc Hardy|2','Alberto Hamonet|1','Senter Johnson|0']),alternates:mkPlayers([])},
 ];
 
 
@@ -520,7 +527,7 @@ const NE_PLAYER_REGISTRY = [{"n":"Abigail 'Abby' Caset","c":"Farmington Polo Clu
 // NE Club list for dropdowns
 const NE_CLUBS_LIST = [
   'Acoaxet Polo Club','Fairfield County Hunt Club','Farmington Polo Club',
-  'Giant Valley Polo Club','Greenwich Polo Club','Harvard University Polo Club',
+  'Giant Valley Polo Club','Greenwich Polo Club','HBC Polo Club','Harvard University Polo Club',
   'Kingswood Polo Club','Myopia Polo Club','Stage Hill Polo Club',
   'Sugarbush Polo Club','Tuckaway Polo','UCONN Polo Club',
   'Westchester Polo Club','Yale Polo Club'
