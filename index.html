@@ -280,11 +280,18 @@ function buildPreResources(schedule) {
 // ── Pre-built schedule with specific dates ──
 function buildPreSchedule(){
   const teams = TEAMS_SEED;
+  // Build matchups BY DIVISION — low plays low, medium plays medium
   const matchups = [];
-  for(let i=0;i<teams.length;i++) for(let j=i+1;j<teams.length;j++){
-    matchups.push({home:teams[i].id,away:teams[j].id});
-    matchups.push({home:teams[j].id,away:teams[i].id});
+  const lowTeams = teams.filter(function(t){return t.goalLevel==='low'});
+  const medTeams = teams.filter(function(t){return t.goalLevel==='medium'});
+  function addDivisionMatchups(divTeams){
+    for(let i=0;i<divTeams.length;i++) for(let j=i+1;j<divTeams.length;j++){
+      matchups.push({home:divTeams[i].id,away:divTeams[j].id});
+      matchups.push({home:divTeams[j].id,away:divTeams[i].id});
+    }
   }
+  addDivisionMatchups(lowTeams);
+  addDivisionMatchups(medTeams);
   // Deterministic shuffle with seed
   let seed=42;
   function rng(){seed=(seed*16807+0)%2147483647;return(seed-1)/2147483646;}
@@ -612,6 +619,13 @@ function render(){
       [1,2,3].forEach(function(i){playerAutocomplete('tf-p'+i,'tf-ph'+i);});
       [1,2].forEach(function(i){playerAutocomplete('tf-a'+i,'tf-ah'+i);});
     }
+    if(state.editTeamModal){
+      var t=state.teams.find(function(x){return x.id===state.editTeamModal});
+      if(t){
+        t.players.forEach(function(p,i){playerAutocomplete('et-p'+i,'et-ph'+i);});
+        [0,1].forEach(function(i){playerAutocomplete('et-a'+i,'et-ah'+i);});
+      }
+    }
   },50);
   const tm=tmMap(),vm=vmMap();
   const tabs=['home','teams','venues','schedule','results','standings','stats','resources'];
@@ -777,7 +791,10 @@ function renderTeams(tm,vm){
       </div>`).join('')}</div>`:`<div class="empty"><div class="empty-icon">🏇</div><div class="empty-title">No teams yet</div></div>`}
   `;
 }
-function submitTeam(){const f=state.teamForm;if(!f.name||!f.club||!f.p1||!f.p2||!f.p3){alert('Fill in team name, club, and 3 players.');return}state.teams.push({id:'team-'+Date.now(),name:f.name,club:f.club,goalLevel:f.goalLevel,homeVenue:f.homeVenue,logo:f.logo||'🏇',season:state.currentSeason,players:[{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(p=>p.name),alternates:[{name:f.a1,handicap:f.a1h},{name:f.a2,handicap:f.a2h}].filter(a=>a.name)});state.teamForm=freshTeamForm();state.showTeamForm=false;save();render();}
+function submitTeam(){const f=state.teamForm;if(!f.name||!f.club||!f.p1||!f.p2||!f.p3){alert('Fill in team name, club, and 3 players.');return}// Validate goal level
+  var totalHcp=[{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(function(p){return p.name}).reduce(function(s,p){return s+parseFloat(p.handicap||0)},0);
+  if(totalHcp>=4&&f.goalLevel==='low'){alert('Team total handicap is '+totalHcp+'. Must be Medium Goal (4+).');f.goalLevel='medium';}
+  state.teams.push({id:'team-'+Date.now(),name:f.name,club:f.club,goalLevel:f.goalLevel,homeVenue:f.homeVenue,logo:f.logo||'🏇',season:state.currentSeason,players:[{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(p=>p.name),alternates:[{name:f.a1,handicap:f.a1h},{name:f.a2,handicap:f.a2h}].filter(a=>a.name)});state.teamForm=freshTeamForm();state.showTeamForm=false;save();render();}
 
 function duplicateTeam(tid){
   var t=state.teams.find(function(x){return x.id===tid});
@@ -926,7 +943,7 @@ function renderSchedule(tm,vm){
             <div style="text-align:right"><div class="game-team">${ht?esc(ht.name):'?'}</div><div class="game-club">${ht?esc(ht.club):''}</div></div>
             <div class="center">${r?`<div class="game-score">${r.homeScore} – ${r.awayScore}</div>`:`<div class="game-vs">vs</div>`}
               <div class="game-date">${icon('clock',11)} ${g.time||'TBD'} &middot; ${g.date}</div>
-              <div class="game-venue">@ ${v?esc(v.name):'TBD'} ${formatTag(g.format)}</div>
+              <div class="game-venue">@ ${v?esc(v.name):'TBD'} ${formatTag(g.format)} ${ht?('<span class="tag '+(ht.goalLevel==='low'?'tag-low':'tag-med')+'" style="font-size:9px">'+(ht.goalLevel==='low'?'Low Div':'Med Div')+'</span>'):''}</div>
               ${g.altDate?`<div style="font-size:10px;color:var(--text-dim);margin-top:2px">Alt: ${g.altDate}</div>`:''}
             </div>
             <div><div class="game-team">${at?esc(at.name):'?'}</div><div class="game-club">${at?esc(at.club):''}</div></div>
@@ -935,7 +952,7 @@ function renderSchedule(tm,vm){
     `:`<div class="card card-accent center" style="padding:40px"><div style="color:var(--text-muted)">Register teams and venues, then generate.</div></div>`}
   `;
 }
-function doGenerate(){if(state.schedule.length>0&&!confirm('Regenerate? This clears results.'))return;const teams=state.teams;const matchups=[];for(let i=0;i<teams.length;i++)for(let j=i+1;j<teams.length;j++){matchups.push({home:teams[i].id,away:teams[j].id});matchups.push({home:teams[j].id,away:teams[i].id})}for(let i=matchups.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[matchups[i],matchups[j]]=[matchups[j],matchups[i]]}state.schedule=buildPreSchedule();state.results={};save();render();}
+function doGenerate(){if(state.schedule.length>0&&!confirm('Regenerate? This clears results.'))return;const teams=state.teams;const matchups=[];var lowT=teams.filter(function(t){return t.goalLevel==='low'});var medT=teams.filter(function(t){return t.goalLevel==='medium'});function addDiv(dt){for(var i=0;i<dt.length;i++)for(var j=i+1;j<dt.length;j++){matchups.push({home:dt[i].id,away:dt[j].id});matchups.push({home:dt[j].id,away:dt[i].id})}}addDiv(lowT);addDiv(medT);for(let i=matchups.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[matchups[i],matchups[j]]=[matchups[j],matchups[i]]}state.schedule=buildPreSchedule();state.results={};save();render();}
 
 // ═══ RESULTS ═══
 function renderResults(tm,vm){
@@ -1121,20 +1138,19 @@ function openEditTeam(id){state.editTeamModal=id;var t=state.teams.find(function
 function closeEditTeam(){state.editTeamModal=null;render();}
 function renderEditTeamModal(tm,vm){
   var t=state.teams.find(function(t){return t.id===state.editTeamModal;});if(!t)return'';
-  var sts=['MA','CT','RI','NH','VT','ME','NY'];
-  return '<div class="modal-overlay" onclick="if(event.target===this)closeEditTeam()"><div class="modal fade-in">'+
+  return '<div class="modal-overlay" onclick="if(event.target===this)closeEditTeam()"><div class="modal fade-in" style="max-width:620px">'+
     '<button class="modal-close" onclick="closeEditTeam()">'+icon('x',20)+'</button>'+
     '<h3 class="mb-20">Edit Team: '+esc(t.name)+'</h3>'+
     '<div class="mb-12"><label class="field-label">Logo</label>'+logoPicker('et-logo',state._editTeamLogo||t.logo)+'</div>'+
     '<div class="grid-2 mb-16">'+
     '<div><label class="field-label">Team Name</label><input id="et-name" value="'+esc(t.name)+'"></div>'+
-    '<div><label class="field-label">Club</label><input id="et-club" value="'+esc(t.club)+'"></div>'+
-    '<div><label class="field-label">Goal Level</label><select id="et-goal"><option value="low"'+(t.goalLevel==='low'?' selected':'')+'>Low Goal</option><option value="medium"'+(t.goalLevel==='medium'?' selected':'')+'>Medium Goal</option></select></div>'+
-    '<div><label class="field-label">Home Venue</label><select id="et-venue"><option value="">None</option>'+state.venues.map(function(v){return '<option value="'+v.id+'"'+(t.homeVenue===v.id?' selected':'')+'>'+esc(v.name)+'</option>';}).join('')+'</select></div></div>'+
-    '<label class="field-label">Players</label><div style="display:grid;gap:6px" class="mb-12">'+
-    t.players.map(function(p,i){return '<div class="grid-2"><input id="et-p'+i+'" value="'+esc(p.name)+'"><input id="et-ph'+i+'" value="'+esc(p.handicap)+'" placeholder="Handicap"></div>';}).join('')+'</div>'+
+    '<div><label class="field-label">Primary Club</label><select id="et-club">'+NE_CLUBS_LIST.map(function(c){return '<option value="'+c+'"'+(t.club===c?' selected':'')+'>'+c+'</option>';}).join('')+'<option value="Other"'+(NE_CLUBS_LIST.indexOf(t.club)<0?' selected':'')+'>Other</option></select></div>'+
+    '<div><label class="field-label">Goal Level</label><select id="et-goal"><option value="low"'+(t.goalLevel==='low'?' selected':'')+'>Low Goal (&lt;4)</option><option value="medium"'+(t.goalLevel==='medium'?' selected':'')+'>Medium Goal (4+)</option></select></div>'+
+    '<div><label class="field-label">Home Venue</label><select id="et-venue"><option value="">Select venue...</option>'+state.venues.map(function(v){return '<option value="'+v.id+'"'+(t.homeVenue===v.id?' selected':'')+'>'+esc(v.name)+' ('+v.st+')</option>';}).join('')+'</select></div></div>'+
+    '<label class="field-label">Players <span class="ac-info">Type to search USPA registry</span></label><div style="display:grid;gap:6px" class="mb-12">'+
+    t.players.map(function(p,i){return '<div class="grid-2"><div class="autocomplete-wrap"><input id="et-p'+i+'" value="'+esc(p.name)+'" placeholder="Player name"></div><input id="et-ph'+i+'" value="'+esc(p.handicap)+'" placeholder="Handicap"></div>';}).join('')+'</div>'+
     '<label class="field-label">Alternates</label><div style="display:grid;gap:6px" class="mb-20">'+
-    [0,1].map(function(i){var a=(t.alternates&&t.alternates[i])||{name:'',handicap:''};return '<div class="grid-2"><input id="et-a'+i+'" value="'+esc(a.name)+'" placeholder="Alternate '+(i+1)+'"><input id="et-ah'+i+'" value="'+esc(a.handicap)+'" placeholder="Handicap"></div>';}).join('')+'</div>'+
+    [0,1].map(function(i){var a=(t.alternates&&t.alternates[i])||{name:'',handicap:''};return '<div class="grid-2"><div class="autocomplete-wrap"><input id="et-a'+i+'" value="'+esc(a.name)+'" placeholder="Alternate '+(i+1)+'"></div><input id="et-ah'+i+'" value="'+esc(a.handicap)+'" placeholder="Handicap"></div>';}).join('')+'</div>'+
     '<div class="flex gap-8"><button class="btn btn-primary" onclick="saveEditTeam(&apos;'+t.id+'&apos;)">'+icon('check')+' Save</button><button class="btn btn-secondary" onclick="closeEditTeam()">Cancel</button></div>'+
   '</div></div>';
 }
@@ -1147,6 +1163,12 @@ function saveEditTeam(tid){
   t.logo=state._editTeamLogo||t.logo;
   t.players=t.players.map(function(p,i){return{name:document.getElementById('et-p'+i).value,handicap:document.getElementById('et-ph'+i).value};}).filter(function(p){return p.name;});
   t.alternates=[0,1].map(function(i){return{name:document.getElementById('et-a'+i).value,handicap:document.getElementById('et-ah'+i).value};}).filter(function(a){return a.name;});
+  // Validate goal level against roster
+  var total=t.players.reduce(function(s,p){return s+parseFloat(p.handicap||0)},0);
+  if(total>=4&&t.goalLevel==='low'){
+    alert('Team total handicap is '+total+' which is 4 or above. Automatically setting to Medium Goal.');
+    t.goalLevel='medium';
+  }
   state.editTeamModal=null;save();render();
 }
 
