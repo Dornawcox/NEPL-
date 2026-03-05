@@ -125,6 +125,21 @@ footer .sub{font-size:12px;color:var(--text-dim)}
 .resource-filled{color:var(--green)}.resource-open{color:var(--text-dim)}
 .resource-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600}
 .rb-filled{background:rgba(76,175,110,0.1);color:var(--green)}.rb-open{background:rgba(90,106,126,0.1);color:var(--text-dim)}.rb-urgent{background:rgba(207,96,86,0.12);color:var(--red)}
+
+.hero{position:relative;overflow:hidden;border-radius:12px;margin-bottom:32px;min-height:320px;display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 32px}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1591985666643-4ee764490083?w=1200&q=80') center/cover no-repeat;filter:brightness(0.35)}
+.hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#1B3A5C 0%,#2E8B8B 50%,#1B3A5C 100%);opacity:0}
+.hero-bg.fallback{background:none}
+.hero-bg.fallback::after{opacity:1}
+.hero-content{position:relative;z-index:1;max-width:640px}
+.hero h1{font-size:48px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.5);margin-bottom:12px}
+.hero p{color:rgba(255,255,255,0.85);font-size:17px;line-height:1.6;text-shadow:0 1px 6px rgba(0,0,0,0.4)}
+.hero .btn{margin-top:24px;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+.uspa-link{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--teal);text-decoration:none;padding:1px 6px;border-radius:4px;background:rgba(76,168,158,0.08);transition:all 0.15s}
+.uspa-link:hover{background:rgba(76,168,158,0.18);color:var(--accent)}
+.season-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:rgba(196,162,92,0.12);color:var(--accent);margin-left:6px}
+.dup-btn{font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(91,141,201,0.1);color:var(--blue);border:1px solid rgba(91,141,201,0.2);cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif}
+.dup-btn:hover{background:rgba(91,141,201,0.2)}
 @media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}nav{flex-wrap:wrap}nav button span.nav-label{display:none}h1{font-size:28px}.header-inner{flex-direction:column;gap:12px}.game-card{grid-template-columns:1fr;text-align:center;gap:8px}}
 </style>
 </head>
@@ -161,38 +176,38 @@ function esc(s){const d=document.createElement('div');d.textContent=s||'';return
 // PRE-POPULATED DATA
 // ══════════════════════════════════════════════
 const VENUES_SEED = [
-  {id:'v-myopia',name:'Myopia Polo Club',location:'Hamilton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'info@myopiapolo.com',notes:'Historic NE venue. Full arena + 2 outdoor fields.',organizer:'Bill Tompkins',logo:'🏇'},
-  {id:'v-stagehill',name:'Stage Hill Polo Club',location:'Bolton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'play@stagehillpolo.com',notes:'Arena + outdoor arena + grass field. Strong admin hub.',organizer:'Alyson Poor',logo:'⚡'},
-  {id:'v-giant',name:'Giant Valley Polo Club',location:'Glastonbury',st:'CT',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'giantvalley@polo.com',notes:'CT anchor. Year-round arena.',organizer:'Mark Gillespie',logo:'🏔️'},
-  {id:'v-newport',name:'Newport / Westchester Polo Club',location:'Portsmouth',st:'RI',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'info@newportpolo.com',notes:'Historic Westchester club operating as Newport Polo. Arena + outdoor arena.',organizer:'Dan Keating',logo:'⚓'},
-  {id:'v-sugar',name:'Sugarbush Polo Club',location:'Shelburne',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'sugarbush@vtpolo.com',notes:'Summer outdoor only. Beautiful mountain setting.',organizer:'Pete Schultz',logo:'🍁'},
-  {id:'v-tuckaway',name:'Tuckaway Farm',location:'Lee',st:'NH',hasArena:false,hasOutdoor:true,hasOutdoorArena:true,contact:'tuckaway@polo.nh',notes:'Outdoor arena + grass field. NH anchor.',organizer:'Sarah Collins',logo:'🦊'},
-  {id:'v-kings',name:'Kingswood Polo Club',location:'Wolfeboro',st:'NH',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'play@kingswoodpolo.com',notes:'Arena + summer outdoor. Lakes Region.',organizer:'Jim Hannigan',logo:'🌲'},
-  {id:'v-quechee',name:'Quechee Polo Club',location:'Quechee',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'polo@quecheeclub.com',notes:'Upper Valley VT. Summer outdoor venue.',organizer:'Tom Richards',logo:'🏞️'},
+  {id:'v-myopia',seasons:['s-2027','s-2026-demo'],name:'Myopia Polo Club',location:'Hamilton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'info@myopiapolo.com',notes:'Historic NE venue. Full arena + 2 outdoor fields.',organizer:'Bill Tompkins',logo:'🏇'},
+  {id:'v-stagehill',seasons:['s-2027','s-2026-demo'],name:'Stage Hill Polo Club',location:'Bolton',st:'MA',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'play@stagehillpolo.com',notes:'Arena + outdoor arena + grass field. Strong admin hub.',organizer:'Alyson Poor',logo:'⚡'},
+  {id:'v-giant',seasons:['s-2027','s-2026-demo'],name:'Giant Valley Polo Club',location:'Glastonbury',st:'CT',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'giantvalley@polo.com',notes:'CT anchor. Year-round arena.',organizer:'Mark Gillespie',logo:'🏔️'},
+  {id:'v-newport',seasons:['s-2027','s-2026-demo'],name:'Newport / Westchester Polo Club',location:'Portsmouth',st:'RI',hasArena:true,hasOutdoor:true,hasOutdoorArena:true,contact:'info@newportpolo.com',notes:'Historic Westchester club operating as Newport Polo. Arena + outdoor arena.',organizer:'Dan Keating',logo:'⚓'},
+  {id:'v-sugar',seasons:['s-2027','s-2026-demo'],name:'Sugarbush Polo Club',location:'Shelburne',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'sugarbush@vtpolo.com',notes:'Summer outdoor only. Beautiful mountain setting.',organizer:'Pete Schultz',logo:'🍁'},
+  {id:'v-tuckaway',seasons:['s-2027','s-2026-demo'],name:'Tuckaway Farm',location:'Lee',st:'NH',hasArena:false,hasOutdoor:true,hasOutdoorArena:true,contact:'tuckaway@polo.nh',notes:'Outdoor arena + grass field. NH anchor.',organizer:'Sarah Collins',logo:'🦊'},
+  {id:'v-kings',seasons:['s-2027','s-2026-demo'],name:'Kingswood Polo Club',location:'Wolfeboro',st:'NH',hasArena:true,hasOutdoor:true,hasOutdoorArena:false,contact:'play@kingswoodpolo.com',notes:'Arena + summer outdoor. Lakes Region.',organizer:'Jim Hannigan',logo:'🌲'},
+  {id:'v-quechee',seasons:['s-2027','s-2026-demo'],name:'Quechee Polo Club',location:'Quechee',st:'VT',hasArena:false,hasOutdoor:true,hasOutdoorArena:false,contact:'polo@quecheeclub.com',notes:'Upper Valley VT. Summer outdoor venue.',organizer:'Tom Richards',logo:'🏞️'},
 ];
 
 function mkPlayers(names){return names.map(n=>{const[name,h]=n.split('|');return{name,handicap:h||'0'}});}
 
 const TEAMS_SEED = [
-  {id:'t-myopia1',name:'Myopia Mustangs',logo:'🐎',club:'Myopia Polo Club',goalLevel:'low',homeVenue:'v-myopia',
+  {id:'t-myopia1',season:'s-2027',name:'Myopia Mustangs',logo:'🐎',club:'Myopia Polo Club',goalLevel:'low',homeVenue:'v-myopia',
     players:mkPlayers(['Bill Tompkins|1','Sarah Chen|0','Jake Morrison|1']),alternates:mkPlayers(['Emma Whitfield|0'])},
-  {id:'t-stagehill1',name:'Stage Hill Storm',logo:'🌩️',club:'Stage Hill Polo Club',goalLevel:'low',homeVenue:'v-stagehill',
+  {id:'t-stagehill1',season:'s-2027',name:'Stage Hill Storm',logo:'🌩️',club:'Stage Hill Polo Club',goalLevel:'low',homeVenue:'v-stagehill',
     players:mkPlayers(['Alyson Poor|2','Steve Rudolph|1','Tom Rizzo|1']),alternates:mkPlayers(['Amanda Roberts|0'])},
-  {id:'t-giant1',name:'Giant Valley Riders',logo:'🦅',club:'Giant Valley Polo Club',goalLevel:'low',homeVenue:'v-giant',
+  {id:'t-giant1',season:'s-2027',name:'Giant Valley Riders',logo:'🦅',club:'Giant Valley Polo Club',goalLevel:'low',homeVenue:'v-giant',
     players:mkPlayers(['Mark Gillespie|1','Lucia Fernandez|1','Chris Walsh|0']),alternates:mkPlayers(['Nina Torres|1'])},
-  {id:'t-newport1',name:'Newport Navy',logo:'⚓',club:'Newport / Westchester Polo Club',goalLevel:'low',homeVenue:'v-newport',
+  {id:'t-newport1',season:'s-2027',name:'Newport Navy',logo:'⚓',club:'Newport / Westchester Polo Club',goalLevel:'low',homeVenue:'v-newport',
     players:mkPlayers(['Dan Keating|2','Meg Sullivan|0','Ravi Patel|1']),alternates:mkPlayers(['Olivia Harrington|0'])},
-  {id:'t-sugar1',name:'Sugarbush Chargers',logo:'⚡',club:'Sugarbush Polo Club',goalLevel:'medium',homeVenue:'v-sugar',
+  {id:'t-sugar1',season:'s-2027',name:'Sugarbush Chargers',logo:'⚡',club:'Sugarbush Polo Club',goalLevel:'medium',homeVenue:'v-sugar',
     players:mkPlayers(['Pete Schultz|2','Hannah Greene|2','Carlos Vega|1']),alternates:mkPlayers(['Liam Casey|1'])},
-  {id:'t-tuck1',name:'Tuckaway Foxes',logo:'🦊',club:'Tuckaway Farm',goalLevel:'low',homeVenue:'v-tuckaway',
+  {id:'t-tuck1',season:'s-2027',name:'Tuckaway Foxes',logo:'🦊',club:'Tuckaway Farm',goalLevel:'low',homeVenue:'v-tuckaway',
     players:mkPlayers(['Sarah Collins|1','Ben Archer|1','Kelly Donahue|0']),alternates:mkPlayers(['Matt Pierce|0'])},
-  {id:'t-kings1',name:'Kingswood Lakers',logo:'🌊',club:'Kingswood Polo Club',goalLevel:'medium',homeVenue:'v-kings',
+  {id:'t-kings1',season:'s-2027',name:'Kingswood Lakers',logo:'🌊',club:'Kingswood Polo Club',goalLevel:'medium',homeVenue:'v-kings',
     players:mkPlayers(['Jim Hannigan|3','Priya Sharma|1','Tyler Brooks|2']),alternates:mkPlayers(['Nora Flanagan|1'])},
-  {id:'t-quechee1',name:'Quechee Valley',logo:'🏔️',club:'Quechee Polo Club',goalLevel:'low',homeVenue:'v-quechee',
+  {id:'t-quechee1',season:'s-2027',name:'Quechee Valley',logo:'🏔️',club:'Quechee Polo Club',goalLevel:'low',homeVenue:'v-quechee',
     players:mkPlayers(['Tom Richards|1','Ava Sinclair|0','Derek Holm|1']),alternates:mkPlayers(['Rachel Kim|0'])},
-  {id:'t-myopia2',name:'Myopia Mavericks',logo:'🔥',club:'Myopia Polo Club',goalLevel:'medium',homeVenue:'v-myopia',
+  {id:'t-myopia2',season:'s-2027',name:'Myopia Mavericks',logo:'🔥',club:'Myopia Polo Club',goalLevel:'medium',homeVenue:'v-myopia',
     players:mkPlayers(['Greg Monroe|2','Tess Callahan|2','Owen Blake|1']),alternates:mkPlayers(['Fiona Xu|1'])},
-  {id:'t-mixed1',name:'NE All-Stars',logo:'⭐',club:'Multi-club',goalLevel:'medium',homeVenue:'v-stagehill',
+  {id:'t-mixed1',season:'s-2027',name:'NE All-Stars',logo:'⭐',club:'Multi-club',goalLevel:'medium',homeVenue:'v-stagehill',
     players:mkPlayers(['Nina Torres|1','Liam Casey|1','Matt Pierce|2']),alternates:mkPlayers(['Rachel Kim|1','Nora Flanagan|0'])},
 ];
 
@@ -465,6 +480,10 @@ function calcPlayerStats(){
   return Object.values(ps).map(p=>({...p,teams:[...p.teams]}));
 }
 
+
+function uspaLookupUrl(name){
+  return 'https://www.uspolo.org/player-search?search='+encodeURIComponent(name);
+}
 function formatTag(format){
   if(format==='outdoor-arena')return'<span class="tag tag-outdoor-arena">Outdoor Arena</span>';
   if(format==='outdoor')return'<span class="tag tag-outdoor">Outdoor</span>';
@@ -525,12 +544,16 @@ function renderHome(tm,vm){
   const topMVP=pStats.sort((a,b)=>b.mvps-a.mvps)[0];
 
   return`
-    <div class="center" style="padding:40px 0 50px">
-      <h1>New England Polo League</h1>
-      <p style="color:var(--text-muted);font-size:16px;max-width:620px;margin:10px auto 0">Year-round club team polo across New England. Low and medium goal, three-a-side with alternates. Two horses is all you need.</p>
-      <div class="flex gap-12" style="justify-content:center;margin-top:28px">
-        <button class="btn btn-primary" onclick="setState({tab:'teams',showTeamForm:true})">Register a Team</button>
-        <button class="btn btn-secondary" onclick="setState({tab:'venues',showVenueForm:true})">Add a Venue</button>
+    <div class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <h1>New England Polo League</h1>
+        <p>Club team polo across New England. Three-a-side, home and away, April through November. Low and medium goal divisions with USPA-registered players. Two horses is all you need to compete.</p>
+        <p style="margin-top:12px;font-size:14px;color:rgba(255,255,255,0.65)">Welcome to the NEPL — where every weekend is a road trip, every club is a host, and the goal is as much about community as competition.</p>
+        <div class="flex gap-12" style="justify-content:center;margin-top:24px">
+          <button class="btn btn-primary" onclick="setState({tab:'teams',showTeamForm:true})">Register a Team</button>
+          <button class="btn btn-secondary" style="color:#fff;border-color:rgba(255,255,255,0.4)" onclick="setState({tab:'venues',showVenueForm:true})">Add a Venue</button>
+        </div>
       </div>
     </div>
     <div class="grid-4 mb-32">${[
@@ -538,7 +561,7 @@ function renderHome(tm,vm){
       {l:'Weeks',v:state.schedule.length,c:'var(--blue)'},{l:'Games Played',v:played+'/'+total,c:'var(--green)'}
     ].map(s=>`<div class="card center"><div class="stat-num" style="color:${s.c}">${s.v}</div><div class="stat-label">${s.l}</div></div>`).join('')}</div>
     <div class="card mb-24"><h3 class="mb-16">How the League Works</h3><div class="grid-2">${[
-      {t:'Club Teams',d:'3-person teams (low or medium goal) with 1–2 alternates. Players can come from different clubs.'},
+      {t:'Club Teams',d:'3-person teams (low or medium goal) with 1–2 alternates. Players can come from different clubs. USPA-registered.'},
       {t:'Home & Away',d:'Every team plays home and away. Host clubs provide venue, food, and hospitality. Games run simultaneously across venues.'},
       {t:'April – November',d:'Starts indoors in April, outdoor May 15 – Oct 15, back indoors for November. 2–3 horses is enough.'},
       {t:'Prizes & Community',d:'USPA awards, MVP selections, individual scoring stats, plus cash prizes from entry fees. But the real draw is the travel and connections.'},
@@ -560,8 +583,8 @@ function renderHome(tm,vm){
 // ═══ TEAMS ═══
 function renderTeams(tm,vm){
   const f=state.teamForm;
-  return`
-    <div class="flex between mb-24"><div><h2>Teams</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.teams.length} registered teams. 3-person rosters with up to 2 alternates.</p></div>
+  return seasonBar()+`
+    <div class="flex between mb-24"><div><h2>Teams</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.teams.filter(t=>!t.season||t.season===state.currentSeason).length} teams this season. 3-person rosters with up to 2 alternates.</p></div>
       <button class="btn btn-primary" onclick="setState({showTeamForm:!state.showTeamForm})">${icon('plus')} Register Team</button></div>
     ${state.showTeamForm?`<div class="card card-accent mb-24 fade-in"><h3 class="mb-20">New Team Registration</h3>
       <div class="mb-16"><label class="field-label">Team Logo</label>${logoPicker('tp-logo',f.logo)}</div>
@@ -575,22 +598,35 @@ function renderTeams(tm,vm){
       <label class="field-label">Alternates (optional)</label><div style="display:grid;gap:8px" class="mb-20">${[1,2].map(i=>`<div class="grid-2"><input value="${esc(f['a'+i])}" oninput="state.teamForm.a${i}=this.value" placeholder="Alternate ${i}"><input value="${esc(f['a'+i+'h'])}" oninput="state.teamForm.a${i}h=this.value" placeholder="Handicap"></div>`).join('')}</div>
       <div class="flex gap-8"><button class="btn btn-primary" onclick="submitTeam()">${icon('check')} Submit</button><button class="btn btn-secondary" onclick="setState({showTeamForm:false})">Cancel</button></div>
     </div>`:''}
-    ${state.teams.length>0?`<div class="grid-2">${state.teams.map(t=>`
+    ${state.teams.filter(t=>!t.season||t.season===state.currentSeason).length>0?`<div class="grid-2">${state.teams.filter(t=>!t.season||t.season===state.currentSeason).map(t=>`
       <div class="card"><div class="flex between mb-10"><div class="flex gap-12">${logoCircle(t.logo)}<div><div class="serif" style="font-size:18px;font-weight:700">${esc(t.name)}</div><div style="font-size:12px;color:var(--text-muted)" class="mt-4">${esc(t.club)}${t.homeVenue&&vm[t.homeVenue]?' &middot; Home: '+esc(vm[t.homeVenue].name):''}</div></div></div>
-        <div class="flex gap-6"><span class="tag ${t.goalLevel==='low'?'tag-low':'tag-med'}">${t.goalLevel==='low'?'Low Goal':'Medium Goal'}</span><button class="btn-icon" onclick="openEditTeam('${t.id}')" title="Edit">${icon('edit')}</button><button class="btn-icon" onclick="removeTeam('${t.id}')" title="Remove">${icon('x')}</button></div></div>
+        <div class="flex gap-6"><span class="tag ${t.goalLevel==='low'?'tag-low':'tag-med'}">${t.goalLevel==='low'?'Low Goal':'Medium Goal'}</span>${t.season?'<span class="season-tag">'+esc(t.season)+'</span>':''}<button class="dup-btn" onclick="duplicateTeam('${t.id}')" title="Duplicate for another season">Copy</button><button class="btn-icon" onclick="openEditTeam('${t.id}')" title="Edit">${icon('edit')}</button><button class="btn-icon" onclick="removeTeam('${t.id}')" title="Remove">${icon('x')}</button></div></div>
         <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em" class="mb-6">Roster</div>
-        ${t.players.map(p=>`<div class="flex between" style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${esc(p.name)}</span><span style="color:var(--text-muted)">${p.handicap?p.handicap+' goal':''}</span></div>`).join('')}
+        ${t.players.map(p=>`<div class="flex between" style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${esc(p.name)} <a href="${uspaLookupUrl(p.name)}" target="_blank" class="uspa-link" title="Look up on USPA">USPA</a></span><span style="color:var(--text-muted)">${p.handicap?p.handicap+' goal':''}</span></div>`).join('')}
         ${(t.alternates||[]).filter(a=>a.name).map(a=>`<div class="flex between" style="padding:5px 0;font-size:13px;color:var(--text-muted)"><span style="font-style:italic">${esc(a.name)} (alt)</span><span>${a.handicap?a.handicap+' goal':''}</span></div>`).join('')}
       </div>`).join('')}</div>`:`<div class="empty"><div class="empty-icon">🏇</div><div class="empty-title">No teams yet</div></div>`}
   `;
 }
-function submitTeam(){const f=state.teamForm;if(!f.name||!f.club||!f.p1||!f.p2||!f.p3){alert('Fill in team name, club, and 3 players.');return}state.teams.push({id:'team-'+Date.now(),name:f.name,club:f.club,goalLevel:f.goalLevel,homeVenue:f.homeVenue,logo:f.logo||'🏇',players:[{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(p=>p.name),alternates:[{name:f.a1,handicap:f.a1h},{name:f.a2,handicap:f.a2h}].filter(a=>a.name)});state.teamForm=freshTeamForm();state.showTeamForm=false;save();render();}
+function submitTeam(){const f=state.teamForm;if(!f.name||!f.club||!f.p1||!f.p2||!f.p3){alert('Fill in team name, club, and 3 players.');return}state.teams.push({id:'team-'+Date.now(),name:f.name,club:f.club,goalLevel:f.goalLevel,homeVenue:f.homeVenue,logo:f.logo||'🏇',season:state.currentSeason,players:[{name:f.p1,handicap:f.p1h},{name:f.p2,handicap:f.p2h},{name:f.p3,handicap:f.p3h}].filter(p=>p.name),alternates:[{name:f.a1,handicap:f.a1h},{name:f.a2,handicap:f.a2h}].filter(a=>a.name)});state.teamForm=freshTeamForm();state.showTeamForm=false;save();render();}
+
+function duplicateTeam(tid){
+  var t=state.teams.find(function(x){return x.id===tid});
+  if(!t)return;
+  var targetSeason=prompt('Duplicate team "'+t.name+'" for which season ID?\n\nAvailable: '+state.seasons.map(function(s){return s.id+' ('+s.name+')'}).join(', '));
+  if(!targetSeason)return;
+  var newT=JSON.parse(JSON.stringify(t));
+  newT.id='team-'+Date.now();
+  newT.season=targetSeason;
+  state.teams.push(newT);
+  save();render();
+  alert('Team duplicated for '+targetSeason+'. Edit the copy to update handicaps or roster.');
+}
 function removeTeam(id){if(confirm('Remove this team?')){state.teams=state.teams.filter(t=>t.id!==id);save();render();}}
 
 // ═══ VENUES ═══
 function renderVenues(vm){
   const f=state.venueForm;const sts=['MA','CT','RI','NH','VT','ME','NY'];
-  return`
+  return seasonBar()+`
     <div class="flex between mb-24"><div><h2>Venues</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${state.venues.length} registered venues across New England.</p></div>
       <button class="btn btn-primary" onclick="setState({showVenueForm:!state.showVenueForm})">${icon('plus')} Add Venue</button></div>
     ${state.showVenueForm?`<div class="card card-accent mb-24 fade-in"><h3 class="mb-20">Register Venue</h3>
@@ -656,7 +692,7 @@ function doGenerate(){if(state.schedule.length>0&&!confirm('Regenerate? This cle
 function renderResults(tm,vm){
   const withR=[],withoutR=[];
   state.schedule.forEach(w=>{w.games.forEach(g=>{const o={...g,weekNum:w.week};if(state.results[g.id])withR.push(o);else withoutR.push(o)})});
-  return`
+  return seasonBar()+`
     <div class="flex between mb-24"><div><h2>Enter Results</h2><p style="color:var(--text-muted);font-size:14px" class="mt-4">${withR.length} of ${withR.length+withoutR.length} completed. Click any game to enter scores, MVP, and goal scorers.</p></div></div>
     ${state.schedule.length===0?`<div class="card center" style="padding:40px;color:var(--text-muted)">Generate a schedule first.</div>`:''}
     ${withoutR.length>0?`<h3 class="mb-12">Upcoming</h3><div style="display:grid;gap:8px" class="mb-32">${withoutR.slice(0,15).map(g=>{const ht=tm[g.home],at=tm[g.away],v=vm[g.venue];return`<div class="game-card" onclick="openGameModal('${g.id}')"><div style="text-align:right"><div class="game-team">${ht?esc(ht.name):'?'}</div><div class="game-club">${ht?esc(ht.club):''}</div></div><div class="center"><div class="game-vs">vs</div><div class="game-date">${g.date} &middot; ${g.time||'TBD'}</div><div class="game-venue">@ ${v?esc(v.name):'TBD'}</div></div><div><div class="game-team">${at?esc(at.name):'?'}</div><div class="game-club">${at?esc(at.club):''}</div></div></div>`}).join('')}${withoutR.length>15?`<div class="center" style="padding:10px;color:var(--text-dim);font-size:13px">+ ${withoutR.length-15} more</div>`:''}</div>`:''}
@@ -778,7 +814,7 @@ function renderPlayerStats(tm){
   const tmm=tmMap();
   function teamName(ids){return ids.map(function(id){return tmm[id]?tmm[id].name:'?';}).join(', ');}
 
-  return `
+  return seasonBar()+`
     <div class="flex between mb-16"><h2>Statistics</h2></div>
     <div class="sub-tabs">
       <button class="sub-tab ${state.statsSubTab==='team'?'active':''}" onclick="setState({statsSubTab:'team'})">Team Stats</button>

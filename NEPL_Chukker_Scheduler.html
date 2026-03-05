@@ -6,11 +6,10 @@
 <title>Chukker Scheduler — NEPL Practice Tool</title>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#FAF8F5;--surface:#fff;--surface-alt:#F3F0EB;--border:#E0D8CC;--text:#2C2418;--text-muted:#7A7060;--text-dim:#A09880;--accent:#8B4513;--accent-light:#A0572A;--green:#4A7C59;--red:#A84032;--blue:#3A6B8C;--teal:#507060;--gold:#B8860B;--navy:#2C3E50}
+:root{--bg:#FAF8F5;--surface:#fff;--surface-alt:#F3F0EB;--border:#E0D8CC;--text:#2C2418;--text-muted:#7A7060;--text-dim:#A09880;--accent:#8B4513;--accent-light:#A0572A;--green:#4A7C59;--red:#A84032;--blue:#3A6B8C;--teal:#507060;--gold:#B8860B}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
-.serif{font-family:'Libre Baskerville',serif}
-.max-w{max-width:960px;margin:0 auto;padding:0 24px}
+.max-w{max-width:1020px;margin:0 auto;padding:0 24px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 h1{font-family:'Libre Baskerville',serif;font-size:32px;color:var(--accent);letter-spacing:-0.02em}
 h2{font-family:'Libre Baskerville',serif;font-size:22px;color:var(--text)}
@@ -23,325 +22,363 @@ input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appear
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;font-family:'Source Sans 3',sans-serif;transition:all 0.15s}
 .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-light)}
 .btn-secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}.btn-secondary:hover{background:rgba(139,69,19,0.06)}
-.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(168,64,50,0.3)}.btn-danger:hover{background:rgba(168,64,50,0.06)}
 .btn-sm{padding:6px 12px;font-size:12px}
-.btn-icon{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:4px}
+.btn-icon{background:none;border:none;color:var(--text-dim);cursor:pointer;padding:4px;font-size:18px}
+.btn-icon:hover{color:var(--text)}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
-.flex{display:flex;align-items:center}.between{justify-content:space-between}.gap-8{gap:8px}.gap-12{gap:12px}.wrap{flex-wrap:wrap}
+.flex{display:flex;align-items:center}.between{justify-content:space-between}.gap-6{gap:6px}.gap-8{gap:8px}.gap-12{gap:12px}.wrap{flex-wrap:wrap}
 .mb-8{margin-bottom:8px}.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}.mb-20{margin-bottom:20px}.mb-24{margin-bottom:24px}
-.mt-12{margin-top:12px}.mt-16{margin-top:16px}
-.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
-.tag-low{background:rgba(74,124,89,0.1);color:var(--green)}.tag-med{background:rgba(58,107,140,0.1);color:var(--blue)}
-.tag-high{background:rgba(184,134,11,0.12);color:var(--gold)}
+.mt-8{margin-top:8px}.mt-12{margin-top:12px}
 header{border-bottom:2px solid var(--border);background:var(--surface);padding:16px 0}
-.player-row{display:grid;grid-template-columns:2fr 80px 80px 80px 40px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px}
-.player-row:last-child{border-bottom:none}
-.player-header{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em}
-/* Chukker chart */
+.option-card{background:var(--surface-alt);border:2px solid transparent;border-radius:8px;padding:14px;cursor:pointer;text-align:center;transition:all 0.15s}
+.option-card:hover{border-color:var(--border)}.option-card.sel{border-color:var(--accent);background:rgba(139,69,19,0.04)}
+.option-label{font-weight:700;font-size:15px;margin-bottom:2px}.option-desc{font-size:12px;color:var(--text-muted)}
+/* Player card */
+.p-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px}
+.p-name{font-weight:700;font-size:15px}.p-hcp{font-size:13px;color:var(--text-muted)}
+.horse-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px}
+.horse-name{flex:1;padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--surface-alt);font-size:13px;font-family:'Source Sans 3',sans-serif;color:var(--text)}
+.horse-dbl{font-size:11px;padding:2px 8px;border-radius:10px;cursor:pointer;font-weight:600;border:1px solid var(--border);background:var(--surface-alt);transition:all 0.15s}
+.horse-dbl.on{background:rgba(168,64,50,0.1);color:var(--red);border-color:rgba(168,64,50,0.3)}
+/* Chart */
 .chart-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:12px}
 .chart-table th{padding:10px 8px;background:var(--accent);color:#fff;font-weight:600;text-align:center;font-size:12px;text-transform:uppercase;letter-spacing:0.04em}
 .chart-table th:first-child{text-align:left;border-radius:6px 0 0 0}
 .chart-table th:last-child{border-radius:0 6px 0 0}
-.chart-table td{padding:8px;text-align:center;border-bottom:1px solid var(--border);vertical-align:middle}
+.chart-table td{padding:8px;text-align:center;border-bottom:1px solid var(--border);vertical-align:top}
 .chart-table td:first-child{text-align:left;font-weight:600}
 .chart-table tr:nth-child(even){background:var(--surface-alt)}
 .chart-table .team-a{background:rgba(139,69,19,0.08);font-weight:600;color:var(--accent)}
 .chart-table .team-b{background:rgba(58,107,140,0.08);font-weight:600;color:var(--blue)}
 .chart-table .rest{color:var(--text-dim);font-style:italic;font-size:12px}
-.chart-table .doubled{font-size:10px;color:var(--red);display:block}
-.option-card{background:var(--surface-alt);border:2px solid transparent;border-radius:8px;padding:14px;cursor:pointer;text-align:center;transition:all 0.15s}
-.option-card:hover{border-color:var(--border)}.option-card.sel{border-color:var(--accent);background:rgba(139,69,19,0.04)}
-.option-label{font-weight:700;font-size:15px;margin-bottom:4px}.option-desc{font-size:12px;color:var(--text-muted)}
-.divider{height:1px;background:var(--border);margin:20px 0}
+.chart-table .dbl-mark{font-size:10px;color:var(--red);display:block;font-weight:400}
+.chart-table .horse-note{font-size:10px;color:var(--text-dim);display:block;font-weight:400;font-style:italic}
+.info-bar{background:var(--surface-alt);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6}
+.stat-pill{display:inline-block;padding:3px 10px;border-radius:10px;font-size:12px;font-weight:600;margin-right:6px}
+.sp-brown{background:rgba(139,69,19,0.1);color:var(--accent)}.sp-blue{background:rgba(58,107,140,0.1);color:var(--blue)}
+.sp-green{background:rgba(74,124,89,0.1);color:var(--green)}.sp-gold{background:rgba(184,134,11,0.1);color:var(--gold)}
 footer{padding:20px;text-align:center;font-size:12px;color:var(--text-dim);margin-top:40px}
-@media print{
-  body{background:#fff}header,.no-print{display:none!important}
-  .card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}
-  .chart-table th{background:#444!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .chart-table .team-a,.chart-table .team-b{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-}
-@media(max-width:640px){.player-row{grid-template-columns:1fr 60px 60px 60px 32px}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+@media print{body{background:#fff}header,.no-print{display:none!important}.card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid}.chart-table th{background:#444!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.chart-table .team-a,.chart-table .team-b{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:640px){.grid-2,.grid-3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header class="no-print"><div class="max-w"><div class="flex between"><div><h1>Chukker Scheduler</h1><div style="font-size:13px;color:var(--text-muted);margin-top:2px">NEPL Practice Tool — Organize fair, balanced chukkers</div></div><a href="#" style="font-size:13px;color:var(--accent)" onclick="location.reload();return false">New Session</a></div></div></header>
-<main class="max-w" style="padding:28px 24px 40px">
-<div id="app"></div>
-</main>
-<footer class="no-print"><div>NEPL — New England Polo League — Chukker Scheduler</div></footer>
+<header class="no-print"><div class="max-w"><div class="flex between"><div><h1>Chukker Scheduler</h1><div style="font-size:13px;color:var(--text-muted);margin-top:2px">NEPL Practice Tool — Organize fair, balanced chukkers</div></div><div class="flex gap-8"><button class="btn btn-sm btn-secondary" onclick="loadDemo()">Load Demo Roster</button><button class="btn btn-sm btn-secondary" onclick="if(confirm('Clear all?')){localStorage.removeItem('nepl-chukker');location.reload()}">Reset</button></div></div></div></header>
+<main class="max-w" style="padding:28px 24px 40px"><div id="app"></div></main>
+<footer class="no-print">NEPL — New England Polo League — Chukker Scheduler</footer>
 <script>
-const LS_KEY='nepl-chukker';
-function lsGet(){try{const v=localStorage.getItem(LS_KEY);return v?JSON.parse(v):null}catch{return null}}
-function lsSave(d){try{localStorage.setItem(LS_KEY,JSON.stringify(d))}catch{}}
+// ═══ STATE ═══
+const LSK='nepl-chukker';
+function lsGet(){try{var v=localStorage.getItem(LSK);return v?JSON.parse(v):null}catch{return null}}
+function lsSave(d){try{localStorage.setItem(LSK,JSON.stringify(d))}catch{}}
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 
-let S=lsGet()||{
-  players:[],
-  settings:{format:'3v3',balance:'balanced',chukkers:6,clubName:'',date:''},
+// Demo roster
+const DEMO_PLAYERS=[
+  {name:'Alyson Poor',hcp:2,horses:[{name:'Thunder',dbl:false},{name:'Blaze',dbl:true}]},
+  {name:'Steve Rudolph',hcp:1,horses:[{name:'Captain',dbl:false},{name:'Scout',dbl:false}]},
+  {name:'Tom Rizzo',hcp:1,horses:[{name:'Copper',dbl:true}]},
+  {name:'Sarah Chen',hcp:0,horses:[{name:'Luna',dbl:false},{name:'Penny',dbl:false}]},
+  {name:'Bill Tompkins',hcp:1,horses:[{name:'Duke',dbl:false},{name:'Arrow',dbl:false},{name:'Shadow',dbl:false}]},
+  {name:'Jake Morrison',hcp:1,horses:[{name:'Ranger',dbl:false},{name:'Bolt',dbl:true}]},
+  {name:'Dan Keating',hcp:2,horses:[{name:'Neptune',dbl:false},{name:'Storm',dbl:false}]},
+  {name:'Meg Sullivan',hcp:0,horses:[{name:'Daisy',dbl:false},{name:'Clover',dbl:false}]},
+  {name:'Mark Gillespie',hcp:1,horses:[{name:'Atlas',dbl:false}]},
+  {name:'Chris Walsh',hcp:0,horses:[{name:'Opal',dbl:true},{name:'Jasper',dbl:false}]},
+  {name:'Nina Torres',hcp:1,horses:[{name:'Fury',dbl:false},{name:'Chance',dbl:false}]},
+  {name:'Ben Archer',hcp:1,horses:[{name:'Rocket',dbl:false},{name:'Sage',dbl:false}]},
+];
+
+var S=lsGet()||{
+  players:DEMO_PLAYERS,
+  settings:{format:'3v3',balance:'balanced',chukkers:0,clubName:'Stage Hill Polo Club',date:'2027-06-14'},
   chart:null,step:'players'
 };
-function save(){lsSave(S)}
-function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+// Auto-calc chukkers if 0
+if(S.settings.chukkers===0) S.settings.chukkers=autoChukkers(S.players,S.settings.format);
 
+function save(){lsSave(S)}
+
+function loadDemo(){
+  S.players=JSON.parse(JSON.stringify(DEMO_PLAYERS));
+  S.settings.chukkers=autoChukkers(S.players,S.settings.format);
+  S.chart=null;S.step='players';save();render();
+}
+
+// ═══ AUTO CHUKKER CALCULATION ═══
+// Based on: total available horse-chukkers / players-per-chukker, ensuring everyone gets fair play
+function autoChukkers(players,format){
+  var named=players.filter(function(p){return p.name});
+  if(named.length<6)return 4;
+  var perSide=format==='4v4'?4:format==='3v3'?3:(named.length>=8?4:3);
+  var perChukker=perSide*2;
+  // Total horse-chukkers available
+  var totalHC=0;
+  named.forEach(function(p){
+    p.horses.forEach(function(h){totalHC+=h.dbl?2:1;});
+  });
+  // Each chukker uses perChukker horse-chukkers
+  var maxByHorses=Math.floor(totalHC/perChukker);
+  // Also consider fairness: each player should play at least 2-3 chukkers
+  var minFair=Math.ceil(named.length*2.5/perChukker);
+  var result=Math.max(4,Math.min(maxByHorses,Math.max(minFair,6)));
+  return Math.min(result,10);
+}
+
+function totalAvailableChukkers(player){
+  var t=0;
+  player.horses.forEach(function(h){t+=h.dbl?2:1;});
+  return t;
+}
+
+// ═══ RENDER ═══
 function render(){
-  const app=document.getElementById('app');
+  var app=document.getElementById('app');
   if(S.step==='players')app.innerHTML=renderPlayers();
   else if(S.step==='settings')app.innerHTML=renderSettings();
   else if(S.step==='chart')app.innerHTML=renderChart();
 }
 
-// ═══ STEP 1: PLAYERS ═══
+// ═══ PLAYERS PAGE ═══
 function renderPlayers(){
-  return `
-    <div class="card mb-24">
-      <div class="flex between mb-16"><h2>1. Add Players</h2><span style="font-size:13px;color:var(--text-muted)">${S.players.length} player${S.players.length!==1?'s':''}</span></div>
-      <div class="player-row player-header"><span>Name</span><span style="text-align:center">Handicap</span><span style="text-align:center">Horses</span><span style="text-align:center">Doubling</span><span></span></div>
-      ${S.players.map((p,i)=>`
-        <div class="player-row">
-          <input value="${esc(p.name)}" onchange="updP(${i},'name',this.value)" placeholder="Player name" style="border:none;padding:4px 0;font-size:14px;background:transparent">
-          <input type="number" min="-2" max="10" value="${p.hcp}" onchange="updP(${i},'hcp',+this.value)" style="text-align:center;padding:6px 4px">
-          <input type="number" min="1" max="8" value="${p.horses}" onchange="updP(${i},'horses',+this.value)" style="text-align:center;padding:6px 4px">
-          <select onchange="updP(${i},'doubling',this.value)" style="text-align:center;padding:6px 2px;font-size:13px">
-            <option value="no" ${p.doubling==='no'?'selected':''}>No</option>
-            <option value="yes" ${p.doubling==='yes'?'selected':''}>Yes</option>
-          </select>
-          <button class="btn-icon" onclick="rmP(${i})" title="Remove">&times;</button>
-        </div>
-      `).join('')}
-      <div style="margin-top:12px" class="flex gap-8">
-        <button class="btn btn-secondary btn-sm" onclick="addP()">+ Add Player</button>
-        <button class="btn btn-secondary btn-sm" onclick="addMultiple()">+ Add 4 Blank</button>
-      </div>
-    </div>
-    ${S.players.length>=6?`<div style="text-align:right"><button class="btn btn-primary" onclick="S.step='settings';save();render()">Next: Settings &rarr;</button></div>`
-    :`<div class="card" style="text-align:center;padding:40px;color:var(--text-muted)">Add at least 6 players to continue</div>`}
-  `;
+  var named=S.players.filter(function(p){return p.name});
+  var totalHC=0;
+  named.forEach(function(p){p.horses.forEach(function(h){totalHC+=h.dbl?2:1;});});
+  return '<div class="card mb-24">'+
+    '<div class="flex between mb-16"><h2>1. Players &amp; Horses</h2><span style="font-size:13px;color:var(--text-muted)">'+named.length+' players &middot; '+totalHC+' horse-chukkers available</span></div>'+
+    '<div class="info-bar no-print">Each player lists their horses. Mark individual horses as <strong>"Double"</strong> if that horse will play two chukkers (with at least one chukker rest between). Horses not marked double play one chukker only.</div>'+
+    S.players.map(function(p,i){
+      return '<div class="p-card"><div class="flex between mb-8">'+
+        '<div class="flex gap-12"><input value="'+esc(p.name)+'" onchange="updP('+i+',\'name\',this.value)" placeholder="Player name" style="font-size:15px;font-weight:700;border:none;padding:2px 0;width:180px;background:transparent">'+
+        '<div class="flex gap-6"><label class="fl" style="margin:0;font-size:11px">HCP</label><input type="number" min="-2" max="10" value="'+p.hcp+'" onchange="updP('+i+',\'hcp\',+this.value)" style="width:50px;text-align:center;padding:4px"></div></div>'+
+        '<div class="flex gap-6"><span style="font-size:12px;color:var(--text-dim)">'+totalAvailableChukkers(p)+' chukkers avail</span><button class="btn-icon" onclick="rmP('+i+')" title="Remove player">&times;</button></div></div>'+
+        '<div style="padding-left:4px">'+
+        p.horses.map(function(h,hi){
+          return '<div class="horse-row">'+
+            '<span style="color:var(--text-dim);font-size:12px;min-width:16px">'+(hi+1)+'.</span>'+
+            '<input class="horse-name" value="'+esc(h.name)+'" onchange="updH('+i+','+hi+',\'name\',this.value)" placeholder="Horse name">'+
+            '<span class="horse-dbl'+(h.dbl?' on':'')+'" onclick="toggleDbl('+i+','+hi+')">'+(h.dbl?'DOUBLE':'Single')+'</span>'+
+            '<button class="btn-icon" onclick="rmH('+i+','+hi+')" style="font-size:14px">&times;</button>'+
+          '</div>';
+        }).join('')+
+        '<button class="btn btn-sm btn-secondary" style="margin-top:6px;font-size:11px" onclick="addH('+i+')">+ Horse</button>'+
+        '</div></div>';
+    }).join('')+
+    '<div class="flex gap-8 mt-12 no-print"><button class="btn btn-secondary btn-sm" onclick="addP()">+ Add Player</button></div>'+
+  '</div>'+
+  (named.length>=6?'<div style="text-align:right" class="no-print"><button class="btn btn-primary" onclick="goSettings()">Next: Settings &rarr;</button></div>'
+  :'<div class="card" style="text-align:center;padding:40px;color:var(--text-muted)">Add at least 6 named players to continue</div>');
 }
-function addP(){S.players.push({name:'',hcp:0,horses:2,doubling:'no'});save();render();}
-function addMultiple(){for(let i=0;i<4;i++)S.players.push({name:'',hcp:0,horses:2,doubling:'no'});save();render();}
+
+function addP(){S.players.push({name:'',hcp:0,horses:[{name:'',dbl:false},{name:'',dbl:false}]});save();render();}
 function rmP(i){S.players.splice(i,1);save();render();}
 function updP(i,k,v){S.players[i][k]=v;save();render();}
+function addH(pi){S.players[pi].horses.push({name:'',dbl:false});save();render();}
+function rmH(pi,hi){if(S.players[pi].horses.length>1){S.players[pi].horses.splice(hi,1);save();render();}}
+function updH(pi,hi,k,v){S.players[pi].horses[hi][k]=v;save();render();}
+function toggleDbl(pi,hi){S.players[pi].horses[hi].dbl=!S.players[pi].horses[hi].dbl;save();render();}
+function goSettings(){S.settings.chukkers=autoChukkers(S.players,S.settings.format);S.step='settings';save();render();}
 
-// ═══ STEP 2: SETTINGS ═══
+// ═══ SETTINGS PAGE ═══
 function renderSettings(){
-  const s=S.settings;
-  return `
-    <div class="flex between mb-24 no-print">
-      <button class="btn btn-secondary btn-sm" onclick="S.step='players';save();render()">&larr; Back to Players</button>
-      <span style="font-size:13px;color:var(--text-muted)">${S.players.filter(p=>p.name).length} players ready</span>
-    </div>
-    <div class="card mb-24">
-      <h2 class="mb-16">2. Chukker Settings</h2>
-      <div class="grid-2 mb-20">
-        <div><label class="fl">Club / Location</label><input value="${esc(s.clubName)}" onchange="S.settings.clubName=this.value;save()" placeholder="e.g., Myopia Polo Club"></div>
-        <div><label class="fl">Date</label><input type="date" value="${s.date}" onchange="S.settings.date=this.value;save()"></div>
-      </div>
-      <div class="mb-20">
-        <label class="fl">Format</label>
-        <div class="grid-3">
-          ${[{v:'3v3',l:'3 on 3',d:'6+ players'},{v:'4v4',l:'4 on 4',d:'8+ players'},{v:'auto',l:'Auto',d:'Best fit for player count'}].map(o=>`
-            <div class="option-card ${s.format===o.v?'sel':''}" onclick="S.settings.format='${o.v}';save();render()"><div class="option-label">${o.l}</div><div class="option-desc">${o.d}</div></div>
-          `).join('')}
-        </div>
-      </div>
-      <div class="mb-20">
-        <label class="fl">Team Balancing</label>
-        <div class="grid-3">
-          ${[{v:'balanced',l:'Balanced',d:'Even handicap split'},{v:'slow',l:'Tend Slower',d:'Lower-hcp players together'},{v:'fast',l:'Tend Faster',d:'Higher-hcp players together'}].map(o=>`
-            <div class="option-card ${s.balance===o.v?'sel':''}" onclick="S.settings.balance='${o.v}';save();render()"><div class="option-label">${o.l}</div><div class="option-desc">${o.d}</div></div>
-          `).join('')}
-        </div>
-      </div>
-      <div class="mb-20">
-        <label class="fl">Number of Chukkers</label>
-        <div class="grid-4">
-          ${[4,5,6,8].map(n=>`<div class="option-card ${s.chukkers===n?'sel':''}" onclick="S.settings.chukkers=${n};save();render()"><div class="option-label">${n}</div><div class="option-desc">chukkers</div></div>`).join('')}
-        </div>
-      </div>
-    </div>
-    <div style="text-align:right"><button class="btn btn-primary" onclick="generateChart()">Generate Chukker Chart &rarr;</button></div>
-  `;
+  var s=S.settings;
+  var named=S.players.filter(function(p){return p.name});
+  var perSide=s.format==='4v4'?4:s.format==='3v3'?3:(named.length>=8?4:3);
+  var autoC=autoChukkers(S.players,s.format);
+
+  return '<div class="flex between mb-24 no-print"><button class="btn btn-secondary btn-sm" onclick="S.step=\'players\';save();render()">&larr; Players</button><span style="font-size:13px;color:var(--text-muted)">'+named.length+' players, '+perSide+'v'+perSide+'</span></div>'+
+    '<div class="card mb-24"><h2 class="mb-16">2. Settings</h2>'+
+    '<div class="grid-2 mb-20"><div><label class="fl">Club / Location</label><input value="'+esc(s.clubName)+'" onchange="S.settings.clubName=this.value;save()" placeholder="e.g., Myopia Polo Club"></div>'+
+    '<div><label class="fl">Date</label><input type="date" value="'+s.date+'" onchange="S.settings.date=this.value;save()"></div></div>'+
+    '<div class="mb-20"><label class="fl">Format</label><div class="grid-3">'+
+    [{v:'3v3',l:'3 on 3',d:'6+ players'},{v:'4v4',l:'4 on 4',d:'8+ players'},{v:'auto',l:'Auto',d:'Best fit'}].map(function(o){
+      return '<div class="option-card '+(s.format===o.v?'sel':'')+'" onclick="S.settings.format=\''+o.v+'\';S.settings.chukkers=autoChukkers(S.players,\''+o.v+'\');save();render()"><div class="option-label">'+o.l+'</div><div class="option-desc">'+o.d+'</div></div>';
+    }).join('')+'</div></div>'+
+    '<div class="mb-20"><label class="fl">Team Balancing</label><div class="grid-3">'+
+    [{v:'balanced',l:'Balanced',d:'Even handicap split'},{v:'slow',l:'Tend Slower',d:'Lower-hcp together'},{v:'fast',l:'Tend Faster',d:'Higher-hcp together'}].map(function(o){
+      return '<div class="option-card '+(s.balance===o.v?'sel':'')+'" onclick="S.settings.balance=\''+o.v+'\';save();render()"><div class="option-label">'+o.l+'</div><div class="option-desc">'+o.d+'</div></div>';
+    }).join('')+'</div></div>'+
+    '<div class="mb-20"><label class="fl">Number of Chukkers <span style="font-weight:400;text-transform:none">(auto-suggested: '+autoC+')</span></label>'+
+    '<div class="flex gap-8 wrap">'+[3,4,5,6,7,8].map(function(n){
+      return '<div class="option-card '+(s.chukkers===n?'sel':'')+'" onclick="S.settings.chukkers='+n+';save();render()" style="padding:10px 18px"><div class="option-label">'+n+'</div></div>';
+    }).join('')+'</div></div>'+
+    '</div>'+
+    '<div style="text-align:right" class="no-print"><button class="btn btn-primary" onclick="generateChart()">Generate Chukker Chart &rarr;</button></div>';
 }
 
-// ═══ SCHEDULE ALGORITHM ═══
+// ═══ ALGORITHM ═══
 function generateChart(){
-  const players=S.players.filter(p=>p.name.trim());
+  var players=S.players.filter(function(p){return p.name.trim()});
   if(players.length<6){alert('Need at least 6 named players.');return;}
-  const s=S.settings;
-  const perSide=s.format==='4v4'?4:s.format==='3v3'?3:(players.length>=8?4:3);
-  const perChukker=perSide*2;
-  const numChukkers=s.chukkers;
+  var s=S.settings;
+  var perSide=s.format==='4v4'?4:s.format==='3v3'?3:(players.length>=8?4:3);
+  var perChukker=perSide*2;
+  var numChukkers=s.chukkers;
 
-  // Calculate max chukkers each player can play based on horses and doubling
-  players.forEach(p=>{
-    p.maxChukkers=p.doubling==='yes'?p.horses*2:p.horses;
-    p.maxChukkers=Math.min(p.maxChukkers,numChukkers);
-    p.assigned=[];
-    p.lastChukker=-10; // Track last played for doubling spacing
+  // Build expanded horse-chukker slots per player
+  // Each horse gets 1 slot (or 2 if doubled), with doubled horses needing spacing
+  players.forEach(function(p){
+    p._slots=[];
+    p.horses.forEach(function(h,hi){
+      var plays=h.dbl?2:1;
+      for(var k=0;k<plays;k++){p._slots.push({horseIdx:hi,horseName:h.name,isDblPlay:h.dbl&&plays===2});}
+    });
+    p._maxChukkers=p._slots.length;
+    p._assigned=[];     // chukker numbers
+    p._horseUsed=[];    // which horse index used each chukker
+    p._lastChukkerForHorse={};  // horseIdx -> last chukker played
   });
 
-  // Sort players for assignment
-  function sortForBalance(arr,mode){
-    const sorted=[...arr].sort((a,b)=>b.hcp-a.hcp);
-    if(mode==='slow')return sorted.reverse();
-    if(mode==='fast')return sorted;
-    return sorted; // balanced uses snake draft
-  }
+  var chart=[];
 
-  const chart=[];
-
-  for(let c=0;c<numChukkers;c++){
-    // Determine eligible players for this chukker
-    let eligible=players.filter(p=>{
-      if(p.assigned.length>=p.maxChukkers)return false;
-      // If doubling, must skip at least 1 chukker between plays
-      if(p.doubling==='yes'&&p.lastChukker===c-1)return false;
-      return true;
+  for(var c=0;c<numChukkers;c++){
+    // 1. PLAYER COUNT BALANCE FIRST: pick players with fewest chukkers played
+    var eligible=players.filter(function(p){
+      if(p._assigned.length>=p._maxChukkers)return false;
+      // Check if player has any horse available this chukker
+      var hasHorse=false;
+      p.horses.forEach(function(h,hi){
+        var usedCount=p._horseUsed.filter(function(x){return x===hi}).length;
+        var maxForHorse=h.dbl?2:1;
+        if(usedCount>=maxForHorse)return;
+        // If this horse was played last chukker and is doubled, needs rest
+        if(h.dbl&&p._lastChukkerForHorse[hi]===c-1)return;
+        hasHorse=true;
+      });
+      return hasHorse;
     });
 
-    // Sort eligible by fewest chukkers played (fairness), then by handicap
-    eligible.sort((a,b)=>a.assigned.length-b.assigned.length||(b.hcp-a.hcp));
+    // Sort by fewest chukkers first (fairness/player count balance), then handicap as tiebreak
+    eligible.sort(function(a,b){return a._assigned.length-b._assigned.length||b.hcp-a.hcp;});
 
-    // Pick players for this chukker
-    const playing=eligible.slice(0,perChukker);
+    var playing=eligible.slice(0,perChukker);
 
-    // Split into teams based on balance mode
-    let teamA,teamB;
-    if(s.balance==='balanced'){
-      // Snake draft: sort by hcp desc, alternate picks
-      const sorted=[...playing].sort((a,b)=>b.hcp-a.hcp);
-      teamA=[];teamB=[];
-      sorted.forEach((p,i)=>{
-        if(i%4<2)teamA.push(p);else teamB.push(p);
+    // Assign horse for each playing player
+    playing.forEach(function(p){
+      // Pick the best available horse
+      var bestHorse=-1;
+      p.horses.forEach(function(h,hi){
+        var usedCount=p._horseUsed.filter(function(x){return x===hi}).length;
+        var maxForHorse=h.dbl?2:1;
+        if(usedCount>=maxForHorse)return;
+        if(h.dbl&&p._lastChukkerForHorse[hi]===c-1)return;
+        if(bestHorse===-1)bestHorse=hi;
+        // Prefer horses not yet used (fresh first)
+        else if(usedCount<p._horseUsed.filter(function(x){return x===bestHorse}).length)bestHorse=hi;
       });
-      // Trim to perSide
-      while(teamA.length>perSide)teamB.push(teamA.pop());
-      while(teamB.length>perSide)teamA.push(teamB.pop());
+      p._assigned.push(c+1);
+      p._horseUsed.push(bestHorse);
+      p._lastChukkerForHorse[bestHorse]=c;
+      p._currentHorse=bestHorse;
+    });
+
+    // 2. HANDICAP BALANCE SECOND: split into teams
+    var teamA,teamB;
+    if(s.balance==='balanced'){
+      // Snake draft by handicap
+      var sorted=playing.slice().sort(function(a,b){return b.hcp-a.hcp});
+      teamA=[];teamB=[];
+      sorted.forEach(function(p,i){
+        var round=Math.floor(i/2);
+        if(round%2===0){if(i%2===0)teamA.push(p);else teamB.push(p);}
+        else{if(i%2===0)teamB.push(p);else teamA.push(p);}
+      });
     } else if(s.balance==='slow'){
-      const sorted=[...playing].sort((a,b)=>a.hcp-b.hcp);
-      teamA=sorted.slice(0,perSide);
-      teamB=sorted.slice(perSide,perSide*2);
+      var sorted=playing.slice().sort(function(a,b){return a.hcp-b.hcp});
+      teamA=sorted.slice(0,perSide);teamB=sorted.slice(perSide);
     } else {
-      const sorted=[...playing].sort((a,b)=>b.hcp-a.hcp);
-      teamA=sorted.slice(0,perSide);
-      teamB=sorted.slice(perSide,perSide*2);
+      var sorted=playing.slice().sort(function(a,b){return b.hcp-a.hcp});
+      teamA=sorted.slice(0,perSide);teamB=sorted.slice(perSide);
     }
 
-    const sitting=players.filter(p=>!playing.includes(p));
+    // Trim if uneven
+    while(teamA.length>perSide&&teamB.length<perSide)teamB.push(teamA.pop());
+    while(teamB.length>perSide&&teamA.length<perSide)teamA.push(teamB.pop());
 
-    // Record assignments
-    playing.forEach(p=>{p.assigned.push(c+1);p.lastChukker=c;});
+    var sitting=players.filter(function(p){return playing.indexOf(p)<0});
+    var hcpA=teamA.reduce(function(s,p){return s+p.hcp},0);
+    var hcpB=teamB.reduce(function(s,p){return s+p.hcp},0);
 
-    const hcpA=teamA.reduce((s,p)=>s+p.hcp,0);
-    const hcpB=teamB.reduce((s,p)=>s+p.hcp,0);
-
-    chart.push({chukker:c+1,teamA,teamB,sitting,hcpA,hcpB});
+    chart.push({chukker:c+1,teamA:teamA,teamB:teamB,sitting:sitting,hcpA:hcpA,hcpB:hcpB});
   }
 
-  S.chart=chart;
-  S.step='chart';
-  save();render();
+  S.chart=chart.map(function(c){
+    return {
+      chukker:c.chukker,
+      teamA:c.teamA.map(function(p){return{name:p.name,hcp:p.hcp,horse:p.horses[p._currentHorse]?p.horses[p._currentHorse].name:'?',isDbl:p.horses[p._currentHorse]?p.horses[p._currentHorse].dbl:false}}),
+      teamB:c.teamB.map(function(p){return{name:p.name,hcp:p.hcp,horse:p.horses[p._currentHorse]?p.horses[p._currentHorse].name:'?',isDbl:p.horses[p._currentHorse]?p.horses[p._currentHorse].dbl:false}}),
+      sitting:c.sitting.map(function(p){return{name:p.name}}),
+      hcpA:c.hcpA,hcpB:c.hcpB
+    };
+  });
+  S.step='chart';save();render();
 }
 
-// ═══ STEP 3: CHART DISPLAY ═══
+// ═══ CHART DISPLAY ═══
 function renderChart(){
-  const ch=S.chart;
-  const s=S.settings;
-  const players=S.players.filter(p=>p.name.trim());
-  const perSide=ch[0]?ch[0].teamA.length:3;
-  const dateStr=s.date?new Date(s.date+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}):'';
+  var ch=S.chart;if(!ch||!ch.length)return'<div>No chart. Go back and generate.</div>';
+  var s=S.settings;
+  var perSide=ch[0].teamA.length;
+  var dateStr=s.date?new Date(s.date+'T12:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}):'';
 
   // Player summary
-  const summary={};
-  players.forEach(p=>{summary[p.name]={chukkers:0,doubled:p.doubling==='yes'}});
-  ch.forEach(c=>{
-    [...c.teamA,...c.teamB].forEach(p=>{if(summary[p.name])summary[p.name].chukkers++});
+  var summary={};
+  S.players.filter(function(p){return p.name}).forEach(function(p){summary[p.name]={total:0,hcp:p.hcp}});
+  ch.forEach(function(c){
+    c.teamA.concat(c.teamB).forEach(function(p){if(summary[p.name])summary[p.name].total++});
   });
 
-  return `
-    <div class="flex between mb-24 no-print">
-      <button class="btn btn-secondary btn-sm" onclick="S.step='settings';save();render()">&larr; Back to Settings</button>
-      <div class="flex gap-8">
-        <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨 Print Chart</button>
-        <button class="btn btn-primary btn-sm" onclick="shareChart()">📧 Copy for Email</button>
-      </div>
-    </div>
-
-    <div class="card mb-24" id="chart-card">
-      <div style="text-align:center;margin-bottom:20px">
-        <h1 style="font-size:28px;margin-bottom:4px">Chukker Chart</h1>
-        ${s.clubName?'<div style="font-size:16px;color:var(--text-muted);font-family:Libre Baskerville,serif">'+esc(s.clubName)+'</div>':''}
-        ${dateStr?'<div style="font-size:14px;color:var(--text-dim);margin-top:2px">'+dateStr+'</div>':''}
-        <div style="font-size:13px;color:var(--text-muted);margin-top:6px">${ch.length} chukkers &middot; ${perSide}v${perSide} &middot; ${players.length} players &middot; ${s.balance==='balanced'?'Balanced':'Tend '+(s.balance==='slow'?'Slower':'Faster')}</div>
-      </div>
-
-      <table class="chart-table">
-        <thead><tr>
-          <th style="width:60px">Chukker</th>
-          <th>Team A (Brown)</th>
-          <th style="width:50px">HCP</th>
-          <th>Team B (Blue)</th>
-          <th style="width:50px">HCP</th>
-          <th>Sitting Out</th>
-        </tr></thead>
-        <tbody>
-          ${ch.map(c=>`<tr>
-            <td style="font-family:'Libre Baskerville',serif;font-size:18px;font-weight:700;color:var(--accent)">${c.chukker}</td>
-            <td class="team-a">${c.teamA.map(p=>esc(p.name)+(p.doubling==='yes'&&isDoubled(p,c.chukker)?'<span class="doubled">(doubled)</span>':'')).join('<br>')}</td>
-            <td style="font-weight:700;color:var(--accent)">${c.hcpA}</td>
-            <td class="team-b">${c.teamB.map(p=>esc(p.name)+(p.doubling==='yes'&&isDoubled(p,c.chukker)?'<span class="doubled">(doubled)</span>':'')).join('<br>')}</td>
-            <td style="font-weight:700;color:var(--blue)">${c.hcpB}</td>
-            <td class="rest">${c.sitting.map(p=>esc(p.name)).join(', ')||'—'}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-
-      <div class="divider"></div>
-      <h3 class="mb-12">Player Summary</h3>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px">
-        ${Object.entries(summary).map(([name,d])=>`
-          <div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--surface-alt);border-radius:6px;font-size:13px">
-            <span style="font-weight:600">${esc(name)}</span>
-            <span style="color:var(--text-muted)">${d.chukkers} chukkers${d.doubled?' (dbl)':''}</span>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-
-    <div class="no-print" style="text-align:center;margin-top:16px">
-      <button class="btn btn-secondary" onclick="generateChart()">🔄 Regenerate (shuffle teams)</button>
-    </div>
-  `;
-}
-
-function isDoubled(player,chukkerNum){
-  // Check if this player is playing on a doubled horse this chukker
-  const assigned=player.assigned||[];
-  if(assigned.length<=player.horses)return false;
-  return true;
+  return '<div class="flex between mb-24 no-print">'+
+    '<button class="btn btn-secondary btn-sm" onclick="S.step=\'settings\';save();render()">&larr; Settings</button>'+
+    '<div class="flex gap-8"><button class="btn btn-secondary btn-sm" onclick="window.print()">🖨 Print</button><button class="btn btn-primary btn-sm" onclick="shareChart()">📧 Copy for Email</button></div></div>'+
+    '<div class="card mb-24">'+
+    '<div style="text-align:center;margin-bottom:20px">'+
+    '<h1 style="font-size:28px;margin-bottom:4px">Chukker Chart</h1>'+
+    (s.clubName?'<div style="font-size:16px;color:var(--text-muted);font-family:Libre Baskerville,serif">'+esc(s.clubName)+'</div>':'')+
+    (dateStr?'<div style="font-size:14px;color:var(--text-dim);margin-top:2px">'+dateStr+'</div>':'')+
+    '<div style="margin-top:8px">'+
+    '<span class="stat-pill sp-brown">'+ch.length+' chukkers</span>'+
+    '<span class="stat-pill sp-blue">'+perSide+'v'+perSide+'</span>'+
+    '<span class="stat-pill sp-green">'+S.players.filter(function(p){return p.name}).length+' players</span>'+
+    '<span class="stat-pill sp-gold">'+({balanced:'Balanced',slow:'Tend Slower',fast:'Tend Faster'}[s.balance])+'</span>'+
+    '</div></div>'+
+    '<table class="chart-table"><thead><tr>'+
+    '<th style="width:55px">Chk</th><th>Team A (Brown)</th><th style="width:45px">HCP</th><th>Team B (Blue)</th><th style="width:45px">HCP</th><th>Sitting Out</th>'+
+    '</tr></thead><tbody>'+
+    ch.map(function(c){
+      function pCell(p){return esc(p.name)+'<span class="horse-note">on '+esc(p.horse)+(p.isDbl?' <span class="dbl-mark">(dbl)</span>':'')+'</span>';}
+      return '<tr><td style="font-family:Libre Baskerville,serif;font-size:18px;font-weight:700;color:var(--accent)">'+c.chukker+'</td>'+
+        '<td class="team-a">'+c.teamA.map(pCell).join('<br>')+'</td>'+
+        '<td style="font-weight:700;color:var(--accent)">'+c.hcpA+'</td>'+
+        '<td class="team-b">'+c.teamB.map(pCell).join('<br>')+'</td>'+
+        '<td style="font-weight:700;color:var(--blue)">'+c.hcpB+'</td>'+
+        '<td class="rest">'+(c.sitting.length?c.sitting.map(function(p){return esc(p.name)}).join(', '):'—')+'</td></tr>';
+    }).join('')+
+    '</tbody></table>'+
+    '<div style="height:1px;background:var(--border);margin:20px 0"></div>'+
+    '<h3 class="mb-12">Player Summary</h3>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">'+
+    Object.keys(summary).map(function(name){var d=summary[name];return '<div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--surface-alt);border-radius:6px;font-size:13px"><span style="font-weight:600">'+esc(name)+' <span style="color:var(--text-dim);font-weight:400">('+d.hcp+')</span></span><span style="color:var(--text-muted)">'+d.total+' chukkers</span></div>';}).join('')+
+    '</div></div>'+
+    '<div class="no-print" style="text-align:center;margin-top:16px"><button class="btn btn-secondary" onclick="generateChart()">🔄 Regenerate (reshuffle)</button></div>';
 }
 
 function shareChart(){
-  const ch=S.chart;if(!ch)return;
-  const s=S.settings;
-  const perSide=ch[0]?ch[0].teamA.length:3;
-  let text='CHUKKER CHART\n';
-  if(s.clubName)text+=s.clubName+'\n';
-  if(s.date)text+=s.date+'\n';
-  text+=ch.length+' chukkers, '+perSide+'v'+perSide+'\n\n';
-  ch.forEach(c=>{
-    text+='--- Chukker '+c.chukker+' ---\n';
-    text+='Team A ('+c.hcpA+'): '+c.teamA.map(p=>p.name).join(', ')+'\n';
-    text+='Team B ('+c.hcpB+'): '+c.teamB.map(p=>p.name).join(', ')+'\n';
-    if(c.sitting.length)text+='Sitting: '+c.sitting.map(p=>p.name).join(', ')+'\n';
-    text+='\n';
+  var ch=S.chart;if(!ch)return;var s=S.settings;
+  var text='CHUKKER CHART\\n';
+  if(s.clubName)text+=s.clubName+'\\n';
+  if(s.date)text+=s.date+'\\n';
+  text+=ch.length+' chukkers, '+ch[0].teamA.length+'v'+ch[0].teamA.length+'\\n\\n';
+  ch.forEach(function(c){
+    text+='--- Chukker '+c.chukker+' ---\\n';
+    text+='Team A ('+c.hcpA+'): '+c.teamA.map(function(p){return p.name+' on '+p.horse+(p.isDbl?' [dbl]':'')}).join(', ')+'\\n';
+    text+='Team B ('+c.hcpB+'): '+c.teamB.map(function(p){return p.name+' on '+p.horse+(p.isDbl?' [dbl]':'')}).join(', ')+'\\n';
+    if(c.sitting.length)text+='Sitting: '+c.sitting.map(function(p){return p.name}).join(', ')+'\\n';
+    text+='\\n';
   });
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(text).then(()=>alert('Chart copied to clipboard! Paste into email.'));
-  } else {
-    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Chart copied!');
-  }
+  if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){alert('Copied to clipboard!')})}
+  else{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('Copied!')}
 }
 
 render();
