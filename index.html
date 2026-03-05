@@ -141,6 +141,15 @@ footer .sub{font-size:12px;color:var(--text-dim)}
 .season-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:rgba(196,162,92,0.12);color:var(--accent);margin-left:6px}
 .dup-btn{font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(91,141,201,0.1);color:var(--blue);border:1px solid rgba(91,141,201,0.2);cursor:pointer;font-weight:600;font-family:'DM Sans',sans-serif}
 .dup-btn:hover{background:rgba(91,141,201,0.2)}
+
+.autocomplete-wrap{position:relative}
+.ac-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--accent);border-top:none;border-radius:0 0 6px 6px;max-height:200px;overflow-y:auto;z-index:100;display:none;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.ac-dropdown.show{display:block}
+.ac-item{padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.ac-item:hover,.ac-item.highlighted{background:var(--surface-alt)}
+.ac-item .ac-name{font-weight:600}.ac-item .ac-club{font-size:11px;color:var(--text-muted)}
+.ac-item .ac-hcp{font-size:12px;color:var(--accent);font-weight:600}
+.ac-info{font-size:11px;color:var(--teal);margin-left:8px}
 @media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}nav{flex-wrap:wrap}nav button span.nav-label{display:none}h1{font-size:28px}.header-inner{flex-direction:column;gap:12px}.game-card{grid-template-columns:1fr;text-align:center;gap:8px}}
 </style>
 </head>
@@ -504,6 +513,81 @@ function seasonResults(){
   Object.keys(state.results).forEach(function(k){if(gameIds[k])r[k]=state.results[k]});
   return r;
 }
+
+// ═══ USPA NE PLAYER REGISTRY ═══
+const NE_PLAYER_REGISTRY = [{"n":"Abigail 'Abby' Caset","c":"Farmington Polo Club","o":"0","a":"0"},{"n":"Agustin 'Agustin' Wulff Sr.","c":"Kingswood Polo Club","o":"2","a":"3"},{"n":"Al Keshvarzian","c":"Greenwich Polo Club","o":"0","a":"0"},{"n":"Alberto Hamonet","c":"Fairfield County Hunt Club","o":"1","a":"1"},{"n":"Alyson 'Alyson' Poor","c":"Stage Hill Polo Club","o":"0","a":"0"},{"n":"Amanda Roberts","c":"Stage Hill Polo Club","o":"1","a":"2"},{"n":"Andrew 'Drew' Gale","c":"Farmington Polo Club","o":"1.5","a":"3"},{"n":"Ariadne 'Ari' Dogani","c":"Kingswood Polo Club","o":"0.5","a":"2"},{"n":"Augustus 'Augie' Grotnik","c":"Myopia Polo Club","o":"0","a":"2"},{"n":"Brendan Tetreault","c":"Westchester Polo Club","o":"0","a":"0"},{"n":"Caleb 'Caleb' Bryden Sr.","c":"Westchester Polo Club","o":"1","a":"2"},{"n":"Carl 'Cb' Scherer","c":"Myopia Polo Club","o":"2","a":"4"},{"n":"Carlos Maldonado","c":"Acoaxet Polo Club","o":"2","a":"3"},{"n":"Celestino 'Celes' Rivera","c":"Kingswood Polo Club","o":"3","a":"3"},{"n":"Charles 'C.j.' Brown","c":"Myopia Polo Club","o":"0","a":"0"},{"n":"Charles 'Charlie' Bullis","c":"Acoaxet Polo Club","o":"2","a":"3"},{"n":"Chelsea Messinger","c":"Myopia Polo Club","o":"0","a":"0"},{"n":"Christopher 'Chris' Fragomeni Esq.","c":"Westchester Polo Club","o":"0","a":"1"},{"n":"Christopher 'Chris' Green","c":"Giant Valley Polo Club","o":"0","a":"2"},{"n":"Christopher Brant","c":"Greenwich Polo Club","o":"1","a":"1"},{"n":"Christopher Keller","c":"Acoaxet Polo Club","o":"0","a":"1"},{"n":"Cynthia 'Cindy' Stephenson","c":"Westchester Polo Club","o":"0","a":"1"},{"n":"Daniel Keating","c":"Westchester Polo Club","o":"1","a":"2"},{"n":"David 'Dave' Bullis","c":"Acoaxet Polo Club","o":"1","a":"2"},{"n":"David Dunstan","c":"Myopia Polo Club","o":"0","a":"1"},{"n":"David Strouss","c":"Myopia Polo Club","o":"0","a":"1"},{"n":"Dennis Carrion-Diaz","c":"Myopia Polo Club","o":"1","a":"3"},{"n":"Dennis Fitzpatrick","c":"Giant Valley Polo Club","o":"0","a":"2"},{"n":"Donald 'Doo' Little Jr.","c":"Myopia Polo Club","o":"1","a":"3"},{"n":"Dorn Cox","c":"Myopia Polo Club","o":"0","a":"2"},{"n":"Dorn Cox","c":"Tuckaway Polo","o":"0","a":"2"},{"n":"Eduardo Amaya Sr.","c":"Acoaxet Polo Club","o":"2","a":"2"},{"n":"Erica Kratz","c":"Myopia Polo Club","o":"0","a":"1"},{"n":"Ernesto 'Rulo' Trotz II","c":"Kingswood Polo Club","o":"4","a":"5"},{"n":"Estanislao 'Estani' Robledo Puch","c":"Myopia Polo Club","o":"1","a":"1"},{"n":"Estanislao 'Estani' Robledo puch Sr.","c":"Myopia Polo Club","o":"2","a":"4"},{"n":"Federico Wulff","c":"Kingswood Polo Club","o":"3","a":"5"},{"n":"Fernando Baldocchi","c":"Kingswood Polo Club","o":"0.5","a":"2"},{"n":"Frank 'Butch' Butterworth III","c":"Giant Valley Polo Club","o":"0","a":"2"},{"n":"Franz 'Seppi' Colloredo-mansfeld Sr.","c":"Myopia Polo Club","o":"0","a":"2"},{"n":"Franz Colloredo","c":"Myopia Polo Club","o":"0","a":"1"},{"n":"Frederick Borja","c":"Kingswood Polo Club","o":"0","a":"2"},{"n":"Grace Grotnik","c":"Myopia Polo Club","o":"0.5","a":"1"},{"n":"Guillermo 'Tomas' Gibelli","c":"Farmington Polo Club","o":"1","a":"2"},{"n":"Heather Souto","c":"Farmington Polo Club","o":"1","a":"2"},{"n":"Hilary Mroz-Blythe","c":"Giant Valley Polo Club","o":"0.5","a":"2"},{"n":"Horacio 'Horacito' Herran Marco","c":"Yale Polo Club","o":"0","a":"1"},{"n":"Hunter Jelsch","c":"Giant Valley Polo Club","o":"2","a":"3"},{"n":"Jacek 'Yaz' Grotnik","c":"Myopia Polo Club","o":"0","a":"2"},{"n":"James 'Jim' Deangelis","c":"Yale Polo Club","o":"1","a":"3"},{"n":"James 'Jim' Thames","c":"Kingswood Polo Club","o":"0","a":"1"},{"n":"James Grayken","c":"Myopia Polo Club","o":"0","a":"1"},{"n":"Joaquin Boero Sr.","c":"Kingswood Polo Club","o":"0","a":"0"},{"n":"Joaquin Uribe","c":"UCONN Polo Club","o":"2","a":"2"},{"n":"John 'William' Crisp","c":"Westchester Polo Club","o":"1","a":"2"},{"n":"John Miller","c":"Myopia Polo Club","o":"0","a":"0"},{"n":"John Wigdahl","c":"Westchester Polo Club","o":"1","a":"2"},{"n":"Johnny Alvarez Belen","c":"Farmington Polo Club","o":"1","a":"3"},{"n":"Jonathan Kaye","c":"Westchester Polo Club","o":"1","a":"1"},{"n":"Jose Barrientos","c":"Stage Hill Polo Club","o":"2","a":"2"},{"n":"Jose Franco","c":"Myopia Polo Club","o":"0","a":"0"},{"n":"Juan Viana Sr.","c":"Myopia Polo Club","o":"0","a":"1"},{"n":"Julian Penados","c":"Yale Polo Club","o":"0.5","a":"3"},{"n":"Julie Deangelis PhD","c":"Farmington Polo Club","o":"0","a":"0"},{"n":"Kevin Horan","c":"Westchester Polo Club","o":"2","a":"2"},{"n":"Kimberly Maguire","c":"Stage Hill Polo Club","o":"0","a":"1"},{"n":"Leighton Jordan Sr.","c":"Greenwich Polo Club","o":"0","a":"1"},{"n":"Leonardo Borja","c":"Kingswood Polo Club","o":"0","a":"2"},{"n":"Loryn Butterworth","c":"Giant Valley Polo Club","o":"0","a":"0"},{"n":"Luc Hardy","c":"Fairfield County Hunt Club","o":"0","a":"2"},{"n":"Luis Alfredo Rodriguez","c":"Farmington Polo Club","o":"2","a":"2"},{"n":"Mark Tashjian","c":"Sugarbush Polo Club","o":"1.5","a":"3"},{"n":"Matthew 'Matt' Roque","c":"Farmington Polo Club","o":"0","a":"0"},{"n":"Mia Purdom","c":"Westchester Polo Club","o":"0","a":"1"},{"n":"Neil 'Jed' Raymond Jr.","c":"Myopia Polo Club","o":"2","a":"3"},{"n":"Nicholas 'Nick' Snow","c":"Myopia Polo Club","o":"3","a":"4"},{"n":"Oscar Monzon","c":"Westchester Polo Club","o":"2","a":"3"},{"n":"Patrick Andrew","c":"Sugarbush Polo Club","o":"1","a":"2"},{"n":"Patrick Quigley","c":"Westchester Polo Club","o":"0","a":"0"},{"n":"Peter Brant Sr.","c":"Greenwich Polo Club","o":"1.5","a":"5"},{"n":"Peter Friedman MD","c":"Acoaxet Polo Club","o":"0","a":"0"},{"n":"Peter Orthwein Sr.","c":"Greenwich Polo Club","o":"0","a":"3"},{"n":"Peter Poor","c":"Stage Hill Polo Club","o":"0","a":"3"},{"n":"Phillip 'Pj' Deangelis","c":"Yale Polo Club","o":"0","a":"1"},{"n":"Phoebe Ingram","c":"Myopia Polo Club","o":"0","a":"0"},{"n":"Reed 'Parker' Miller","c":"Myopia Polo Club","o":"1","a":"1"},{"n":"Robert 'Rob' Wilkinson","c":"Myopia Polo Club","o":"0","a":"1"},{"n":"Robert 'Robert' Tyszkowski","c":"Myopia Polo Club","o":"0","a":"0"},{"n":"Robert Mehm","c":"Myopia Polo Club","o":"0","a":"2"},{"n":"Rory Torrey","c":"Westchester Polo Club","o":"2","a":"3"},{"n":"Samuel 'Sam' Shore","c":"Westchester Polo Club","o":"1","a":"2"},{"n":"Samuel Clemens","c":"Westchester Polo Club","o":"1","a":"1"},{"n":"Segundo Caimi","c":"Kingswood Polo Club","o":"4","a":"4"},{"n":"Senter Johnson","c":"Fairfield County Hunt Club","o":"0","a":"0"},{"n":"Seth Gardner","c":"Sugarbush Polo Club","o":"0","a":"1"},{"n":"Simon Colloredo-Mansfeld","c":"Myopia Polo Club","o":"0","a":"2"},{"n":"Sophia Deangelis","c":"Farmington Polo Club","o":"0","a":"0"},{"n":"Stephanie Still","c":"Acoaxet Polo Club","o":"0","a":"1"},{"n":"Stephen Burr Jr.","c":"Myopia Polo Club","o":"2","a":"2"},{"n":"Stuart 'Pinto' Odell","c":"Westchester Polo Club","o":"0","a":"2"},{"n":"Thomas 'Mitch' Taylor","c":"Sugarbush Polo Club","o":"0","a":"1"},{"n":"Timothy Day","c":"Westchester Polo Club","o":"0.5","a":"1"},{"n":"Tomas 'Tommy' Alberdi","c":"Greenwich Polo Club","o":"4","a":"4"},{"n":"Tomas 'Tommy' Erbetti","c":"Kingswood Polo Club","o":"0","a":"0"},{"n":"Travis Soto","c":"Farmington Polo Club","o":"0","a":"0"},{"n":"Ursula 'Ula' Green","c":"Acoaxet Polo Club","o":"0.5","a":"0"},{"n":"Walter Eayrs","c":"Myopia Polo Club","o":"1","a":"2"},{"n":"Whitney Ellis","c":"Myopia Polo Club","o":"2","a":"2"},{"n":"William 'Albany' Mulholland","c":"Harvard University Polo Club","o":"1","a":"1"},{"n":"William 'Albert' Ellis","c":"Myopia Polo Club","o":"1","a":"1"},{"n":"Winston Painter","c":"UCONN Polo Club","o":"1.5","a":"3"},{"n":"Zoeline 'Minnie' Keating","c":"Westchester Polo Club","o":"0.5","a":"2"}];
+
+// NE Club list for dropdowns
+const NE_CLUBS_LIST = [
+  'Acoaxet Polo Club','Fairfield County Hunt Club','Farmington Polo Club',
+  'Giant Valley Polo Club','Greenwich Polo Club','Harvard University Polo Club',
+  'Kingswood Polo Club','Myopia Polo Club','Stage Hill Polo Club',
+  'Sugarbush Polo Club','Tuckaway Polo','UCONN Polo Club',
+  'Westchester Polo Club','Yale Polo Club'
+];
+
+function playerAutocomplete(inputId, hcpInputId) {
+  var input = document.getElementById(inputId);
+  if (!input) return;
+  // Create dropdown if not exists
+  var dropId = inputId + '-ac';
+  var existing = document.getElementById(dropId);
+  if (existing) existing.remove();
+  var drop = document.createElement('div');
+  drop.id = dropId;
+  drop.className = 'ac-dropdown';
+  input.parentNode.style.position = 'relative';
+  input.parentNode.appendChild(drop);
+
+  input.addEventListener('input', function() {
+    var val = this.value.toLowerCase().trim();
+    if (val.length < 2) { drop.classList.remove('show'); return; }
+    var matches = NE_PLAYER_REGISTRY.filter(function(p) {
+      return p.n.toLowerCase().indexOf(val) >= 0;
+    }).slice(0, 8);
+    if (matches.length === 0) { drop.classList.remove('show'); return; }
+    drop.innerHTML = matches.map(function(p, i) {
+      return '<div class="ac-item" data-idx="' + i + '" onclick="selectPlayer(\'' + inputId + '\',\'' + (hcpInputId||'') + '\',this)"><div><span class="ac-name">' + esc(p.n) + '</span><br><span class="ac-club">' + esc(p.c) + '</span></div><span class="ac-hcp">A:' + p.a + ' / O:' + p.o + '</span></div>';
+    }).join('');
+    drop.classList.add('show');
+  });
+
+  input.addEventListener('blur', function() {
+    setTimeout(function() { drop.classList.remove('show'); }, 200);
+  });
+}
+
+function selectPlayer(inputId, hcpInputId, el) {
+  var name = el.querySelector('.ac-name').textContent;
+  var hcpText = el.querySelector('.ac-hcp').textContent;
+  document.getElementById(inputId).value = name;
+  // Extract arena handicap and set it
+  if (hcpInputId) {
+    var match = hcpText.match(/A:([\d.]+)/);
+    if (match) {
+      var hcpInput = document.getElementById(hcpInputId);
+      if (hcpInput) hcpInput.value = match[1];
+    }
+  }
+  el.parentNode.classList.remove('show');
+  // Trigger state update
+  var evt = new Event('change', { bubbles: true });
+  document.getElementById(inputId).dispatchEvent(evt);
+  if (hcpInputId) {
+    var hEvt = new Event('change', { bubbles: true });
+    document.getElementById(hcpInputId).dispatchEvent(hEvt);
+  }
+}
+
+function clubDropdownHtml(selectId, currentValue, onchangeExpr) {
+  return '<select id="' + selectId + '" onchange="' + onchangeExpr + '" style="width:100%;padding:10px 14px;background:var(--surface-alt);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;font-family:DM Sans,sans-serif">' +
+    '<option value="">Select club...</option>' +
+    NE_CLUBS_LIST.map(function(c) {
+      return '<option value="' + c + '"' + (c === currentValue ? ' selected' : '') + '>' + c + '</option>';
+    }).join('') +
+    '<option value="Other">Other (type in)</option></select>';
+}
+
 function formatTag(format){
   if(format==='outdoor-arena')return'<span class="tag tag-outdoor-arena">Outdoor Arena</span>';
   if(format==='outdoor')return'<span class="tag tag-outdoor">Outdoor</span>';
@@ -516,6 +600,12 @@ function formatTag(format){
 function render(){
   const app=document.getElementById('app');
   setTimeout(renderSeasonBar,0);
+  setTimeout(function(){
+    if(state.tab==='teams'&&state.showTeamForm){
+      [1,2,3].forEach(function(i){playerAutocomplete('tf-p'+i,'tf-ph'+i);});
+      [1,2].forEach(function(i){playerAutocomplete('tf-a'+i,'tf-ah'+i);});
+    }
+  },50);
   const tm=tmMap(),vm=vmMap();
   const tabs=['home','teams','venues','schedule','results','standings','stats','resources'];
   const tabIcons={home:'trophy',teams:'users',venues:'map',schedule:'calendar',results:'edit',standings:'bar',stats:'star',resources:'horse'};
@@ -662,12 +752,12 @@ function renderTeams(tm,vm){
       <div class="mb-16"><label class="field-label">Team Logo</label>${logoPicker('tp-logo',f.logo)}</div>
       <div class="grid-2 mb-16">
         <div><label class="field-label">Team Name</label><input id="tf-name" value="${esc(f.name)}" oninput="state.teamForm.name=this.value" placeholder="e.g., Myopia Marauders"></div>
-        <div><label class="field-label">Primary Club</label><input id="tf-club" value="${esc(f.club)}" oninput="state.teamForm.club=this.value" placeholder="e.g., Myopia Polo Club"></div>
+        <div><label class="field-label">Primary Club</label><select oninput="state.teamForm.club=this.value" style="width:100%"><option value="">Select club...</option>${NE_CLUBS_LIST.map(c=>'<option value="'+c+'"'+(f.club===c?' selected':'')+'>'+c+'</option>').join('')}<option value="Other"${!NE_CLUBS_LIST.includes(f.club)&&f.club?' selected':''}>Other</option></select></div>
         <div><label class="field-label">Goal Level</label><select onchange="state.teamForm.goalLevel=this.value"><option value="low" ${f.goalLevel==='low'?'selected':''}>Low Goal (0–4)</option><option value="medium" ${f.goalLevel==='medium'?'selected':''}>Medium Goal (4–8)</option></select></div>
-        <div><label class="field-label">Home Venue</label><select onchange="state.teamForm.homeVenue=this.value"><option value="">Select...</option>${state.venues.map(v=>`<option value="${v.id}" ${f.homeVenue===v.id?'selected':''}>${esc(v.name)}</option>`).join('')}</select></div>
+        <div><label class="field-label">Home Venue</label><select onchange="state.teamForm.homeVenue=this.value"><option value="">Select venue...</option>${state.venues.map(v=>`<option value="${v.id}" ${f.homeVenue===v.id?'selected':''}>${esc(v.name)} (${v.st})</option>`).join('')}</select></div>
       </div>
-      <label class="field-label">Players (3 required)</label><div style="display:grid;gap:8px" class="mb-16">${[1,2,3].map(i=>`<div class="grid-2"><input value="${esc(f['p'+i])}" oninput="state.teamForm.p${i}=this.value" placeholder="Player ${i}"><input value="${esc(f['p'+i+'h'])}" oninput="state.teamForm.p${i}h=this.value" placeholder="Handicap"></div>`).join('')}</div>
-      <label class="field-label">Alternates (optional)</label><div style="display:grid;gap:8px" class="mb-20">${[1,2].map(i=>`<div class="grid-2"><input value="${esc(f['a'+i])}" oninput="state.teamForm.a${i}=this.value" placeholder="Alternate ${i}"><input value="${esc(f['a'+i+'h'])}" oninput="state.teamForm.a${i}h=this.value" placeholder="Handicap"></div>`).join('')}</div>
+      <label class="field-label">Players (3 required) <span class="ac-info">Type to search USPA registry</span></label><div style="display:grid;gap:8px" class="mb-16">${[1,2,3].map(i=>`<div class="grid-2"><div class="autocomplete-wrap"><input id="tf-p${i}" value="${esc(f['p'+i])}" oninput="state.teamForm['p'+${i}]=this.value" onchange="state.teamForm['p'+${i}]=this.value" placeholder="Player ${i} — start typing name"></div><input id="tf-ph${i}" value="${esc(f['p'+i+'h'])}" oninput="state.teamForm['p'+${i}+'h']=this.value" onchange="state.teamForm['p'+${i}+'h']=this.value" placeholder="Handicap"></div>`).join('')}</div>
+      <label class="field-label">Alternates (optional)</label><div style="display:grid;gap:8px" class="mb-20">${[1,2].map(i=>`<div class="grid-2"><div class="autocomplete-wrap"><input id="tf-a${i}" value="${esc(f['a'+i])}" oninput="state.teamForm['a'+${i}]=this.value" onchange="state.teamForm['a'+${i}]=this.value" placeholder="Alternate ${i}"></div><input id="tf-ah${i}" value="${esc(f['a'+i+'h'])}" oninput="state.teamForm['a'+${i}+'h']=this.value" onchange="state.teamForm['a'+${i}+'h']=this.value" placeholder="Handicap"></div>`).join('')}</div>
       <div class="flex gap-8"><button class="btn btn-primary" onclick="submitTeam()">${icon('check')} Submit</button><button class="btn btn-secondary" onclick="setState({showTeamForm:false})">Cancel</button></div>
     </div>`:''}
     ${seasonTeams().length>0?`<div class="grid-2">${seasonTeams().map(t=>`
