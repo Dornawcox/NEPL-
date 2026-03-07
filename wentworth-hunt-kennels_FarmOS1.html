@@ -51,11 +51,7 @@ body {
   overflow-y: auto;
 }
 
-#main-content {
-  margin-left: 240px;
-  min-height: 100vh;
-  flex: 1;
-}
+/* #main-content removed — correct ID is #main below */
 
 .sidebar-brand {
   padding: 28px 20px 20px;
@@ -1131,7 +1127,7 @@ body {
   body { overflow-x:hidden; }
   #mobile-header { display:flex; }
   #sidebar { display:none !important; }
-  #main-content { margin-left:0 !important; padding-top:52px; width:100%; }
+  #main { margin-left:0 !important; padding-top:52px; width:100%; }
   .page-content { padding:12px !important; }
   .stat-grid { grid-template-columns:1fr 1fr; gap:8px; }
   .dash-grid { grid-template-columns:1fr; }
@@ -1408,11 +1404,11 @@ body {
     <div class="page-header">
       <div>
         <div class="page-title">Kennel Overview</div>
-        <div class="page-subtitle">Good morning — Friday 6 March 2026 · <strong style="color:var(--gold)">🎉 50th Anniversary Season</strong></div>
+        <div class="page-subtitle">Good morning — Friday 6 March 2026 · <strong style="color:var(--gold)">50th Anniversary Season</strong></div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-outline" onclick="showPage('events')">📅 Schedule Event</button>
-        <button class="btn btn-gold" onclick="showPage('chores')">✅ View Chores</button>
+        <button class="btn btn-outline" onclick="showPage('events')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="3" width="12" height="11" rx="1"/><line x1="5" y1="1" x2="5" y2="5"/><line x1="11" y1="1" x2="11" y2="5"/><line x1="2" y1="7" x2="14" y2="7"/></svg>Schedule Event</button>
+        <button class="btn btn-gold" onclick="showPage('chores')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="2" width="12" height="12" rx="1.5"/><polyline points="5,8 7,11 11,5"/></svg>View Chores</button>
       </div>
     </div>
     <div class="content-area">
@@ -1497,7 +1493,7 @@ body {
         <div>
           <div class="card" style="margin-bottom:20px">
             <div class="card-header">
-              <span class="card-title">⚠️ Alerts</span>
+              <span class="card-title"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><path d="M8 2L14 13H2L8 2Z"/><line x1="8" y1="7" x2="8" y2="10"/><circle cx="8" cy="12" r="0.5" fill="currentColor"/></svg>Alerts</span>
             </div>
             <div class="card-body">
               <div class="alert-item">
@@ -1571,13 +1567,13 @@ body {
         <div class="page-subtitle">34 hounds — FarmOS asset--animal records</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-outline">⬇ Export JSON</button>
+        <button class="btn btn-outline"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><path d="M8 2v9M4 8l4 5 4-5"/><line x1="2" y1="14" x2="14" y2="14"/></svg>Export JSON</button>
         <button class="btn btn-gold" onclick="openEditHound('new')">+ Add Hound</button>
       </div>
     </div>
     <div class="content-area">
       <div class="filter-bar">
-        <input class="search-box" type="text" placeholder="🔍  Search hounds…" oninput="filterHounds(this.value)">
+        <input class="search-box" type="text" placeholder="Search hounds…" oninput="filterHounds(this.value)">
         <select class="filter-select" onchange="filterHounds()">
           <option value="">All Runs</option>
           <option>Run 1</option><option>Run 2</option><option>Run 3</option>
@@ -1624,8 +1620,8 @@ body {
         <div class="page-subtitle">Run assignments, compatibility &amp; schedule</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-outline">📋 Print Layout</button>
-        <button class="btn btn-gold">⚙ Manage Runs</button>
+        <button class="btn btn-outline"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><rect x="3" y="1" width="10" height="14" rx="1"/><line x1="6" y1="6" x2="10" y2="6"/><line x1="6" y1="9" x2="10" y2="9"/></svg>Print Layout</button>
+        <button class="btn btn-gold"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M11.54 4.46l-1.41 1.41M4.46 11.54l-1.41 1.41"/></svg>Manage Runs</button>
       </div>
     </div>
     <div class="content-area">
@@ -1650,7 +1646,7 @@ body {
       <div id="health-active-heat" style="margin-bottom:24px"></div>
       <div id="health-cycle-history" style="margin-bottom:24px"></div>
       <div class="card">
-        <div class="card-header"><span class="card-title">📋 Observation Log</span><span class="ornament">FarmOS log--observation</span></div>
+        <div class="card-header"><span class="card-title">Observation Log</span><span class="ornament">FarmOS log--observation</span></div>
         <div class="card-body">
           <div id="health-obs-log"></div>
         </div>
@@ -1798,8 +1794,8 @@ body {
         <div class="page-subtitle">Membership · Liability releases · Hunt protocols</div>
       </div>
       <div class="page-actions">
-        <button class="btn btn-gold" onclick="openDocSignModal('wwh-annual-release',null)">✍ Sign Release</button>
-        <button class="btn btn-outline" onclick="openViewSigsModal()">📁 Archive</button>
+        <button class="btn btn-gold" onclick="openDocSignModal('wwh-annual-release',null)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><path d="M10 2L14 6L6 14H2V10L10 2Z"/><line x1="8" y1="4" x2="12" y2="8"/></svg>Sign Release</button>
+        <button class="btn btn-outline" onclick="openViewSigsModal()"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><rect x="1" y="4" width="14" height="10" rx="1"/><path d="M1 4l2-3h10l2 3"/><line x1="6" y1="9" x2="10" y2="9"/></svg>Archive</button>
       </div>
     </div>
     <div class="content-area">
@@ -1818,12 +1814,12 @@ body {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
         <div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-header"><span class="card-title">🏆 Membership Types</span><span class="ornament">2026 Dues</span></div>
+            <div class="card-header"><span class="card-title">Membership Types</span><span class="ornament">2026 Dues</span></div>
             <div class="card-body">
               <table class="hound-table">
                 <thead><tr><th>Type</th><th>Annual Dues</th><th>Hunt Limit</th><th>Notes</th></tr></thead>
                 <tbody>
-                  <tr><td><strong style="color:var(--gold)">⭐ GOLD Patron</strong></td><td style="color:var(--gold)">$1,200</td><td>Unlimited</td><td style="font-size:12px;color:var(--muted)">50th anniversary tier · Guest perks · Free pace entry</td></tr>
+                  <tr><td><strong style="color:var(--gold)">GOLD Patron</strong></td><td style="color:var(--gold)">$1,200</td><td>Unlimited</td><td style="font-size:12px;color:var(--muted)">50th anniversary tier · Guest perks · Free pace entry</td></tr>
                   <tr><td><strong>Patron</strong></td><td>$840</td><td>Unlimited</td><td style="font-size:12px;color:var(--muted)">Full + guest capping privilege (up to 3×)</td></tr>
                   <tr><td><strong>Full</strong></td><td>$700</td><td>Unlimited</td><td style="font-size:12px;color:var(--muted)">QHH cert after 14 hunts/year</td></tr>
                   <tr><td><strong>Patron Family</strong></td><td>$1,400</td><td>Unlimited</td><td style="font-size:12px;color:var(--muted)">2 spouses + 1 junior + guest privilege</td></tr>
@@ -1836,7 +1832,7 @@ body {
             </div>
           </div>
           <div class="card">
-            <div class="card-header"><span class="card-title">💰 Capping Fees (Guest Hunting)</span></div>
+            <div class="card-header"><span class="card-title">Capping Fees (Guest Hunting)</span></div>
             <div class="card-body">
               <table class="hound-table">
                 <thead><tr><th>Season</th><th>Fee</th><th>Hunt Limit</th></tr></thead>
@@ -1854,7 +1850,7 @@ body {
         </div>
         <div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-header"><span class="card-title">💳 Payment Options</span></div>
+            <div class="card-header"><span class="card-title">Payment Options</span></div>
             <div class="card-body" style="font-size:14px;line-height:1.9;color:var(--cream-dark)">
               <p style="margin-bottom:8px"><strong>Credit Card:</strong> <a href="https://wentworth-hunt.square.site/shop/membership/2" target="_blank" style="color:var(--gold)">Pay membership online ↗</a> or <a href="https://wentworth-hunt.square.site/product/capping-fee/21" target="_blank" style="color:var(--gold)">pay capping fee ↗</a><br><span style="font-size:12px;color:var(--muted)">(Credit card fees passed to purchaser as WWH is a non-profit)</span></p>
               <p style="margin-bottom:8px"><strong>Venmo:</strong> @wentworth-hunt — include your name + membership type or capping date</p>
@@ -1862,7 +1858,7 @@ body {
             </div>
           </div>
           <div class="card">
-            <div class="card-header"><span class="card-title">🎉 GOLD Patron Perks — 50th Anniversary</span></div>
+            <div class="card-header"><span class="card-title">GOLD Patron Perks — 50th Anniversary</span></div>
             <div class="card-body" style="font-size:14px;line-height:1.9;color:var(--cream-dark)">
               <p>✦ Guest capping waived for each hunt (up to 3× per guest/year)</p>
               <p>✦ Gold Patron lapel pin button</p>
@@ -1906,7 +1902,7 @@ body {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
         <div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-header"><span class="card-title">🎩 Formal Season Attire</span></div>
+            <div class="card-header"><span class="card-title">Formal Season Attire</span></div>
             <div class="card-body" style="font-size:14px;line-height:1.9;color:var(--cream-dark)">
               <p><strong>Staff &amp; Masters:</strong> Red (scarlet) coats, white breeches, black top hats or helmets</p>
               <p><strong>Members in Colors:</strong> By invitation of Masters — scarlet or black coat with hunt colors on collar</p>
@@ -1917,7 +1913,7 @@ body {
             </div>
           </div>
           <div class="card">
-            <div class="card-header"><span class="card-title">🐕 Hound &amp; Kennel Etiquette</span></div>
+            <div class="card-header"><span class="card-title">Hound &amp; Kennel Etiquette</span></div>
             <div class="card-body" style="font-size:14px;line-height:1.9;color:var(--cream-dark)">
               <p>✦ Never speak to or feed hounds without permission of Huntsman or Kennelman</p>
               <p>✦ Never enter kennel runs without Chuck Cox (Kennelman) present</p>
@@ -1930,7 +1926,7 @@ body {
         </div>
         <div>
           <div class="card" style="margin-bottom:20px">
-            <div class="card-header"><span class="card-title">🏇 Field Etiquette</span></div>
+            <div class="card-header"><span class="card-title">Field Etiquette</span></div>
             <div class="card-body" style="font-size:14px;line-height:1.9;color:var(--cream-dark)">
               <p>✦ Follow the Field Master at all times — never overtake</p>
               <p>✦ Never ride between hounds and a fox; never head a fox</p>
@@ -1945,7 +1941,7 @@ body {
             </div>
           </div>
           <div class="card">
-            <div class="card-header"><span class="card-title">🏡 Tuckaway Farm Territory</span></div>
+            <div class="card-header"><span class="card-title">Tuckaway Farm Territory</span></div>
             <div class="card-body" style="font-size:14px;line-height:1.9;color:var(--cream-dark)">
               <p style="font-style:italic;color:var(--muted);margin-bottom:8px">Home of WWH Kennels — Lee, NH</p>
               <p>250+ acres along the Oyster River · Organic farm (vegetables, fruits, hay, blueberries, grains, livestock &amp; poultry)</p>
@@ -2048,7 +2044,7 @@ body {
         <div style="display:flex;gap:12px;margin-top:8px">
           <button class="btn btn-gold" onclick="toast('Membership application saved ✓')">Submit Application</button>
           <button class="btn btn-outline">Save Draft</button>
-          <button class="btn btn-outline">⬇ Print PDF</button>
+          <button class="btn btn-outline"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><path d="M8 2v9M4 8l4 5 4-5"/><line x1="2" y1="14" x2="14" y2="14"/></svg>Print PDF</button>
         </div>
       </div>
     </div>
@@ -2122,7 +2118,7 @@ body {
 
         <div style="display:flex;gap:12px">
           <button class="btn btn-gold" onclick="toast('Waiver signed and filed ✓')">Sign &amp; Submit</button>
-          <button class="btn btn-outline">⬇ Print PDF</button>
+          <button class="btn btn-outline"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><path d="M8 2v9M4 8l4 5 4-5"/><line x1="2" y1="14" x2="14" y2="14"/></svg>Print PDF</button>
         </div>
       </div>
     </div>
@@ -3604,7 +3600,7 @@ function renderActiveHeat(){
       </td>
     </tr>`;
   }).join('');
-  el.innerHTML=`<div class="card"><div class="card-header"><span class="card-title">🌡 Active Heat Cycles</span><span class="ornament">Segregated Runs</span></div><div class="card-body">
+  el.innerHTML=`<div class="card"><div class="card-header"><span class="card-title">Active Heat Cycles</span><span class="ornament">Segregated Runs</span></div><div class="card-body">
     <table class="hound-table"><thead><tr><th>Hound</th><th>Start Date</th><th>Day #</th><th>Isolated In</th><th>Expected End</th><th>Status</th><th>Actions</th></tr></thead>
     <tbody>${rows}</tbody></table></div></div>`;
 }
@@ -3625,7 +3621,7 @@ function renderCycleHistory(){
       <td><button class="btn btn-outline btn-sm" onclick="openAddHeatCycle('${h.id}')">+ Cycle</button></td>
     </tr>`;
   }).join('');
-  el.innerHTML=`<div class="card"><div class="card-header"><span class="card-title">📋 Heat Cycle History</span></div><div class="card-body">
+  el.innerHTML=`<div class="card"><div class="card-header"><span class="card-title">Heat Cycle History</span></div><div class="card-body">
     <table class="hound-table"><thead><tr><th>Hound</th><th>Cycle 1</th><th>Cycle 2</th><th>Cycle 3</th><th>Avg Interval</th><th>Latest Notes</th><th></th></tr></thead>
     <tbody>${rows}</tbody></table></div></div>`;
 }
@@ -4094,10 +4090,11 @@ class FarmOSClient {
   // ---------------------------------------------------------------------------
   // Configuration
   // ---------------------------------------------------------------------------
-  configure(host, client_id, scope) {
-    this._cfg.host      = (host || '').replace(/\/+$/, '');
-    this._cfg.client_id = client_id || 'farm';
-    this._cfg.scope     = scope     || 'farm_manager';
+  configure(host, client_id, scope, client_secret) {
+    this._cfg.host          = (host || '').replace(/\/+$/, '');
+    this._cfg.client_id     = client_id || 'farm';
+    this._cfg.scope         = scope     || 'farm_manager';
+    this._cfg.client_secret = client_secret || '';
     this._persist();
   }
 
@@ -4169,7 +4166,13 @@ class FarmOSClient {
       this._storeToken(tok);
       this._emit('connected', 'Connected to ' + this._cfg.host);
     } catch (e) {
-      this._emit('error', 'Auth code exchange failed: ' + e.message);
+      var msg = e.message || '';
+      if (msg.includes('invalid_client')) {
+        msg = 'invalid_client — Check: (1) Client ID matches farmOS consumer, (2) Redirect URI is registered in farmOS Admin → Simple OAuth → Consumers, (3) Client Secret if your consumer requires one.';
+      } else if (msg.includes('invalid_grant')) {
+        msg = 'invalid_grant — Authorization code expired or already used. Try connecting again.';
+      }
+      this._emit('error', 'Auth code exchange failed: ' + msg);
     }
   }
 
@@ -4187,6 +4190,7 @@ class FarmOSClient {
       client_id:  this._cfg.client_id,
       scope:      this._cfg.scope
     });
+    if (this._cfg.client_secret) body.set('client_secret', this._cfg.client_secret);
     var tok = await this._tokenPost(body);
     this._storeToken(tok);
     this._emit('connected', 'Connected to ' + this._cfg.host);
@@ -4239,11 +4243,12 @@ class FarmOSClient {
     } catch (netErr) {
       // TypeError: Failed to fetch → almost always a CORS or network error
       var isFile = window.location.protocol === 'file:';
+      var origin = window.location.origin || 'this page';
       if (netErr instanceof TypeError) {
         throw new Error(
           isFile
-            ? 'Cannot reach farmOS from a local file. Save this page to a web server, or open it via http://localhost.'
-            : 'Network error — could not reach ' + this._cfg.host + '. Check URL and that farmOS has CORS enabled for this origin.'
+            ? 'Running from a local file — browsers block cross-origin requests from file://. Host this page on a web server (even python3 -m http.server works) then reconnect.'
+            : 'CORS blocked — farmOS at ' + this._cfg.host + ' must allow origin: ' + origin + '. In farmOS go to Admin → Configuration → Web Services → CORS and add that origin, then re-enable the Simple OAuth Password Credentials module.'
         );
       }
       throw netErr;
@@ -4570,11 +4575,12 @@ class FarmOSPanel {
   // ---------------------------------------------------------------------------
   _readSettings() {
     var modal = document.getElementById('fos-modal');
-    var host  = (modal.querySelector('#fos-host').value || '').trim().replace(/\/+$/, '');
-    var cid   = (modal.querySelector('#fos-cid').value  || 'farm').trim();
-    var scope = modal.querySelector('#fos-scope').value || 'farm_manager';
+    var host   = (modal.querySelector('#fos-host').value || '').trim().replace(/\/+$/, '');
+    var cid    = (modal.querySelector('#fos-cid').value  || 'farm').trim();
+    var secret = (modal.querySelector('#fos-secret') ? modal.querySelector('#fos-secret').value : '') || '';
+    var scope  = modal.querySelector('#fos-scope').value || 'farm_manager';
     if (!host) { this._setStatus('Enter a farmOS server URL first', 'err'); return false; }
-    this._client.configure(host, cid, scope);
+    this._client.configure(host, cid, scope, secret);
     return true;
   }
 
@@ -4684,7 +4690,10 @@ class FarmOSPanel {
 
     var host  = c.host || '';
     var cid   = c.client_id || 'farm';
+    var secret = c.client_secret || '';
     var scope = c.scope || 'farm_manager';
+    var redir  = window.location.href.split('?')[0].split('#')[0];
+    var origin = window.location.origin || window.location.protocol + '//' + window.location.host || 'file://';
     var scopes = ['farm_manager', 'farm_worker', 'farm_viewer'];
     var scopeOpts = scopes.map(function(s) {
       return '<option value="' + s + '"' + (scope === s ? ' selected' : '') + '>' + s + '</option>';
@@ -4718,8 +4727,14 @@ class FarmOSPanel {
       '  <div class="fos-row">',
       '    <div class="fos-field">',
       '      <label class="fos-label">Client ID</label>',
-      '      <input id="fos-cid" class="fos-input" type="text" value="' + cid + '">',
+      '      <input id="fos-cid" class="fos-input" type="text" value="' + cid + '" placeholder="farm">',
       '    </div>',
+      '    <div class="fos-field">',
+      '      <label class="fos-label">Client Secret <span style="opacity:0.5;font-size:9px">(if required)</span></label>',
+      '      <input id="fos-secret" class="fos-input" type="password" value="' + secret + '" placeholder="Leave blank for public clients" autocomplete="off">',
+      '    </div>',
+      '  </div>',
+      '  <div class="fos-row">',
       '    <div class="fos-field">',
       '      <label class="fos-label">Scope</label>',
       '      <select id="fos-scope" class="fos-input">' + scopeOpts + '</select>',
@@ -4734,12 +4749,13 @@ class FarmOSPanel {
       '    </div>',
 
       '    <div id="fos-pane-code">',
-      '      <p class="fos-hint">Redirects to your farmOS site to authorize. No password stored in this app.</p>',
+      '      <p class="fos-hint">Redirects to your farmOS site to authorize. Your farmOS Admin must add this page\'s URL as an allowed Redirect URI under <strong>Admin → Simple OAuth → Consumers → farm → Edit</strong>.</p>',
+      '      <div class="fos-hint" style="background:rgba(196,151,58,0.08);border:1px solid rgba(196,151,58,0.2);border-radius:3px;padding:8px;margin-bottom:8px;font-family:monospace;font-size:10px;word-break:break-all">' + redir + '</div>',
       '      <button id="fos-do-code" class="fos-btn-primary fos-full">Connect via farmOS →</button>',
       '    </div>',
 
       '    <div id="fos-pane-pass" style="display:none">',
-      '      <p class="fos-hint">Requires "Simple OAuth Password Grant" module on your farmOS server, and CORS must allow this page\'s origin. If you get a network error, check farmOS → Admin → Simple OAuth → Allowed Origins.</p>',
+      '      <p class="fos-hint">Requires <strong>Simple OAuth Password Credentials</strong> module on farmOS. Also requires CORS: farmOS Admin → Configuration → Web Services → CORS, add this origin: <code style="font-size:10px">' + origin + '</code></p>',
       '      <div class="fos-row">',
       '        <div class="fos-field"><label class="fos-label">Username</label>',
       '          <input id="fos-user" class="fos-input" type="text" autocomplete="username"></div>',
