@@ -657,6 +657,12 @@ body {
   gap: 20px;
 }
 
+.two-col-stack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
 .run-card {
   background: var(--forest-mid);
   border: 1px solid var(--divider);
@@ -1146,6 +1152,8 @@ body {
   .filter-row select, .filter-row input { width:100%; }
   input[type=text], input[type=email], input[type=tel], input[type=number],
   input[type=date], select, textarea { font-size:16px !important; }
+  .two-col-stack { grid-template-columns: 1fr !important; }
+  .runs-grid { grid-template-columns: 1fr !important; }
 }
 
 /* ── EDIT MODALS ── */
@@ -1384,14 +1392,19 @@ body {
     </div>
     <div id="hunt-year-display" style="margin-top:4px;font-size:10px;color:var(--gold);font-weight:700">Season: 2025-2026</div>
     <div style="margin-top:6px">
-      <label style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:3px">Change Season</label>
-      <select id="global-hunt-year" style="width:100%;padding:5px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--divider);border-radius:3px;color:var(--gold);font-size:11px;font-family:'Josefin Sans',sans-serif" onchange="setHuntYear(this.value)">
-        <option value="2023-2024">2023–2024</option>
-        <option value="2024-2025">2024–2025</option>
-        <option value="2025-2026" selected>2025–2026 ← Current</option>
-        <option value="2026-2027">2026–2027</option>
-        <option value="2027-2028">2027–2028</option>
-      </select>
+      <label style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:3px">Active Season</label>
+      <div style="display:flex;gap:4px">
+        <select id="global-hunt-year" style="flex:1;padding:5px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--divider);border-radius:3px;color:var(--gold);font-size:11px;font-family:'Josefin Sans',sans-serif" onchange="setHuntYear(this.value)">
+          <option value="2023-2024">2023–2024</option>
+          <option value="2024-2025">2024–2025</option>
+          <option value="2025-2026" selected>2025–2026 ← Current</option>
+          <option value="2026-2027">2026–2027</option>
+          <option value="2027-2028">2027–2028</option>
+        </select>
+        <button onclick="openSeasonManager()" title="Manage seasons" style="padding:5px 8px;background:rgba(0,0,0,0.3);border:1px solid var(--divider);border-radius:3px;cursor:pointer;color:var(--gold);font-size:12px;line-height:1">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M11.54 4.46l-1.41 1.41M4.46 11.54l-1.41 1.41"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 </nav>
@@ -1621,7 +1634,7 @@ body {
       </div>
       <div class="page-actions">
         <button class="btn btn-outline"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><rect x="3" y="1" width="10" height="14" rx="1"/><line x1="6" y1="6" x2="10" y2="6"/><line x1="6" y1="9" x2="10" y2="9"/></svg>Print Layout</button>
-        <button class="btn btn-gold"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M11.54 4.46l-1.41 1.41M4.46 11.54l-1.41 1.41"/></svg>Manage Runs</button>
+        <button class="btn btn-gold" onclick="openEditRun('new')"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="vertical-align:-2px;margin-right:4px"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M11.54 4.46l-1.41 1.41M4.46 11.54l-1.41 1.41"/></svg>Manage Runs</button>
       </div>
     </div>
     <div class="content-area">
@@ -1699,7 +1712,7 @@ body {
       </div>
     </div>
     <div class="content-area">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div class="two-col-stack">
         <div class="card">
           <div class="card-header"><span class="card-title">Week of March 6–12</span><span class="ornament">Daily Duties</span></div>
           <div class="card-body">
@@ -1811,7 +1824,7 @@ body {
       </div>
     </div>
     <div class="content-area">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div class="two-col-stack">
         <div>
           <div class="card" style="margin-bottom:20px">
             <div class="card-header"><span class="card-title">Membership Types</span><span class="ornament">2026 Dues</span></div>
@@ -1899,7 +1912,7 @@ body {
       </div>
     </div>
     <div class="content-area">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+      <div class="two-col-stack">
         <div>
           <div class="card" style="margin-bottom:20px">
             <div class="card-header"><span class="card-title">Formal Season Attire</span></div>
@@ -2348,12 +2361,104 @@ var S = lsG() || JSON.parse(JSON.stringify(SEED));
 // ── Global Hunt Year ──
 // Hunt year is formatted "2025-2026" — stored in S.huntYear
 // All forms, releases, and agreements are filtered/tagged by hunt year
+// ─── HUNT YEAR / SEASON MANAGEMENT ───────────────────────────────────────────
+function getHuntYears() {
+  if (!S.huntYears || !S.huntYears.length) {
+    S.huntYears = ['2023-2024','2024-2025','2025-2026','2026-2027','2027-2028'];
+  }
+  return S.huntYears;
+}
+
 function getHuntYear(){ return S.huntYear || '2025-2026'; }
+
+function rebuildYearSelect() {
+  const sel = document.getElementById('global-hunt-year');
+  if (!sel) return;
+  const hy = getHuntYear();
+  const years = getHuntYears();
+  sel.innerHTML = years.map(y =>
+    `<option value="${y}"${y===hy?' selected':''}>${y.replace('-','–')}${y===hy?' ← Active':''}</option>`
+  ).join('');
+}
+
+function openSeasonManager() {
+  const years = getHuntYears();
+  const hy = getHuntYear();
+  const rows = years.map((y,i) => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--divider)">
+      <div style="flex:1;font-family:'Josefin Sans',sans-serif;font-size:13px;color:${y===hy?'var(--gold)':'var(--cream)'}">
+        ${y.replace('-','–')} ${y===hy?'<span style="font-size:9px;opacity:.6">ACTIVE</span>':''}
+      </div>
+      <button onclick="setHuntYear('${y}');closeEditModal()" style="padding:4px 10px;background:${y===hy?'rgba(107,21,35,0.3)':'rgba(0,0,0,0.3)'};border:1px solid ${y===hy?'var(--burgundy)':'var(--divider)'};border-radius:2px;cursor:pointer;font-family:'Josefin Sans',sans-serif;font-size:10px;color:${y===hy?'#e89090':'var(--cream-dark)'};letter-spacing:.5px">
+        ${y===hy?'Active':'Set Active'}
+      </button>
+      <button onclick="deleteSeason('${y}')" style="padding:4px 8px;background:none;border:1px solid rgba(180,60,60,0.3);border-radius:2px;cursor:pointer;font-size:11px;color:#a06060" title="Remove season">✕</button>
+    </div>`).join('');
+
+  showEditModal('Manage Hunt Seasons', `
+    <div style="margin-bottom:16px">
+      <p style="font-family:'Josefin Sans',sans-serif;font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5">
+        Hunt seasons control which year is shown on release forms, member docs, and rosters. The active season is used for all signing and record-keeping.
+      </p>
+      <div id="season-rows">${rows}</div>
+    </div>
+    <div style="border-top:1px solid var(--divider);padding-top:14px">
+      <label class="eml">Add New Season</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="emi" id="new-season-start" type="number" placeholder="Start year e.g. 2028" min="2020" max="2040" style="width:50%">
+        <button onclick="addNewSeason()" class="btn btn-gold" style="flex-shrink:0;padding:8px 14px">+ Add Season</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Enter the starting year (e.g. 2028 creates 2028–2029)</div>
+    </div>
+  `, null);
+}
+
+function addNewSeason() {
+  const inp = document.getElementById('new-season-start');
+  const yr = parseInt(inp.value);
+  if (!yr || yr < 2020 || yr > 2040) { inp.style.borderColor='#c06060'; return; }
+  const key = yr + '-' + (yr+1);
+  const years = getHuntYears();
+  if (years.includes(key)) { inp.style.borderColor='#c06060'; return; }
+  years.push(key);
+  years.sort();
+  S.huntYears = years;
+  sv();
+  rebuildYearSelect();
+  inp.value = '';
+  // Refresh modal rows
+  const rowsEl = document.getElementById('season-rows');
+  if (rowsEl) {
+    const hy = getHuntYear();
+    rowsEl.innerHTML = years.map(y => `
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--divider)">
+        <div style="flex:1;font-family:'Josefin Sans',sans-serif;font-size:13px;color:${y===hy?'var(--gold)':'var(--cream)'}">
+          ${y.replace('-','–')} ${y===hy?'<span style="font-size:9px;opacity:.6">ACTIVE</span>':''}
+        </div>
+        <button onclick="setHuntYear('${y}');closeEditModal()" style="padding:4px 10px;background:${y===hy?'rgba(107,21,35,0.3)':'rgba(0,0,0,0.3)'};border:1px solid ${y===hy?'var(--burgundy)':'var(--divider)'};border-radius:2px;cursor:pointer;font-family:'Josefin Sans',sans-serif;font-size:10px;color:${y===hy?'#e89090':'var(--cream-dark)'};letter-spacing:.5px">
+          ${y===hy?'Active':'Set Active'}
+        </button>
+        <button onclick="deleteSeason('${y}')" style="padding:4px 8px;background:none;border:1px solid rgba(180,60,60,0.3);border-radius:2px;cursor:pointer;font-size:11px;color:#a06060" title="Remove">✕</button>
+      </div>`).join('');
+  }
+  toast('Season ' + key.replace('-','–') + ' added');
+}
+
+function deleteSeason(key) {
+  if (key === getHuntYear()) { toast('Cannot delete active season'); return; }
+  if (!confirm('Remove season ' + key.replace('-','–') + '?')) return;
+  S.huntYears = getHuntYears().filter(y => y !== key);
+  sv();
+  rebuildYearSelect();
+  openSeasonManager(); // refresh modal
+}
+
 function setHuntYear(y){ S.huntYear = y; sv(); applyHuntYearToUI(); }
 function applyHuntYearToUI(){
   // Update season display in sidebar
   const el = document.getElementById('hunt-year-display');
   if(el) el.textContent = 'Season: '+getHuntYear();
+  rebuildYearSelect();
   // Update season dropdowns on release form
   const wss = document.getElementById('wsig-season');
   if(wss) wss.value = getHuntYear();
@@ -2519,7 +2624,7 @@ function closeModal() { document.getElementById('hound-modal').classList.remove(
 function openEditHound(id) {
   const h = id==='new' ? {id:'new',name:'',sex:'M',status:'active',birthdate:'',breed:'English Foxhound',color:'',chip:'',vet_date:'',notes:'',run:'Run 1',compat_with:[],incompat_with:[],heat_cycles:[]} : S.hounds.find(x=>x.id===id);
   if(!h) return;
-  showEditModal('🐕 '+(id==='new'?'Register New Hound':'Edit Hound: '+h.name), `
+  showEditModal((id==='new'?'Register New Hound':'Edit Hound: '+h.name), `
     <div class="emr"><div>
       <label class="eml">Name</label><input class="emi" id="eh-name" value="${esc(h.name)}">
     </div><div>
@@ -2569,7 +2674,7 @@ function saveHound(id) {
 // ─── ADD HEAT CYCLE ───
 function openAddHeat(hid) {
   closeModal();
-  showEditModal('♀ Log Heat Cycle', `
+  showEditModal('Log Heat Cycle', `
     <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Recording heat cycle for: <strong>${esc((S.hounds.find(h=>h.id===hid)||{name:'?'}).name)}</strong></p>
     <label class="eml">Date</label><input class="emi" id="hc-date" type="date" value="${td()}">
     <label class="eml">Notes (e.g. "Day 7 of cycle")</label><input class="emi" id="hc-notes" placeholder="e.g. Day 7">
@@ -2614,7 +2719,7 @@ function delRun(id){
 function openEditRun(id) {
   const r=id==='new'?{id:'new',name:'',capacity:6,hounds:'',notes:'',schedule:'',alert:''}:S.runs.find(x=>x.id===id);
   if(!r) return;
-  showEditModal('🏠 '+(id==='new'?'Add Kennel Run':'Edit Run: '+r.name),`
+  showEditModal((id==='new'?'Add Kennel Run':'Edit Run: '+r.name),`
     <div class="emr"><div>
       <label class="eml">Run Name</label><input class="emi" id="er-name" value="${esc(r.name)}">
     </div><div>
@@ -2724,7 +2829,7 @@ function viewMemberDocs(memberId, memberName){
     }
   });
 
-  showEditModal(`📄 Documents — ${esc(memberName)}`,`
+  showEditModal(`Documents — ${esc(memberName)}`,`
     <div style="font-size:10px;color:var(--muted);font-family:'Josefin Sans',sans-serif;margin-bottom:12px">Season: ${hy} · <button onclick="closeEditModal();showPage('forms')" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:10px;font-family:'Josefin Sans',sans-serif;text-decoration:underline;padding:0">View all documents →</button></div>
     ${docRows}
   `, null);
@@ -2739,7 +2844,7 @@ function delStaff(id){
 function openEditStaff(id){
   const m=id==='new'?{id:'new',role:'',name:'',phone:'',email:'',duties:''}:S.staff.find(x=>x.id===id);
   if(!m) return;
-  showEditModal('👤 '+(id==='new'?'Add Staff Member':'Edit: '+m.name),`
+  showEditModal((id==='new'?'Add Staff Member':'Edit: '+m.name),`
     <label class="eml">Role / Title</label>
     <select class="emi" id="es-role-select" onchange="document.getElementById('es-role').style.display=this.value==='custom'?'block':'none';if(this.value!=='custom')document.getElementById('es-role').value=this.value;">
       ${['Joint Master of Foxhounds','Master of Foxhounds','Huntsman','First Whipper-In','Whipper-In','Junior Whipper-In','Kennelman','Field Secretary','Treasurer','Member','Volunteer'].map(r=>`<option value="${r}"${m.role===r?' selected':''}>${r}</option>`).join('')}
@@ -2798,7 +2903,7 @@ function delChore(id){
 function openEditChore(id){
   const c=id==='new'?{id:'new',name:'',day:'Daily',time:'',assignee:'Volunteer',completed:false}:S.chores.find(x=>x.id===id);
   if(!c) return;
-  showEditModal('📋 '+(id==='new'?'Add Chore':'Edit Chore'),`
+  showEditModal('Add Chore' + (id==='new'?'':'Edit Chore: '+c.name),`
     <label class="eml">Task Name</label><input class="emi" id="ec-name" value="${esc(c.name)}">
     <div class="emr"><div>
       <label class="eml">Day(s)</label><input class="emi" id="ec-day" value="${esc(c.day)}">
@@ -2867,7 +2972,7 @@ function delTerritory(id){
 function openEditTerritory(id){
   const t=id==='new'?{id:'new',name:'',location:'',terrain:'',jumps:'',roads:'',bonus:'',url:'',home:false}:S.territories.find(x=>x.id===id);
   if(!t) return;
-  showEditModal('🗺 '+(id==='new'?'Add Territory':'Edit: '+t.name),`
+  showEditModal((id==='new'?'Add Territory':'Edit: '+t.name),`
     <div class="emr"><div>
       <label class="eml">Name</label><input class="emi" id="et-name" value="${esc(t.name)}">
     </div><div>
@@ -3097,7 +3202,7 @@ function submitWwhRelease(numAcks){
 // ── MEMBER AGREEMENT FUNCTIONS ──
 function openSignMemberAgreement(memberId, memberName){
   const m = (S.staff||[]).find(x=>x.id===memberId);
-  showEditModal('📝 Membership Agreement: '+esc(memberName),`
+  showEditModal('Membership Agreement: '+esc(memberName),`
     <div class="emr"><div>
       <label class="eml">Member Name</label>
       <input class="emi" id="ma-name" value="${esc(memberName)}">
@@ -3137,7 +3242,7 @@ function openSignMemberAgreement(memberId, memberName){
 
 function openViewMemberAgreement(agreementId){
   const a=(S.memberAgreements||[]).find(x=>x.id===agreementId); if(!a) return;
-  showEditModal('📄 Membership Agreement',`
+  showEditModal('Membership Agreement',`
     <div style="line-height:1.8;font-family:'Josefin Sans',sans-serif;font-size:13px">
       <div><strong style="color:var(--gold)">Member:</strong> ${esc(a.name)}</div>
       <div><strong style="color:var(--gold)">Type:</strong> ${esc(a.type||a.title)}</div>
@@ -3182,7 +3287,7 @@ function openDocSignModal(docId, memberId){
   (doc.acks||[]).forEach((a,i)=>{ acks+=`<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(196,151,58,0.1)"><input type="checkbox" id="wack${i}" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;accent-color:var(--gold)"><label for="wack${i}" style="font-size:12px;color:var(--cream);cursor:pointer;font-family:'Josefin Sans',sans-serif">${esc(a.l)}</label></div>`; });
   const yearOpts = ['2023-2024','2024-2025','2025-2026','2026-2027','2027-2028'].map(y=>`<option${y===getHuntYear()?' selected':''}>${y}</option>`).join('');
   
-  showEditModal('✍ '+esc(doc.title),`
+  showEditModal(esc(doc.title),`
     <div style="font-size:13px;color:var(--muted);margin-bottom:12px;font-family:'Josefin Sans',sans-serif">${member?'Signing as: <strong style="color:var(--cream)">'+esc(member.name)+'</strong>':'Non-member / Guest signature'}</div>
     <div class="doc-page-wwh">${sections}<div style="background:rgba(107,21,35,0.15);border:1px solid rgba(200,80,80,0.3);border-radius:3px;padding:10px;margin-top:12px;font-size:11px;color:#d09090;font-family:'Josefin Sans',sans-serif">⚠ By signing, you acknowledge you have read all terms above. This document is required for each hunt season.</div></div>
     <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'Josefin Sans',sans-serif;margin:14px 0 8px">Check all to sign</div>
@@ -3238,7 +3343,7 @@ function openViewSignedDoc(sigId){
   let acksHtml = (doc.acks||[]).map(a=>`<p style="font-size:11px;color:var(--cream-dark);margin-bottom:3px">☑ ${esc(a.l)}</p>`).join('');
   const sigImg = sig.sigData ? `<img src="${sig.sigData}" style="max-height:60px;border:1px solid var(--divider);border-radius:3px;background:#fff;padding:4px;margin-top:4px">` : `<div style="font-style:italic;font-size:14px;font-family:Georgia,serif;color:var(--gold);padding:8px 0">${esc(sig.name)}</div>`;
   
-  showEditModal('📄 Signed Document',`
+  showEditModal('Signed Document',`
     <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
       <button class="btn btn-gold btn-sm" onclick="dlWwhSigPdf('${sigId}')">📥 Download PDF</button>
     </div>
@@ -3265,7 +3370,7 @@ function openReadDoc(docId){
   if(!doc) return;
   let sections = '';
   (doc.sections||[]).forEach(s=>{ sections+=`<h4 style="font-size:13px;color:var(--gold);margin:12px 0 4px">${esc(s.h)}</h4><p style="font-size:12px;color:rgba(242,232,208,0.8);line-height:1.7">${esc(s.b)}</p>`; });
-  showEditModal('📋 '+esc(doc.title),`
+  showEditModal(esc(doc.title),`
     <div class="doc-page-wwh">${sections}</div>
     <div style="margin-top:14px">
       <button class="btn btn-gold btn-sm" onclick="closeEditModal();openDocSignModal('${docId}',null)">✍ Sign This Document</button>
@@ -3293,7 +3398,7 @@ function openViewSigsArchive(){
       </div>`;
     });
   }
-  showEditModal('📁 Signature Archive', rows, null);
+  showEditModal('Signature Archive', rows, null);
 }
 
 function delSig(id){
@@ -3366,7 +3471,7 @@ function openViewSigsModal(){
       </div>`;
     });
   }
-  showEditModal('📁 Signed Release Archive', html, null);
+  showEditModal('Signed Release Archive', html, null);
 }
 
 function openViewSig(id){
@@ -3396,7 +3501,7 @@ function openViewSig(id){
       <button class="btn btn-gold btn-sm" onclick="dlWwhSigPdf('${s.id}')">📥 Download PDF</button>
     </div>
   `;
-  showEditModal('📄 Signed Release — '+esc(s.name), html, null);
+  showEditModal('Signed Release — '+esc(s.name), html, null);
   setTimeout(()=>{const em=document.querySelector('.em-save');if(em)em.style.display='none';},10);
 }
 
@@ -3438,7 +3543,7 @@ function dlWwhSigPdf(id){
 }
 
 function openAddEvent(){
-  showEditModal('📅 Schedule Event',`
+  showEditModal('Schedule Event',`
     <label class="eml">Title</label><input class="emi" id="ev-title">
     <div class="emr"><div>
       <label class="eml">Date</label><input class="emi" id="ev-date" type="date" value="${td()}">
@@ -3484,7 +3589,7 @@ function renderEventsPage(){
 
 function openEditEvent(id){
   const e=S.events.find(x=>x.id===id);if(!e)return;
-  showEditModal('📅 Edit Event: '+e.title,`
+  showEditModal('Edit Event: '+e.title,`
     <label class="eml">Title</label><input class="emi" id="ev-title" value="${esc(e.title)}">
     <div class="emr"><div>
       <label class="eml">Date</label><input class="emi" id="ev-date" type="date" value="${e.date}">
@@ -3656,7 +3761,7 @@ function renderObsLog(){
 function openAddObservation(houndId){
   const hOptions = S.hounds.map(h=>`<option value="${h.id}"${houndId&&h.id===houndId?' selected':''}>${esc(h.name)} (${h.sex==='F'?'♀':'♂'})</option>`).join('');
   const typeOptions = Object.entries(OBS_TYPES).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
-  showEditModal('🩺 Log Observation', `
+  showEditModal('Log Observation', `
     <div class="emr"><div>
       <label class="eml">Hound</label>
       <select class="emi" id="obs-hound">${hOptions}</select>
@@ -3702,7 +3807,7 @@ function openEditObs(id){
   const o=S.observations.find(x=>x.id===id); if(!o) return;
   const hOptions=S.hounds.map(h=>`<option value="${h.id}"${h.id===o.houndId?' selected':''}>${esc(h.name)}</option>`).join('');
   const typeOptions=Object.entries(OBS_TYPES).map(([k,v])=>`<option value="${k}"${k===o.type?' selected':''}>${v.label}</option>`).join('');
-  showEditModal('✎ Edit Observation', `
+  showEditModal('Edit Observation', `
     <div class="emr"><div>
       <label class="eml">Hound</label><select class="emi" id="obs-hound">${hOptions}</select>
     </div><div>
@@ -3745,7 +3850,7 @@ function endHeatCycle(houndId){
 
 function openAddHeatCycle(houndId){
   const h=S.hounds.find(x=>x.id===houndId); if(!h) return;
-  showEditModal(`♀ Add Heat Cycle: ${esc(h.name)}`,`
+  showEditModal(`Add Heat Cycle: ${esc(h.name)}`,`
     <label class="eml">Start Date</label>
     <input class="emi" id="hc-date" type="date" value="${td()}">
     <label class="eml" style="margin-top:10px">Notes</label>
@@ -3790,7 +3895,7 @@ function renderNotesPage(){
 function openAddNote(){
   const staffOpts = S.staff.map(m=>`<option>${esc(m.name)}</option>`).join('');
   const typeOpts = Object.entries(NOTE_TYPES).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
-  showEditModal('📝 Add Note',`
+  showEditModal('Add Note',`
     <div class="emr"><div>
       <label class="eml">Author</label>
       <select class="emi" id="note-by">${staffOpts}<option>Other</option></select>
@@ -3819,7 +3924,7 @@ function openEditNote(id){
   const n=S.notes.find(x=>x.id===id); if(!n) return;
   const staffOpts=S.staff.map(m=>`<option${m.name===n.by?' selected':''}>${esc(m.name)}</option>`).join('');
   const typeOpts=Object.entries(NOTE_TYPES).map(([k,v])=>`<option value="${k}"${k===n.type?' selected':''}>${v}</option>`).join('');
-  showEditModal('✎ Edit Note',`
+  showEditModal('Edit Note',`
     <div class="emr"><div>
       <label class="eml">Author</label><select class="emi" id="note-by">${staffOpts}</select>
     </div><div>
@@ -3934,7 +4039,7 @@ function openVolModal(evId){
       }
     </div>`;
   }).join('');
-  showEditModal(`${et.icon} ${esc(ev.title)} — Volunteers`,`
+  showEditModal(`${esc(ev.title)} — Volunteers`,`
     <div style="font-size:12px;color:var(--muted);margin-bottom:16px;font-family:'Josefin Sans',sans-serif">${ev.date} · ${esc(ev.time||'')} · ${esc(ev.location||'')}</div>
     ${rows}
   `,null,true);
@@ -3945,7 +4050,7 @@ function fillVolSlot(evId,roleId){
   const et=VOL_EVENT_TYPES[ev.type]||{roles:[]};
   const role=et.roles.find(r=>r.id===roleId)||{name:roleId};
   const memberNames=(S.staff||[]).map(m=>`<option value="${esc(m.name)}">`).join('');
-  showEditModal(`✍ Sign Up: ${esc(role.name)}`,`
+  showEditModal(`Sign Up: ${esc(role.name)}`,`
     <div style="font-size:12px;color:var(--muted);margin-bottom:14px;font-family:'Josefin Sans',sans-serif">${esc(ev.title)} · ${ev.date}</div>
     <label class="eml">Name (type to autocomplete from members, or enter any name)</label>
     <input class="emi" id="fvs-name" placeholder="Start typing member name..." autocomplete="off" list="fvs-names-list">
@@ -3966,7 +4071,7 @@ function clearVolSlot(evId,roleId){
 
 function openAddVolEvent(){
   const typeOpts=Object.entries(VOL_EVENT_TYPES).map(([k,v])=>`<option value="${k}">${v.icon} ${v.label}</option>`).join('');
-  showEditModal('🙋 Add Volunteer Event',`
+  showEditModal('Add Volunteer Event',`
     <label class="eml">Title</label><input class="emi" id="ve-title">
     <div class="emr"><div>
       <label class="eml">Type</label><select class="emi" id="ve-type">${typeOpts}</select>
@@ -3990,7 +4095,7 @@ function openAddVolEvent(){
 function openEditVolEvent(id){
   const ev=(S.volEvents||[]).find(x=>x.id===id); if(!ev) return;
   const typeOpts=Object.entries(VOL_EVENT_TYPES).map(([k,v])=>`<option value="${k}"${k===ev.type?' selected':''}>${v.icon} ${v.label}</option>`).join('');
-  showEditModal('✎ Edit Event: '+ev.title,`
+  showEditModal('Edit Event: '+ev.title,`
     <label class="eml">Title</label><input class="emi" id="ve-title" value="${esc(ev.title)}">
     <div class="emr"><div>
       <label class="eml">Type</label><select class="emi" id="ve-type">${typeOpts}</select>
@@ -4031,13 +4136,8 @@ renderFormsPage();
 
 // ── INIT: Sync global hunt year selector ──
 (function(){
-  var sel=document.getElementById('global-hunt-year');
+  rebuildYearSelect();
   var hy=getHuntYear();
-  if(sel){
-    var found=false;
-    for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===hy){sel.selectedIndex=i;found=true;break;}}
-    if(!found){var opt=document.createElement('option');opt.value=hy;opt.textContent=hy;sel.appendChild(opt);sel.value=hy;}
-  }
   var el=document.getElementById('hunt-year-display');
   if(el) el.textContent='Season: '+hy;
   var mob=document.getElementById('mobile-year');
@@ -4168,9 +4268,9 @@ class FarmOSClient {
     } catch (e) {
       var msg = e.message || '';
       if (msg.includes('invalid_client')) {
-        msg = 'invalid_client — Check: (1) Client ID matches farmOS consumer, (2) Redirect URI is registered in farmOS Admin → Simple OAuth → Consumers, (3) Client Secret if your consumer requires one.';
+        msg = 'invalid_client — The farmOS consumer is not configured for Authorization Code grant, or the redirect URI does not match. Fix: go to ' + (this._cfg.host||'your-farmos-site') + '/admin/content/consumer, edit the "farm" consumer, enable Authorization Code grant, and add this exact redirect URI: ' + (savedRedir || window.location.href.split('?')[0]);
       } else if (msg.includes('invalid_grant')) {
-        msg = 'invalid_grant — Authorization code expired or already used. Try connecting again.';
+        msg = 'invalid_grant — Code already used or expired. Try connecting again.';
       }
       this._emit('error', 'Auth code exchange failed: ' + msg);
     }
@@ -4248,7 +4348,7 @@ class FarmOSClient {
         throw new Error(
           isFile
             ? 'Running from a local file — browsers block cross-origin requests from file://. Host this page on a web server (even python3 -m http.server works) then reconnect.'
-            : 'CORS blocked — farmOS at ' + this._cfg.host + ' must allow origin: ' + origin + '. In farmOS go to Admin → Configuration → Web Services → CORS and add that origin, then re-enable the Simple OAuth Password Credentials module.'
+            : 'CORS blocked by farmOS. Fix: go to ' + this._cfg.host + '/admin/content/consumer, edit the "farm" consumer, and add "' + origin + '" to the Allowed Origins field. Also ensure the Password Credentials grant type is enabled on that consumer.'
         );
       }
       throw netErr;
@@ -4749,13 +4849,14 @@ class FarmOSPanel {
       '    </div>',
 
       '    <div id="fos-pane-code">',
-      '      <p class="fos-hint">Redirects to your farmOS site to authorize. Your farmOS Admin must add this page\'s URL as an allowed Redirect URI under <strong>Admin → Simple OAuth → Consumers → farm → Edit</strong>.</p>',
+      '      <p class="fos-hint"><strong>Setup required on farmOS server:</strong><br>1. Go to <code style="font-size:10px">Admin → Content → Consumers</code><br>2. Edit the <em>farm</em> consumer (or create a new one)<br>3. Enable <em>Authorization Code</em> grant type<br>4. Add this exact URI to <em>Redirect URIs</em>:</p>',
       '      <div class="fos-hint" style="background:rgba(196,151,58,0.08);border:1px solid rgba(196,151,58,0.2);border-radius:3px;padding:8px;margin-bottom:8px;font-family:monospace;font-size:10px;word-break:break-all">' + redir + '</div>',
+      '      <p class="fos-hint" style="margin-top:-4px">5. Add <code style="font-size:10px">' + origin + '</code> to <em>Allowed Origins</em> on the same consumer.</p>',
       '      <button id="fos-do-code" class="fos-btn-primary fos-full">Connect via farmOS →</button>',
       '    </div>',
 
       '    <div id="fos-pane-pass" style="display:none">',
-      '      <p class="fos-hint">Requires <strong>Simple OAuth Password Credentials</strong> module on farmOS. Also requires CORS: farmOS Admin → Configuration → Web Services → CORS, add this origin: <code style="font-size:10px">' + origin + '</code></p>',
+      '      <p class="fos-hint"><strong>Setup required on farmOS server:</strong><br>1. Enable the <em>Simple OAuth Password Grant</em> module<br>2. Go to <code style="font-size:10px">Admin → Content → Consumers</code> → edit the <em>farm</em> consumer<br>3. Add <code style="font-size:10px">' + origin + '</code> to <em>Allowed Origins</em><br>4. Enable <em>Password Credentials</em> grant type on that consumer</p>',
       '      <div class="fos-row">',
       '        <div class="fos-field"><label class="fos-label">Username</label>',
       '          <input id="fos-user" class="fos-input" type="text" autocomplete="username"></div>',
@@ -4831,18 +4932,29 @@ class FarmOSPanel {
     var c    = this._client.cfg;
     var host = c.host || '(not configured)';
     var exp  = c.expires_at ? new Date(c.expires_at).toLocaleString() : 'N/A';
+    var adminUrl = (c.host||'') + '/admin/content/consumer';
     return [
       '<div id="fos-pane-info" class="fos-pane" style="display:none">',
-      '  <div class="fos-info-body">',
-      '    <p>This app connects to <strong>farmOS</strong> via the standard',
-      '    <a href="https://farmos.org/development/api/" target="_blank">JSON:API</a>.</p>',
-      '    <p>Authentication uses OAuth2 as described in the',
-      '    <a href="https://farmos.org/development/api/authentication/" target="_blank">farmOS auth docs</a>.',
-      '    The Authorization Code flow is recommended — your password is never stored in this app.</p>',
-      '    <p>The Password Grant requires the <em>Simple OAuth Password Grant</em> module',
-      '    on your farmOS server, plus the default <code>farm_api_default_consumer</code> client.</p>',
+      '  <div class="fos-section-label">farmOS Server Setup Guide</div>',
+      '  <div class="fos-info-body" style="font-size:12px;line-height:1.7">',
+      '    <p style="margin:0 0 10px"><strong style="color:#c4973a">Step 1 — Enable modules</strong><br>',
+      '    In farmOS go to <code>Admin → Extend</code> and ensure these are enabled:<br>',
+      '    • <em>farmOS API</em> (farm_api)<br>',
+      '    • <em>Simple OAuth</em> (simple_oauth)<br>',
+      '    • <em>Simple OAuth Password Grant</em> — only needed for password grant</p>',
+      '    <p style="margin:0 0 10px"><strong style="color:#c4973a">Step 2 — Configure the Consumer</strong><br>',
+      '    Go to <code>' + adminUrl + '</code> and edit the <em>farm</em> consumer (or create a new one).<br>',
+      '    Set these fields:<br>',
+      '    • <em>Grant types:</em> check <strong>Authorization Code</strong> (and/or Password Credentials)<br>',
+      '    • <em>Redirect URIs:</em> add the exact URL of this page<br>',
+      '    • <em>Allowed Origins:</em> add this page\'s origin for CORS<br>',
+      '    • <em>Scopes:</em> farm_manager (or appropriate scope)</p>',
+      '    <p style="margin:0 0 10px"><strong style="color:#c4973a">Step 3 — Connect</strong><br>',
+      '    Use <em>Authorization Code</em> (recommended) — redirects to farmOS to log in, no password stored here.<br>',
+      '    Or use <em>Password Grant</em> if the Password Grant module is installed and CORS is set.</p>',
       '  </div>',
-      '  <div class="fos-info-box">',
+      '  <div class="fos-info-box" style="margin-top:8px">',
+      '    <strong>Current config</strong><br>',
       '    Server: ' + host + '<br>',
       '    Client ID: ' + (c.client_id || 'farm') + '<br>',
       '    Scope: ' + (c.scope || 'farm_manager') + '<br>',
@@ -4850,9 +4962,9 @@ class FarmOSPanel {
       '    Has refresh token: ' + (this._client.hasRefresh ? 'yes' : 'no'),
       '  </div>',
       '  <div class="fos-info-links">',
-      '    <a href="https://farmos.org/development/api/" target="_blank">farmOS API docs ↗</a>',
+      '    <a href="' + adminUrl + '" target="_blank">farmOS Consumers ↗</a>',
       '    <a href="https://farmos.org/development/api/authentication/" target="_blank">Auth docs ↗</a>',
-      '    <a href="https://farmier.com" target="_blank">Farmier hosting ↗</a>',
+      '    <a href="https://farmos.org/development/module/oauth/" target="_blank">OAuth module docs ↗</a>',
       '  </div>',
       '</div>'
     ].join('\n');
